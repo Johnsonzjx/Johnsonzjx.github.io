@@ -1,0 +1,689 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HashMap底层原理分析 - Java Learning Blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Java Study,"> 
+    <meta name="description" content="HashMap介绍HashMap 主要用来存放键值对，它基于哈希表的 Map 接口实现，是常用的 Java 集合之一。
+JDK1.8 之前 HashMap 由 数组+链表 组成的，数组是 HashM,"> 
+    <meta name="author" content="HustZjx"> 
+    <link rel="alternative" href="atom.xml" title="Java Learning Blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Java Learning Blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">HashMap底层原理分析</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/容器与源码分析"><b>「
+                    </b>容器与源码分析<b> 」</b></a>
+                
+                三月 28, 2021
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2021/03/28/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="HashMap底层原理分析" class="">HashMap底层原理分析</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    14k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    13 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/HashMap/" rel="tag">HashMap</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" rel="tag">红黑树</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="HashMap介绍"><a href="#HashMap介绍" class="headerlink" title="HashMap介绍"></a><strong>HashMap介绍</strong></h1><p>HashMap 主要用来存放键值对，它基于哈希表的 Map 接口实现，是常用的 Java 集合之一。</p>
+<p>JDK1.8 之前 HashMap 由 数组+链表 组成的，数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的（“拉链法”解决冲突）。 </p>
+<p>JDK1.8 之后 HashMap 的组成多了红黑树，在满足下面两个条件之后，会执行链表转红黑树操作，以此来加快搜索速度。</p>
+<ul>
+<li>链表长度大于阈值（默认为 8）</li>
+<li>HashMap 数组长度超过 64</li>
+</ul>
+<h1 id="底层数据结构分析"><a href="#底层数据结构分析" class="headerlink" title="底层数据结构分析"></a><strong>底层数据结构分析</strong></h1><h2 id="JDK1-8之前"><a href="#JDK1-8之前" class="headerlink" title="JDK1.8之前"></a><strong>JDK1.8之前</strong></h2><p>JDK1.8 之前 HashMap 底层是 <strong>数组和链表</strong> 结合在一起使用也就是 <strong>链表散列</strong>。</p>
+<p>HashMap 通过 key 的 hashCode 经过扰动函数处理过后得到 hash 值，然后通过 <code>(n - 1) &amp; hash</code> 判断当前元素存放的位置（这里的 n 指的是数组的长度），如果当前位置存在元素的话，就判断该元素与要存入的元素的 hash 值以及 key 是否相同，如果相同的话，直接覆盖，不相同就通过拉链法解决冲突。</p>
+<p>所谓扰动函数指的就是 HashMap 的 hash 方法。使用 hash 方法也就是扰动函数是为了防止一些实现比较差的 hashCode() 方法 换句话说使用扰动函数之后可以减少碰撞。</p>
+<p><strong>JDK 1.8 HashMap 的 hash 方法源码:</strong></p>
+<p>JDK 1.8 的 hash 方法 相比于 JDK 1.7 hash 方法更加简化，但是原理不变。</p>
+<pre><code class="java">    static final int hash(Object key) &#123;
+      int h;
+      // key.hashCode()：返回散列值也就是hashcode
+      // ^ ：按位异或
+      // &gt;&gt;&gt;:无符号右移，忽略符号位，空位都以0补齐
+      return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
+  &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>对比一下 JDK1.7 的 HashMap 的 hash 方法源码.</p>
+<pre><code class="java">static int hash(int h) &#123;
+    // This function ensures that hashCodes that differ only by
+    // constant multiples at each bit position have a bounded
+    // number of collisions (approximately 8 at default load factor).
+
+    h ^= (h &gt;&gt;&gt; 20) ^ (h &gt;&gt;&gt; 12);
+    return h ^ (h &gt;&gt;&gt; 7) ^ (h &gt;&gt;&gt; 4);
+&#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>相比于 JDK1.8 的 hash 方法 ，JDK 1.7 的 hash 方法的性能会稍差一点点，因为毕竟扰动了 4 次。</p>
+<p>所谓 <strong>“拉链法”</strong> 就是：将链表和数组相结合。也就是说创建一个链表数组，数组中每一格就是一个链表。若遇到哈希冲突，则将冲突的值加到链表中即可。</p>
+<p><img src="https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-7/jdk1.8%E4%B9%8B%E5%89%8D%E7%9A%84%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84.png" alt="jdk1.8之前的内部结构"></p>
+<h2 id="JDK1-8之后"><a href="#JDK1-8之后" class="headerlink" title="JDK1.8之后"></a><strong>JDK1.8之后</strong></h2><p>相比于之前的版本，JDK1.8 以后在解决哈希冲突时有了较大的变化。</p>
+<p>当链表长度大于阈值（默认为 8）时，会首先调用 <code>treeifyBin()</code>方法。这个方法会根据 HashMap 数组来决定是否转换为红黑树。只有当数组长度大于或者等于 64 的情况下，才会执行转换红黑树操作，以减少搜索时间。否则，就是只是执行 <code>resize()</code> 方法对数组扩容。相关源码这里就不贴了，重点关注 <code>treeifyBin()</code>方法即可！</p>
+<p><img src="https://oscimg.oschina.net/oscnet/up-bba283228693dae74e78da1ef7a9a04c684.png" alt="img"></p>
+<p><strong>类的属性：</strong></p>
+<pre><code class="java">public class HashMap&lt;K,V&gt; extends AbstractMap&lt;K,V&gt; implements Map&lt;K,V&gt;, Cloneable, Serializable &#123;
+    // 序列号
+    private static final long serialVersionUID = 362498820763181265L;
+    // 默认的初始容量是16
+    static final int DEFAULT_INITIAL_CAPACITY = 1 &lt;&lt; 4;
+    // 最大容量
+    static final int MAXIMUM_CAPACITY = 1 &lt;&lt; 30;
+    // 默认的填充因子
+    static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    // 当桶(bucket)上的结点数大于这个值时会转成红黑树
+    static final int TREEIFY_THRESHOLD = 8;
+    // 当桶(bucket)上的结点数小于这个值时树转链表
+    static final int UNTREEIFY_THRESHOLD = 6;
+    // 桶中结构转化为红黑树对应的table的最小大小
+    static final int MIN_TREEIFY_CAPACITY = 64;
+    // 存储元素的数组，总是2的幂次倍
+    transient Node&lt;k,v&gt;[] table;
+    // 存放具体元素的集
+    transient Set&lt;map.entry&lt;k,v&gt;&gt; entrySet;
+    // 存放元素的个数，注意这个不等于数组的长度。
+    transient int size;
+    // 每次扩容和更改map结构的计数器
+    transient int modCount;
+    // 临界值 当实际大小(容量*填充因子)超过临界值时，会进行扩容
+    int threshold;
+    // 加载因子
+    final float loadFactor;
+&#125;Copy to clipboardErrorCopied
+</code></pre>
+<ul>
+<li><p><strong>loadFactor 加载因子</strong></p>
+<p>loadFactor 加载因子是控制数组存放数据的疏密程度，loadFactor 越趋近于 1，那么 数组中存放的数据(entry)也就越多，也就越密，也就是会让链表的长度增加，loadFactor 越小，也就是趋近于 0，数组中存放的数据(entry)也就越少，也就越稀疏。</p>
+<p><strong>loadFactor 太大导致查找元素效率低，太小导致数组的利用率低，存放的数据会很分散。loadFactor 的默认值为 0.75f 是官方给出的一个比较好的临界值</strong>。</p>
+<p>给定的默认容量为 16，负载因子为 0.75。Map 在使用过程中不断的往里面存放数据，当数量达到了 16 * 0.75 = 12 就需要将当前 16 的容量进行扩容，而扩容这个过程涉及到 rehash、复制数据等操作，所以非常消耗性能。</p>
+</li>
+<li><p><strong>threshold</strong></p>
+<p><strong>threshold = capacity * loadFactor</strong>，<strong>当 Size&gt;=threshold</strong>的时候，那么就要考虑对数组的扩增了，也就是说，这个的意思就是 <strong>衡量数组是否需要扩增的一个标准</strong>。</p>
+</li>
+</ul>
+<h1 id="如何确定Hash桶数组索引"><a href="#如何确定Hash桶数组索引" class="headerlink" title="如何确定Hash桶数组索引"></a><strong>如何确定Hash桶数组索引</strong></h1><p>无论是插入、删除还是查找，我们都要先确定元素的桶数组的索引，这一步是至关重要的。我们希望元素的分布尽可能的均匀最好是一个桶上只有一个元素，这样在进行查询的时候无须遍历，直接可以得到结果。我们来看看hashmap的底层源码是如何为了这个目标而吧努力的(方法1+方法2)：</p>
+<pre><code class="java">//方法1：
+static final int hash(Object key) &#123;   //jdk1.8 &amp; jdk1.7
+     int h;
+     // h = key.hashCode() 为第一步 取hashCode值
+     // h ^ (h &gt;&gt;&gt; 16)  为第二步 高位参与运算
+     return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
+&#125;
+//方法2：
+static int indexFor(int h, int length) &#123;  //jdk1.7的源码，jdk1.8没有这个方法，但是实现原理一样的
+     return h &amp; (length-1);  //第三步 取模运算
+&#125;
+</code></pre>
+<p>详细的过程是：首先得到key的hashcode值，然后将他的高16位和l低16位进行异或运算得到一个hash值，这样做的原因是即使桶数组长度比较小的时候，hashcode的高位依然能够参与到桶数组的索引的确定中，这样可以使得元素的分布更加分散，降低hash冲突，同时不会有太大的开销；最后将上一步得到的hash值与桶数组的长度-1进行&amp;运算，这是hashmap中在速度上进行的优化，当桶数组的长度为2的整数次幂时，hash &amp;(桶的长度-1)与hash%(桶的长度)得到的结果是一样的，但是位运算的速度要比算术运算的速度快。</p>
+<h2 id="Put方法的源码及分析"><a href="#Put方法的源码及分析" class="headerlink" title="Put方法的源码及分析"></a><strong>Put方法的源码及分析</strong></h2><pre><code class="java">public V put(K key, V value) &#123;
+  // 对key的hashCode()做hash
+    return putVal(hash(key), key, value, false, true);
+&#125;
+
+  final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+               boolean evict) &#123;
+    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;
+    // 步骤①：tab为空则创建
+   if ((tab = table) == null || (n = tab.length) == 0)
+       n = (tab = resize()).length;
+   // 步骤②：计算index，并对null做处理 
+   if ((p = tab[i = (n - 1) &amp; hash]) == null) 
+      tab[i] = newNode(hash, key, value, null);
+   else &#123;
+       Node&lt;K,V&gt; e; K k;
+       // 步骤③：节点key存在，直接覆盖value
+      if (p.hash == hash &amp;&amp;
+           ((k = p.key) == key || (key != null &amp;&amp; key.equals(k))))
+           e = p;
+       // 步骤④：判断该链为红黑树
+       else if (p instanceof TreeNode)
+          e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(this, tab, hash, key, value);
+      // 步骤⑤：该链为链表
+       else &#123;
+           for (int binCount = 0; ; ++binCount) &#123;
+               if ((e = p.next) == null) &#123;
+                  p.next = newNode(hash, key,value,null);
+                      //链表长度大于8转换为红黑树进行处理
+                  if (binCount &gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st  
+                       treeifyBin(tab, hash);
+                   break;
+               &#125;
+                  // key已经存在直接覆盖value
+              if (e.hash == hash &amp;&amp;
+           ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))      break;
+               p = e;
+           &#125;
+       &#125;
+      
+       if (e != null) &#123; // existing mapping for key
+           V oldValue = e.value;
+           if (!onlyIfAbsent || oldValue == null)
+               e.value = value;
+           afterNodeAccess(e);
+           return oldValue;
+       &#125;
+   &#125;
+
+   ++modCount;
+   // 步骤⑥：超过最大容量 就扩容
+   if (++size &gt; threshold)
+       resize();
+   afterNodeInsertion(evict);
+   return null &#125;
+</code></pre>
+<p>1.首先判断桶数组是否为空，如果为空或者长度为0则新建一个桶数组（初始话长度为16）；<br>2.判断插入元素所对应的桶数组的索引处是否为空，如果为空则说明暂时没有元素与该元素产生hash冲突，直接将元素插入到该位置，在判断hashmap是否需要扩容（比较size和最大容量threashold的大小）；<br>3.如果插入元素所对应的位置不为空，则比较该元素的key和桶所对应的首元素的key是否相等（通过hashcode和equals方法进行判断），如果相等则直接替换他们的；<br>4.如果key和桶中首元素的key不相等，则再判断桶中是否是红黑树，如果是的则直接在红黑树中插入键值对；<br>5.如果不是红黑树则需要遍历桶，如果在遍历过程总找到key相等的就直接替换，否则看桶中的元素是否大于8,大于8则转换为红黑树进行存储，然后在红黑树中进行插入。不大于8则进行链表的插入操作；<br>6.插入成功后判断是否需要扩容；</p>
+<h1 id="get-方法的源码及分析"><a href="#get-方法的源码及分析" class="headerlink" title="get()方法的源码及分析"></a><strong>get()方法的源码及分析</strong></h1><pre><code class="java">final Node&lt;K,V&gt; getNode(int hash, Object key) &#123;
+    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; int n; K k;
+    if ((tab = table) != null &amp;&amp; (n = tab.length) &gt; 0 &amp;&amp;
+        (first = tab[(n - 1) &amp; hash]) != null) &#123;
+        if (first.hash == hash &amp;&amp; // always check first node
+            ((k = first.key) == key || (key != null &amp;&amp; key.equals(k))))
+            return first;
+        if ((e = first.next) != null) &#123;
+            if (first instanceof TreeNode)
+                return ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);
+            do &#123;
+                if (e.hash == hash &amp;&amp;
+                    ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
+                    return e;
+            &#125; while ((e = e.next) != null);
+        &#125;
+    &#125;
+    return null;
+&#125;
+</code></pre>
+<p>get方法的原理相对来说比较简单，首先计算key的hashcode值，然后进一步计算得到桶数组的索引，相等则返回value不相等则通过遍历来查找（如果为红黑树储存则在红黑树中进行查找，如果为链表则在链表总进行查找）。若找不到则返回null;</p>
+<h1 id="JDK1-8和JDK1-7的链表插入方式"><a href="#JDK1-8和JDK1-7的链表插入方式" class="headerlink" title="JDK1.8和JDK1.7的链表插入方式"></a>JDK1.8和JDK1.7的链表插入方式</h1><p>dk1.8之前采用的是头部插入而jdk1.8中采用的是尾部插入，我觉得主要是为了提高效率，可能sun公司的工程师认为后插入的元素使用的概率比较大，放在头部可以提高操作的性能。后来改为尾部插入的原因是因为尾部插入可以保证元素的顺序和插入的顺序相同同时使得hashmap的性能更加稳定。同时插入操作也十分简单方便，只需要将原来链表首元素赋值给待插入元素的next属性即可。</p>
+<h1 id="HashMap线程安全性分析"><a href="#HashMap线程安全性分析" class="headerlink" title="HashMap线程安全性分析"></a>HashMap线程安全性分析</h1><p>hashmap发生死锁的原因主要是在并发环境中，当有多个线程进行扩容时候形成了一个闭合链条，导致死循环。具体讲解可以参考博客</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/21673805">Java 8系列之重新认识HashMap</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/luxia_24/article/details/52344367">关于上上文hashmap的深入-hashmap产生死锁的详解</a></p>
+<h1 id="HashMap的扩容机制"><a href="#HashMap的扩容机制" class="headerlink" title="HashMap的扩容机制"></a>HashMap的扩容机制</h1><p>扩容的源码如下：</p>
+<pre><code class="java">final Node&lt;K,V&gt;[] resize() &#123;
+        Node&lt;K,V&gt;[] oldTab = table;
+        int oldCap = (oldTab == null) ? 0 : oldTab.length;
+        int oldThr = threshold;
+        int newCap, newThr = 0;
+        if (oldCap &gt; 0) &#123;
+            if (oldCap &gt;= MAXIMUM_CAPACITY) &#123;
+                threshold = Integer.MAX_VALUE;
+                return oldTab;
+            &#125;
+            else if ((newCap = oldCap &lt;&lt; 1) &lt; MAXIMUM_CAPACITY &amp;&amp;
+                     oldCap &gt;= DEFAULT_INITIAL_CAPACITY)
+                newThr = oldThr &lt;&lt; 1; // double threshold
+        &#125;
+        else if (oldThr &gt; 0) // initial capacity was placed in threshold
+            newCap = oldThr;
+        else &#123;               // zero initial threshold signifies using defaults
+            newCap = DEFAULT_INITIAL_CAPACITY;
+            newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);
+        &#125;
+        if (newThr == 0) &#123;
+            float ft = (float)newCap * loadFactor;
+            newThr = (newCap &lt; MAXIMUM_CAPACITY &amp;&amp; ft &lt; (float)MAXIMUM_CAPACITY ?
+                      (int)ft : Integer.MAX_VALUE);
+        &#125;
+        threshold = newThr;
+        @SuppressWarnings(&#123;&quot;rawtypes&quot;,&quot;unchecked&quot;&#125;)
+            Node&lt;K,V&gt;[] newTab = (Node&lt;K,V&gt;[])new Node[newCap];
+        table = newTab;
+        if (oldTab != null) &#123;
+            for (int j = 0; j &lt; oldCap; ++j) &#123;
+                Node&lt;K,V&gt; e;
+                if ((e = oldTab[j]) != null) &#123;
+                    oldTab[j] = null;
+                    if (e.next == null)
+                        newTab[e.hash &amp; (newCap - 1)] = e;
+                    else if (e instanceof TreeNode)
+                        ((TreeNode&lt;K,V&gt;)e).split(this, newTab, j, oldCap);
+                    else &#123; // preserve order
+                        Node&lt;K,V&gt; loHead = null, loTail = null;
+                        Node&lt;K,V&gt; hiHead = null, hiTail = null;
+                        Node&lt;K,V&gt; next;
+                        do &#123;
+                            next = e.next;
+                            if ((e.hash &amp; oldCap) == 0) &#123;
+                                if (loTail == null)
+                                    loHead = e;
+                                else
+                                    loTail.next = e;
+                                loTail = e;
+                            &#125;
+                            else &#123;
+                                if (hiTail == null)
+                                    hiHead = e;
+                                else
+                                    hiTail.next = e;
+                                hiTail = e;
+                            &#125;
+                        &#125; while ((e = next) != null);
+                        if (loTail != null) &#123;
+                            loTail.next = null;
+                            newTab[j] = loHead;
+                        &#125;
+                        if (hiTail != null) &#123;
+                            hiTail.next = null;
+                            newTab[j + oldCap] = hiHead;
+                        &#125;
+                    &#125;
+                &#125;
+            &#125;
+        &#125;
+        return newTab;
+    &#125;
+</code></pre>
+<p>用一个比较经典的例子讲解一下这个过程。假设了我们的hash算法就是简单的用key mod 一下表的大小（也就是数组的长度）。其中的哈希桶数组table的size=2， 所以key = 3、7、5，put顺序依次为 5、7、3。在mod 2以后都冲突在table[1]这里了。这里假设负载因子 loadFactor=1，即当键值对的实际大小size 大于 table的实际大小时进行扩容。接下来的三个步骤是哈希桶数组 resize成4，然后所有的Node重新rehash的过程。<br>如果每次扩容都需要在进行rehash这样太过麻烦，有没有什么比较好的办法呢？sun的工程师在jdk1.8中进行了优化，提出了一个很巧妙的方法，那就是每次扩容的时候容量都是乘以2，这就保证了扩容后的索引要么保持不变要么是在原值的基础上加上了原始数组的容量。在jdk1.8中这个新的索引不需要重新计算，只需要根据hash值新增的那一位判断，如果新增的那一位为0,则保持不变，为1则新索引=旧索引+旧容量；这个设计确实非常的巧妙，既省去了重新计算hash值的时间，而且同时，由于新增的1bit是0还是1可以认为是随机的，因此resize的过程，均匀的把之前的冲突的节点分散到新的bucket了。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+            </ul>
+            
+            
+            <div class="post-nav">
+                <hr>
+                
+                    <div class="post-nav-item">上一篇:<a href="/2021/03/28/ArrayList%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" rel="prev" 
+                        title="ArrayList底层原理分析">ArrayList底层原理分析
+                      </a></div>
+                
+                
+                    <div class="post-nav-item">下一篇:<a href="/2021/03/28/%E5%AE%B9%E5%99%A8%E7%BB%BC%E8%BF%B0/" rel="next" 
+                        title="容器分析">容器分析</a></div>
+                                
+            </div>   
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d=''
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/lovelyChild.jpg" height=300 width=300></img>
+                    <p>HustZjx</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/TriDiamond" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="https://twitter.com/TriDiamond6" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="https://stackoverflow.com/users/7602324/tridiamond?tab=profile" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">21 <p>文章</p></a></li>
+                    <li><a href="/categories">4 <p>分类</p></a></li>
+                    <li><a href="/tags">55 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HashMap%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">HashMap介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">底层数据结构分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK1-8%E4%B9%8B%E5%89%8D"><span class="toc-number">2.1.</span> <span class="toc-text">JDK1.8之前</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK1-8%E4%B9%8B%E5%90%8E"><span class="toc-number">2.2.</span> <span class="toc-text">JDK1.8之后</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%A1%AE%E5%AE%9AHash%E6%A1%B6%E6%95%B0%E7%BB%84%E7%B4%A2%E5%BC%95"><span class="toc-number">3.</span> <span class="toc-text">如何确定Hash桶数组索引</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Put%E6%96%B9%E6%B3%95%E7%9A%84%E6%BA%90%E7%A0%81%E5%8F%8A%E5%88%86%E6%9E%90"><span class="toc-number">3.1.</span> <span class="toc-text">Put方法的源码及分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#get-%E6%96%B9%E6%B3%95%E7%9A%84%E6%BA%90%E7%A0%81%E5%8F%8A%E5%88%86%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">get()方法的源码及分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JDK1-8%E5%92%8CJDK1-7%E7%9A%84%E9%93%BE%E8%A1%A8%E6%8F%92%E5%85%A5%E6%96%B9%E5%BC%8F"><span class="toc-number">5.</span> <span class="toc-text">JDK1.8和JDK1.7的链表插入方式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HashMap%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%80%A7%E5%88%86%E6%9E%90"><span class="toc-number">6.</span> <span class="toc-text">HashMap线程安全性分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HashMap%E7%9A%84%E6%89%A9%E5%AE%B9%E6%9C%BA%E5%88%B6"><span class="toc-number">7.</span> <span class="toc-text">HashMap的扩容机制</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2021
+        <span class="gradient-text">
+            HustZjx
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.5" target="_blank" rel="noopener">v1.4.5</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-149874671-1');
+</script>
+ 
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', 'Stay hungry, stay foolish'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+ <!-- 例：百度统计 --> <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?your_code"; var s = document.getElementsByTagName("script")[0];  s.parentNode.insertBefore(hm, s); })(); </script> 
+
+</html>

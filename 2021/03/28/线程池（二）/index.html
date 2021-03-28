@@ -1,0 +1,732 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>线程池（二） - Java Learning Blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Java Study,"> 
+    <meta name="description" content="ThreadPoolExecutor使用示例Runnable+ThreadPoolExecutor首先创建一个 Runnable 接口的实现类（当然也可以是 Callable 接口，我们上面也说了两,"> 
+    <meta name="author" content="HustZjx"> 
+    <link rel="alternative" href="atom.xml" title="Java Learning Blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Java Learning Blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">线程池（二）</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/并发编程"><b>「
+                    </b>并发编程<b> 」</b></a>
+                
+                三月 28, 2021
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2021/03/28/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%BA%8C%EF%BC%89/" title="线程池（二）" class="">线程池（二）</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    18k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    16 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/CachedThreadExecutor/" rel="tag">CachedThreadExecutor</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/FixedThreadPool/" rel="tag">FixedThreadPool</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ScheduledThreadPoolExecutor/" rel="tag">ScheduledThreadPoolExecutor</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/SingleThreadExecutor/" rel="tag">SingleThreadExecutor</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ThreadPoolExecutor/" rel="tag">ThreadPoolExecutor</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="ThreadPoolExecutor使用示例"><a href="#ThreadPoolExecutor使用示例" class="headerlink" title="ThreadPoolExecutor使用示例"></a><strong>ThreadPoolExecutor使用示例</strong></h1><h2 id="Runnable-ThreadPoolExecutor"><a href="#Runnable-ThreadPoolExecutor" class="headerlink" title="Runnable+ThreadPoolExecutor"></a><strong>Runnable+ThreadPoolExecutor</strong></h2><p>首先创建一个 <code>Runnable</code> 接口的实现类（当然也可以是 <code>Callable</code> 接口，我们上面也说了两者的区别。）</p>
+<pre><code class="java">MyRunnable.java
+import java.util.Date;
+
+/**
+ * 这是一个简单的Runnable类，需要大约5秒钟来执行其任务。
+ * @author shuang.kou
+ */
+public class MyRunnable implements Runnable &#123;
+
+    private String command;
+
+    public MyRunnable(String s) &#123;
+        this.command = s;
+    &#125;
+
+    @Override
+    public void run() &#123;
+        System.out.println(Thread.currentThread().getName() + &quot; Start. Time = &quot; + new Date());
+        processCommand();
+        System.out.println(Thread.currentThread().getName() + &quot; End. Time = &quot; + new Date());
+    &#125;
+
+    private void processCommand() &#123;
+        try &#123;
+            Thread.sleep(5000);
+        &#125; catch (InterruptedException e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+
+    @Override
+    public String toString() &#123;
+        return this.command;
+    &#125;
+&#125;
+Copy to clipboardErrorCopied
+</code></pre>
+<p>编写测试程序，我们这里以阿里巴巴推荐的使用 <code>ThreadPoolExecutor</code> 构造函数自定义参数的方式来创建线程池。</p>
+<pre><code class="java">ThreadPoolExecutorDemo.java
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+public class ThreadPoolExecutorDemo &#123;
+
+    private static final int CORE_POOL_SIZE = 5;
+    private static final int MAX_POOL_SIZE = 10;
+    private static final int QUEUE_CAPACITY = 100;
+    private static final Long KEEP_ALIVE_TIME = 1L;
+    public static void main(String[] args) &#123;
+
+        //使用阿里巴巴推荐的创建线程池的方式
+        //通过ThreadPoolExecutor构造函数自定义参数创建
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(
+                CORE_POOL_SIZE,
+                MAX_POOL_SIZE,
+                KEEP_ALIVE_TIME,
+                TimeUnit.SECONDS,
+                new ArrayBlockingQueue&lt;&gt;(QUEUE_CAPACITY),
+                new ThreadPoolExecutor.CallerRunsPolicy());
+
+        for (int i = 0; i &lt; 10; i++) &#123;
+            //创建WorkerThread对象（WorkerThread类实现了Runnable 接口）
+            Runnable worker = new MyRunnable(&quot;&quot; + i);
+            //执行Runnable
+            executor.execute(worker);
+        &#125;
+        //终止线程池
+        executor.shutdown();
+        while (!executor.isTerminated()) &#123;
+        &#125;
+        System.out.println(&quot;Finished all threads&quot;);
+    &#125;
+&#125;
+Copy to clipboardErrorCopied
+</code></pre>
+<p>可以看到我们上面的代码指定了：</p>
+<ol>
+<li><code>corePoolSize</code>: 核心线程数为 5。</li>
+<li><code>maximumPoolSize</code> ：最大线程数 10</li>
+<li><code>keepAliveTime</code> : 等待时间为 1L。</li>
+<li><code>unit</code>: 等待时间的单位为 TimeUnit.SECONDS。</li>
+<li><code>workQueue</code>：任务队列为 <code>ArrayBlockingQueue</code>，并且容量为 100;</li>
+<li><code>handler</code>:饱和策略为 <code>CallerRunsPolicy</code>。</li>
+</ol>
+<p><strong>Output：</strong></p>
+<pre><code class="java">pool-1-thread-3 Start. Time = Sun Apr 12 11:14:37 CST 2020
+pool-1-thread-5 Start. Time = Sun Apr 12 11:14:37 CST 2020
+pool-1-thread-2 Start. Time = Sun Apr 12 11:14:37 CST 2020
+pool-1-thread-1 Start. Time = Sun Apr 12 11:14:37 CST 2020
+pool-1-thread-4 Start. Time = Sun Apr 12 11:14:37 CST 2020
+pool-1-thread-3 End. Time = Sun Apr 12 11:14:42 CST 2020
+pool-1-thread-4 End. Time = Sun Apr 12 11:14:42 CST 2020
+pool-1-thread-1 End. Time = Sun Apr 12 11:14:42 CST 2020
+pool-1-thread-5 End. Time = Sun Apr 12 11:14:42 CST 2020
+pool-1-thread-1 Start. Time = Sun Apr 12 11:14:42 CST 2020
+pool-1-thread-2 End. Time = Sun Apr 12 11:14:42 CST 2020
+pool-1-thread-5 Start. Time = Sun Apr 12 11:14:42 CST 2020
+pool-1-thread-4 Start. Time = Sun Apr 12 11:14:42 CST 2020
+pool-1-thread-3 Start. Time = Sun Apr 12 11:14:42 CST 2020
+pool-1-thread-2 Start. Time = Sun Apr 12 11:14:42 CST 2020
+pool-1-thread-1 End. Time = Sun Apr 12 11:14:47 CST 2020
+pool-1-thread-4 End. Time = Sun Apr 12 11:14:47 CST 2020
+pool-1-thread-5 End. Time = Sun Apr 12 11:14:47 CST 2020
+pool-1-thread-3 End. Time = Sun Apr 12 11:14:47 CST 2020
+pool-1-thread-2 End. Time = Sun Apr 12 11:14:47 CST 2020
+</code></pre>
+<h2 id="线程池原理分析"><a href="#线程池原理分析" class="headerlink" title="线程池原理分析"></a><strong>线程池原理分析</strong></h2><p>通过代码输出结果可以看出：<strong>线程首先会先执行 5 个任务，然后这些任务有任务被执行完的话，就会去拿新的任务执行。</strong> 大家可以先通过上面讲解的内容，分析一下到底是咋回事？（自己独立思考一会）</p>
+<p>现在，我们就分析上面的输出内容来简单分析一下线程池原理。</p>
+<p><strong>为了搞懂线程池的原理，我们需要首先分析一下 <code>execute</code>方法。</strong> 在 4.1 节中的 Demo 中我们使用 <code>executor.execute(worker)</code>来提交一个任务到线程池中去，这个方法非常重要，下面我们来看看它的源码：</p>
+<pre><code class="java">   // 存放线程池的运行状态 (runState) 和线程池内有效线程的数量 (workerCount)
+   private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
+   
+    private static int workerCountOf(int c) &#123;
+        return c &amp; CAPACITY;
+    &#125;
+    //任务队列
+    private final BlockingQueue&lt;Runnable&gt; workQueue;
+
+    public void execute(Runnable command) &#123;
+        // 如果任务为null，则抛出异常。
+        if (command == null)
+            throw new NullPointerException();
+        // ctl 中保存的线程池当前的一些状态信息
+        int c = ctl.get();
+
+        //  下面会涉及到 3 步 操作
+        // 1.首先判断当前线程池中之行的任务数量是否小于 corePoolSize
+        // 如果小于的话，通过addWorker(command, true)新建一个线程，并将任务(command)添加到该线程中；然后，启动该线程从而执行任务。
+        if (workerCountOf(c) &lt; corePoolSize) &#123;
+            if (addWorker(command, true))
+                return;
+            c = ctl.get();
+        &#125;
+        // 2.如果当前之行的任务数量大于等于 corePoolSize 的时候就会走到这里
+        // 通过 isRunning 方法判断线程池状态，线程池处于 RUNNING 状态才会被并且队列可以加入任务，该任务才会被加入进去
+        if (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;
+            int recheck = ctl.get();
+            // 再次获取线程池状态，如果线程池状态不是 RUNNING 状态就需要从任务队列中移除任务，并尝试判断线程是否全部执行完毕。同时执行拒绝策略。
+            if (!isRunning(recheck) &amp;&amp; remove(command))
+                reject(command);
+                // 如果当前线程池为空就新创建一个线程并执行。
+            else if (workerCountOf(recheck) == 0)
+                addWorker(null, false);
+        &#125;
+        //3. 通过addWorker(command, false)新建一个线程，并将任务(command)添加到该线程中；然后，启动该线程从而执行任务。
+        //如果addWorker(command, false)执行失败，则通过reject()执行相应的拒绝策略的内容。
+        else if (!addWorker(command, false))
+            reject(command);
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>通过下图可以更好的对上面这 3 步做一个展示</p>
+<p><img src="https://snailclimb.gitee.io/javaguide/docs/java/multi-thread/images/java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/%E5%9B%BE%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86.png" alt="图解线程池实现原理"></p>
+<h2 id="几个常见方法的对比"><a href="#几个常见方法的对比" class="headerlink" title="几个常见方法的对比"></a><strong>几个常见方法的对比</strong></h2><h3 id="Runnable-和Callable"><a href="#Runnable-和Callable" class="headerlink" title="Runnable()和Callable()"></a><strong>Runnable()和Callable()</strong></h3><p><code>Runnable</code>自 Java 1.0 以来一直存在，但<code>Callable</code>仅在 Java 1.5 中引入,目的就是为了来处理<code>Runnable</code>不支持的用例。<code>Runnable</code> 接口不会返回结果或抛出检查异常，但是<code>Callable</code> 接口可以。所以，如果任务不需要返回结果或抛出异常推荐使用 **<code>Runnable</code> 接口**，这样代码看起来会更加简洁。</p>
+<p>工具类 <code>Executors</code> 可以实现 <code>Runnable</code> 对象和 <code>Callable</code> 对象之间的相互转换。（<code>Executors.callable（Runnable task</code>）或 <code>Executors.callable（Runnable task，Object resule）</code>）。</p>
+<pre><code class="java">Runnable.java
+@FunctionalInterface
+public interface Runnable &#123;
+   /**
+    * 被线程执行，没有返回值也无法抛出异常
+    */
+    public abstract void run();
+&#125;Copy to clipboardErrorCopied
+Callable.java
+@FunctionalInterface
+public interface Callable&lt;V&gt; &#123;
+    /**
+     * 计算结果，或在无法这样做时抛出异常。
+     * @return 计算得出的结果
+     * @throws 如果无法计算结果，则抛出异常
+     */
+    V call() throws Exception;
+&#125;
+</code></pre>
+<h3 id="execute-和submit"><a href="#execute-和submit" class="headerlink" title="execute()和submit()"></a>execute()和submit()</h3><ol>
+<li><code>execute()</code>方法用于提交不需要返回值的任务，所以无法判断任务是否被线程池执行成功与否；</li>
+<li><code>submit()</code>方法用于提交需要返回值的任务。线程池会返回一个 <code>Future</code> 类型的对象，通过这个 <code>Future</code> 对象可以判断任务是否执行成功 ，并且可以通过 <code>Future</code> 的 <code>get()</code>方法来获取返回值，<code>get()</code>方法会阻塞当前线程直到任务完成，而使用 <code>get（long timeout，TimeUnit unit）</code>方法则会阻塞当前线程一段时间后立即返回，这时候有可能任务没有执行完。</li>
+</ol>
+<p>我们以**<code>AbstractExecutorService</code>**接口中的一个 <code>submit</code> 方法为例子来看看源代码：</p>
+<pre><code class="java">    public Future&lt;?&gt; submit(Runnable task) &#123;
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;Void&gt; ftask = newTaskFor(task, null);
+        execute(ftask);
+        return ftask;
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>上面方法调用的 <code>newTaskFor</code> 方法返回了一个 <code>FutureTask</code> 对象。</p>
+<pre><code class="java">    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) &#123;
+        return new FutureTask&lt;T&gt;(runnable, value);
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>我们再来看看<code>execute()</code>方法：</p>
+<pre><code class="java">    public void execute(Runnable command) &#123;
+      ...
+    &#125;
+</code></pre>
+<h3 id="shutdown-和shutdownNow"><a href="#shutdown-和shutdownNow" class="headerlink" title="shutdown()和shutdownNow()"></a><strong>shutdown()和shutdownNow()</strong></h3><ul>
+<li><code>shutdown（）</code> :关闭线程池，线程池的状态变为 <code>SHUTDOWN</code>。线程池不再接受新任务了，但是队列里的任务得执行完毕。</li>
+<li><code>shutdownNow（）</code> :关闭线程池，线程的状态变为 <code>STOP</code>。线程池会终止当前正在运行的任务，并停止处理排队的任务并返回正在等待执行的 List。</li>
+</ul>
+<h3 id="isTerminated-和isShutdown"><a href="#isTerminated-和isShutdown" class="headerlink" title="isTerminated()和isShutdown()"></a><strong>isTerminated()和isShutdown()</strong></h3><ul>
+<li><code>isShutDown</code> 当调用 <code>shutdown()</code> 方法后返回为 true。</li>
+<li><code>isTerminated</code> 当调用 <code>shutdown()</code> 方法后，并且所有提交的任务完成后返回为 true</li>
+</ul>
+<h1 id="常见线程池详解"><a href="#常见线程池详解" class="headerlink" title="常见线程池详解"></a><strong>常见线程池详解</strong></h1><h2 id="FixedThreadPool"><a href="#FixedThreadPool" class="headerlink" title="FixedThreadPool"></a><strong>FixedThreadPool</strong></h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a><strong>介绍</strong></h3><p><code>FixedThreadPool</code> 被称为可重用固定线程数的线程池。通过 Executors 类中的相关源代码来看一下相关实现：</p>
+<pre><code class="java">   /**
+     * 创建一个可重用固定数量线程的线程池
+     */
+    public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory) &#123;
+        return new ThreadPoolExecutor(nThreads, nThreads,
+                                      0L, TimeUnit.MILLISECONDS,
+                                      new LinkedBlockingQueue&lt;Runnable&gt;(),
+                                      threadFactory);
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>另外还有一个 <code>FixedThreadPool</code> 的实现方法，和上面的类似，所以这里不多做阐述：</p>
+<pre><code class="java">    public static ExecutorService newFixedThreadPool(int nThreads) &#123;
+        return new ThreadPoolExecutor(nThreads, nThreads,
+                                      0L, TimeUnit.MILLISECONDS,
+                                      new LinkedBlockingQueue&lt;Runnable&gt;());
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>从上面源代码可以看出新创建的 <code>FixedThreadPool</code> 的 <code>corePoolSize</code> 和 <code>maximumPoolSize</code> 都被设置为 nThreads，这个 nThreads 参数是我们使用的时候自己传递的。</p>
+<h2 id="执行任务过程介绍"><a href="#执行任务过程介绍" class="headerlink" title="执行任务过程介绍"></a><strong>执行任务过程介绍</strong></h2><p><code>FixedThreadPool</code> 的 <code>execute()</code> 方法运行示意图（该图片来源：《Java 并发编程的艺术》）：</p>
+<p><img src="https://snailclimb.gitee.io/javaguide/docs/java/multi-thread/images/java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/FixedThreadPool.png" alt="FixedThreadPool的execute()方法运行示意图"></p>
+<p><strong>上图说明：</strong></p>
+<ol>
+<li>如果当前运行的线程数小于 corePoolSize， 如果再来新任务的话，就创建新的线程来执行任务；</li>
+<li>当前运行的线程数等于 corePoolSize 后， 如果再来新任务的话，会将任务加入 <code>LinkedBlockingQueue</code>；</li>
+<li>线程池中的线程执行完 手头的任务后，会在循环中反复从 <code>LinkedBlockingQueue</code> 中获取任务来执行；</li>
+</ol>
+<h3 id="为什么不推荐使用FixedThreadPool"><a href="#为什么不推荐使用FixedThreadPool" class="headerlink" title="为什么不推荐使用FixedThreadPool"></a><strong>为什么不推荐使用FixedThreadPool</strong></h3><p><code>FixedThreadPool</code> 使用无界队列 <code>LinkedBlockingQueue</code>（队列的容量为 Intger.MAX_VALUE）作为线程池的工作队列会对线程池带来如下影响 ：</p>
+<ol>
+<li>当线程池中的线程数达到 <code>corePoolSize</code> 后，新任务将在无界队列中等待，因此线程池中的线程数不会超过<code> corePoolSize</code>；</li>
+<li>由于使用无界队列时 <code>maximumPoolSize</code> 将是一个无效参数，因为不可能存在任务队列满的情况。所以，通过创建 <code>FixedThreadPool</code>的源码可以看出创建的 <code>FixedThreadPool</code> 的 <code>corePoolSize</code> 和 <code>maximumPoolSize</code> 被设置为同一个值。</li>
+<li>由于 1 和 2，使用无界队列时 <code>keepAliveTime</code> 将是一个无效参数；</li>
+<li>运行中的 <code>FixedThreadPool</code>（未执行 <code>shutdown()</code>或 <code>shutdownNow()</code>）不会拒绝任务，在任务比较多的时候会导致 <code>OOM</code>（内存溢出）。</li>
+</ol>
+<h2 id="SingleThreadExecutor详解"><a href="#SingleThreadExecutor详解" class="headerlink" title="SingleThreadExecutor详解"></a><strong>SingleThreadExecutor详解</strong></h2><h3 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a><strong>介绍</strong></h3><p><code>SingleThreadExecutor</code> 是只有一个线程的线程池。下面看看<strong>SingleThreadExecutor 的实现：</strong></p>
+<pre><code class="java">   /**
+     *返回只有一个线程的线程池
+     */
+    public static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactory) &#123;
+        return new FinalizableDelegatedExecutorService
+            (new ThreadPoolExecutor(1, 1,
+                                    0L, TimeUnit.MILLISECONDS,
+                                    new LinkedBlockingQueue&lt;Runnable&gt;(),
+                                    threadFactory));
+    &#125;Copy to clipboardErrorCopied
+   public static ExecutorService newSingleThreadExecutor() &#123;
+        return new FinalizableDelegatedExecutorService
+            (new ThreadPoolExecutor(1, 1,
+                                    0L, TimeUnit.MILLISECONDS,
+                                    new LinkedBlockingQueue&lt;Runnable&gt;()));
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>从上面源代码可以看出新创建的 <code>SingleThreadExecutor</code> 的 <code>corePoolSize</code> 和 <code>maximumPoolSize</code> 都被设置为 1.其他参数和 <code>FixedThreadPool</code> 相同。</p>
+<h3 id="执行任务过程"><a href="#执行任务过程" class="headerlink" title="执行任务过程"></a><strong>执行任务过程</strong></h3><p><code>SingleThreadExecutor</code> 的运行示意图（该图片来源：《Java 并发编程的艺术》）：</p>
+<p><img src="https://snailclimb.gitee.io/javaguide/docs/java/multi-thread/images/java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/SingleThreadExecutor.png" alt="SingleThreadExecutor的运行示意图"></p>
+<p><strong>上图说明;</strong></p>
+<ol>
+<li>如果当前运行的线程数少于 corePoolSize，则创建一个新的线程执行任务；</li>
+<li>当前线程池中有一个运行的线程后，将任务加入 <code>LinkedBlockingQueue</code></li>
+<li>线程执行完当前的任务后，会在循环中反复从<code>LinkedBlockingQueue</code> 中获取任务来执行；</li>
+</ol>
+<h2 id="CachedThreadPool详解"><a href="#CachedThreadPool详解" class="headerlink" title="CachedThreadPool详解"></a><strong>CachedThreadPool详解</strong></h2><h3 id="介绍-2"><a href="#介绍-2" class="headerlink" title="介绍"></a><strong>介绍</strong></h3><p><code>CachedThreadPool</code> 是一个会根据需要创建新线程的线程池。下面通过源码来看看 <code>CachedThreadPool</code> 的实现：</p>
+<pre><code class="java">    /**
+     * 创建一个线程池，根据需要创建新线程，但会在先前构建的线程可用时重用它。
+     */
+    public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) &#123;
+        return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                      60L, TimeUnit.SECONDS,
+                                      new SynchronousQueue&lt;Runnable&gt;(),
+                                      threadFactory);
+    &#125;
+Copy to clipboardErrorCopied
+    public static ExecutorService newCachedThreadPool() &#123;
+        return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                      60L, TimeUnit.SECONDS,
+                                      new SynchronousQueue&lt;Runnable&gt;());
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p><code>CachedThreadPool</code> 的<code>corePoolSize</code> 被设置为空（0），<code>maximumPoolSize</code>被设置为 Integer.MAX.VALUE，即它是无界的，这也就意味着如果主线程提交任务的速度高于 <code>maximumPool</code> 中线程处理任务的速度时，<code>CachedThreadPool</code> 会不断创建新的线程。极端情况下，这样会导致耗尽 cpu 和内存资源。</p>
+<h3 id="执行任务过程-1"><a href="#执行任务过程-1" class="headerlink" title="执行任务过程"></a><strong>执行任务过程</strong></h3><p><code>CachedThreadPool </code>的 <code>execute()</code>方法的执行示意图（该图片来源：《Java 并发编程的艺术》）：</p>
+<p><img src="https://snailclimb.gitee.io/javaguide/docs/java/multi-thread/images/java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/CachedThreadPool-execute.png" alt="CachedThreadPool的execute()方法的执行示意图"></p>
+<p><strong>上图说明：</strong></p>
+<ol>
+<li>首先执行 <code>SynchronousQueue.offer(Runnable task)</code> 提交任务到任务队列。如果当前 <code>maximumPool</code> 中有闲线程正在执行 <code>SynchronousQueue.poll(keepAliveTime,TimeUnit.NANOSECONDS)</code>，那么主线程执行 offer 操作与空闲线程执行的 <code>poll</code> 操作配对成功，主线程把任务交给空闲线程执行，<code>execute()</code>方法执行完成，否则执行下面的步骤 2；</li>
+<li>当初始 <code>maximumPool</code> 为空，或者 <code>maximumPool</code> 中没有空闲线程时，将没有线程执行 <code>SynchronousQueue.poll(keepAliveTime,TimeUnit.NANOSECONDS)</code>。这种情况下，步骤 1 将失败，此时 <code>CachedThreadPool</code> 会创建新线程执行任务，execute 方法执行完成；</li>
+</ol>
+<h3 id="为什么不推荐使用CachedThreadPool"><a href="#为什么不推荐使用CachedThreadPool" class="headerlink" title="为什么不推荐使用CachedThreadPool"></a><strong>为什么不推荐使用CachedThreadPool</strong></h3><p><code>CachedThreadPool</code>允许创建的线程数量为 <code>Integer.MAX_VALUE </code>，可能会创建大量线程，从而导致 <code>OOM</code>。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+            </ul>
+            
+            
+            <div class="post-nav">
+                <hr>
+                
+                    <div class="post-nav-item">上一篇:<a href="/2021/03/28/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%B8%89%EF%BC%89/" rel="prev" 
+                        title="线程池（三）">线程池（三）
+                      </a></div>
+                
+                
+                    <div class="post-nav-item">下一篇:<a href="/2021/03/28/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%B8%80%EF%BC%89/" rel="next" 
+                        title="线程池（一）">线程池（一）</a></div>
+                                
+            </div>   
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d=''
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/lovelyChild.jpg" height=300 width=300></img>
+                    <p>HustZjx</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/TriDiamond" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="https://twitter.com/TriDiamond6" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="https://stackoverflow.com/users/7602324/tridiamond?tab=profile" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">21 <p>文章</p></a></li>
+                    <li><a href="/categories">4 <p>分类</p></a></li>
+                    <li><a href="/tags">55 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ThreadPoolExecutor%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.</span> <span class="toc-text">ThreadPoolExecutor使用示例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Runnable-ThreadPoolExecutor"><span class="toc-number">1.1.</span> <span class="toc-text">Runnable+ThreadPoolExecutor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">线程池原理分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%A0%E4%B8%AA%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-number">1.3.</span> <span class="toc-text">几个常见方法的对比</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Runnable-%E5%92%8CCallable"><span class="toc-number">1.3.1.</span> <span class="toc-text">Runnable()和Callable()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#execute-%E5%92%8Csubmit"><span class="toc-number">1.3.2.</span> <span class="toc-text">execute()和submit()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shutdown-%E5%92%8CshutdownNow"><span class="toc-number">1.3.3.</span> <span class="toc-text">shutdown()和shutdownNow()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isTerminated-%E5%92%8CisShutdown"><span class="toc-number">1.3.4.</span> <span class="toc-text">isTerminated()和isShutdown()</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text">常见线程池详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#FixedThreadPool"><span class="toc-number">2.1.</span> <span class="toc-text">FixedThreadPool</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.1.1.</span> <span class="toc-text">介绍</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1%E8%BF%87%E7%A8%8B%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.2.</span> <span class="toc-text">执行任务过程介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8FixedThreadPool"><span class="toc-number">2.2.1.</span> <span class="toc-text">为什么不推荐使用FixedThreadPool</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SingleThreadExecutor%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.3.</span> <span class="toc-text">SingleThreadExecutor详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1%E8%BF%87%E7%A8%8B"><span class="toc-number">2.3.2.</span> <span class="toc-text">执行任务过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CachedThreadPool%E8%AF%A6%E8%A7%A3"><span class="toc-number">2.4.</span> <span class="toc-text">CachedThreadPool详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-2"><span class="toc-number">2.4.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1%E8%BF%87%E7%A8%8B-1"><span class="toc-number">2.4.2.</span> <span class="toc-text">执行任务过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8CachedThreadPool"><span class="toc-number">2.4.3.</span> <span class="toc-text">为什么不推荐使用CachedThreadPool</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2021
+        <span class="gradient-text">
+            HustZjx
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.5" target="_blank" rel="noopener">v1.4.5</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-149874671-1');
+</script>
+ 
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', 'Stay hungry, stay foolish'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+ <!-- 例：百度统计 --> <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?your_code"; var s = document.getElementsByTagName("script")[0];  s.parentNode.insertBefore(hm, s); })(); </script> 
+
+</html>

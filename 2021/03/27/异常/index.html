@@ -1,0 +1,643 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>异常 - Java Learning Blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Java Study,"> 
+    <meta name="description" content="异常处理实际上，当java程序执行时出现错误时，jvm会把执行时出错的信息(例如出错原因、类型、 位置)收集，然后打包成为1个对象(object)，程序员可以对这种对象进行处理。这种对象就是所谓的异,"> 
+    <meta name="author" content="HustZjx"> 
+    <link rel="alternative" href="atom.xml" title="Java Learning Blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Java Learning Blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">异常</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Java基础"><b>「
+                    </b>JAVA基础<b> 」</b></a>
+                
+                三月 27, 2021
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2021/03/27/%E5%BC%82%E5%B8%B8/" title="异常" class="">异常</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    11k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    10 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%86%85%E9%83%A8%E7%B1%BB/" rel="tag">内部类</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag">垃圾回收</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%BC%95%E7%94%A8/" rel="tag">引用</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%8A%BD%E8%B1%A1%E7%B1%BB/" rel="tag">抽象类</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a><strong>异常处理</strong></h1><p>实际上，当java程序执行时出现错误时，jvm会把执行时出错的信息(例如出错原因、类型、 位置)收集，然后打包成为1个对象(object)，程序员可以对这种对象进行处理。这种对象就是所谓的异常。<strong>可能出现的异常的代码并不是肯定会出现异常, 还取决于执行环境和数据</strong>。</p>
+<p>在Java中，所有的异常都有一个共同的超类Throwable（可抛出类）。Throwable类有两个重要的子类：Exception（异常）和 Error（错误），二者都是Java异常处理的重要子类，各自都包含大量子类。异常和错误的区别是：异常能被程序本身可以处理，错误是无法处理。</p>
+<h1 id="异常分类"><a href="#异常分类" class="headerlink" title="异常分类"></a><strong>异常分类</strong></h1><h2 id="Error-和-Exception"><a href="#Error-和-Exception" class="headerlink" title="Error 和 Exception"></a><strong>Error 和 Exception</strong></h2><ul>
+<li><strong>Error</strong>：表示程序在运行期间出现了非常严重的错误，并且该错误是不可恢复的，由于这属于JVM层次的严重错误，因此这种错误是会导致程序终止执行的。此外，编译器不会检查Error是否被处理，因此在程序中不推荐去捕获Error类型的异常，主要原因是运行时异常多是由于逻辑错误导致的，属于应该解决的错误，也就是说，一个正确的程序中是不应该存在Error的。OutOfMemoryError、ThreadDeath等都属于错误。当这些异常发生时，JVM一般会选择将线程终止。</li>
+<li><strong>Exception</strong>：表示可恢复的异常，是编译器可以捕捉到的。可分为运行时异常（RuntimeException）和非运行时异常。</li>
+</ul>
+<p>它包含两种类型：<strong>受查异常（checked exception）</strong>和<strong>不受查异常（unchecked exception）</strong>，其中不受查异常特指<strong>运行时异常（runtime exception）</strong>。</p>
+<p>在实际开发中，经常会在程序编译时产生一些异常，而这些异常<strong>必须要进行处理</strong>，这种异常被称为<strong>编译时异常</strong>，也被称为<strong>受查异常</strong>，所有的Error都属于受查异常。另外还有一种异常是在程序运行时产生的（运行时异常），这种异常即使不编写异常处理代码，依然可以通过编译，因此被称为不受查异常。</p>
+<p>总而言之，只能在代码中忽略RuntimeException（及其子类）类型的异常，其他类型异常的处理都是由编译器强制实施的。究其原因，RuntimeException代表的是编程错误：</p>
+<ul>
+<li>非运行时异常：除了RuntimeError的异常， 是需要显示用try-catch捕捉处理的异常，如IOException等；</li>
+<li>运行时异常：不需要显示捕捉，如NullPointException等，常见于程序逻辑问题导致。</li>
+</ul>
+<h1 id="异常处理机制"><a href="#异常处理机制" class="headerlink" title="异常处理机制"></a><strong>异常处理机制</strong></h1><h2 id="捕获与处理"><a href="#捕获与处理" class="headerlink" title="捕获与处理"></a><strong>捕获与处理</strong></h2><h3 id="try-catch-finally的处理机制"><a href="#try-catch-finally的处理机制" class="headerlink" title="try-catch-finally的处理机制"></a><strong>try-catch-finally的处理机制</strong></h3><p>完整的异常处理程序看起来像这样，但Java也允许缺少catch或者finally：</p>
+<pre><code class="java">try &#123;
+    // 监控区域（guarded region）
+    // 可能抛出异常 A、B、C 的危险活动
+    throw new A(); // A为自定义的异常类型
+&#125; catch(A a1) &#123;
+    // 异常A的异常处理程序
+&#125; catch(B b1) &#123;
+    // 异常B的异常处理程序
+&#125; catch(C c1) &#123;
+    // 异常C的异常处理程序
+&#125; finally &#123;
+    // 每次必须执行的活动
+&#125;
+</code></pre>
+<ul>
+<li><strong>try</strong>块为监控区域（guarded region），即可能产生异常的区域。关键字throw用来抛出异常，每个异常都作为一个对象抛出。</li>
+<li><strong>catch</strong>块为异常处理程序，异常处理程序必须紧跟在try块之后，当异常被抛出时，异常处理程序将负责搜寻参数与异常类型相匹配的第一个处理程序，然后进入catch子句执行。注意，只有匹配的catch子句才能得到执行（第5部分将会讲到异常匹配），这与switch语句不同，switch语句需要在每一个case后面跟一个break，以避免执行后续的case子句。</li>
+<li><strong>finally</strong>块是程序希望每次都要执行的代码，例如一些需要清理的资源：已经打开的文件或网络连接，在屏幕上画的图形，甚至可以是外部世界的某个开关。总之记住，finally最可靠。</li>
+</ul>
+<h3 id="自动关闭的try-catch"><a href="#自动关闭的try-catch" class="headerlink" title="自动关闭的try-catch"></a><strong>自动关闭的try-catch</strong></h3><p>补充：在Java7之前，如果遇到类似IO流的处理，要在finally部分关闭IO流；Java7增加了一个新用法，在Java7优化后的try-with-resource语句，该语句确保了每个资源在语句结束时关闭。所谓的资源是指在程序完成后，必须关闭的流对象。写在()里面的流对象对应的类都实现了自动关闭接口AutoCloseable；</p>
+<pre><code class="java">try (创建流对象语句，如果多个,使用&#39;;&#39;隔开) &#123;
+    // 读写数据
+&#125; catch (IOException e) &#123;
+    e.printStackTrace();
+&#125;
+</code></pre>
+<h3 id="try-catch-finally的执行机制"><a href="#try-catch-finally的执行机制" class="headerlink" title="try-catch-finally的执行机制"></a><strong>try-catch-finally的执行机制</strong></h3><p>一般的顺序就是try-&gt;catch-&gt;finally，但要注意当出现return时的情况。若在try或catch语句里面有return语句，finally语句和return语句的执行顺序问题：</p>
+<ul>
+<li>若有finally语句，则无论如何，都会执行该语句，在try或catch中的return语句会将它的返回值压入栈内，然后执行finally语句，当finally执行完成后，若finally语句里有return语句，则执行return语句并结束。return的作用就是结束当前方法。</li>
+<li>若finally没有return语句，则返回被保存的栈里的return语句，再执行。然而，在压栈时候，要注意压入栈内的是什么东西，是值本身还是引用，若是引用则引用的值会改变，若是变量值，则不会改变。然而非常不建议在finally里面写return语句，因为它会吞掉异常，后面有例子。</li>
+</ul>
+<pre><code class="java">public class Multiplereturns &#123;
+    public static void f(int i) &#123;
+        System.out.println(&quot;Initialization that requires cleadup&quot;);
+        try &#123;
+            System.out.println(&quot;Point 1&quot;);
+            if (i == 1)
+                return;
+            System.out.println(&quot;Point 2&quot;);
+            if (i == 2)
+                return;
+            System.out.println(&quot;Point 3&quot;);
+            if (i == 3)
+                return;
+            System.out.println(&quot;End&quot;);
+            return;
+        &#125; finally &#123;
+            System.out.println(&quot;Performing cleanup&quot;);
+        &#125;
+    &#125;
+
+    public static void main(String[] args) &#123;
+        for (int i = 1; i &lt;= 4; i++)
+            f(i);
+    &#125;
+</code></pre>
+<h2 id="捕获所有异常"><a href="#捕获所有异常" class="headerlink" title="捕获所有异常"></a><strong>捕获所有异常</strong></h2><h3 id="异常的信息：e-toString-和e-getMessage"><a href="#异常的信息：e-toString-和e-getMessage" class="headerlink" title="异常的信息：e.toString()和e.getMessage()"></a><strong>异常的信息：e.toString()和e.getMessage()</strong></h3><pre><code class="java">public class E03 &#123;
+    public static void main(String[] args) &#123;
+        try&#123;
+            throw new ArrayIndexOutOfBoundsException(&quot;An ArrayIndexOutOfBoundsException in main&quot;);
+            //throw new ArrayIndexOutOfBoundsException();
+        &#125;
+        catch (ArrayIndexOutOfBoundsException e) &#123;
+            System.out.println(e.getMessage());
+            System.out.println(e.toString());
+        &#125;
+    &#125;
+&#125;
+/*Output:
+An ArrayIndexOutOfBoundsException in main
+java.lang.ArrayIndexOutOfBoundsException: An ArrayIndexOutOfBoundsException in main
+-----------------------------------------------------------------------------------
+null
+java.lang.ArrayIndexOutOfBoundsException
+ */
+</code></pre>
+<p>上面是传入字符串的输出，下面是默认构造器的输出。可以初步判断e.getMessage()获取的是传入的信息，而e.toString()包含两部分：类的信息+传入的信息。是否是这样哪？看源码：</p>
+<pre><code class="java">private String detailMessage;
+
+public Throwable(String message) &#123;
+    fillInStackTrace();
+    detailMessage = message;
+&#125;
+...Throwable的构造方法都接收message传入detailMessage
+
+public String getMessage() &#123;
+    return detailMessage;
+&#125;
+...getMessage()获取detailMessage
+
+public String toString() &#123;
+    String s = getClass().getName();
+    String message = getLocalizedMessage();
+    return (message != null) ? (s + &quot;: &quot; + message) : s;
+&#125;
+public String getLocalizedMessage() &#123;
+    return getMessage();
+&#125;
+</code></pre>
+<h3 id="异常链"><a href="#异常链" class="headerlink" title="异常链"></a><strong>异常链</strong></h3><ul>
+<li>常常会再捕获一个异常后抛出另外一个异常，并且希望把<strong>异常原始信息保存下来，这被称为异常链</strong>。</li>
+<li>现在所有Throwable的子类在构造器中都可以接受一个cause（因由）对象作为参数，这个cause表示原始异常，这样通过把原始异常传递给新的异常，使得即使在当前位置创建并抛出了新的异常，也可以通过这个cause追踪到异常最初发生的位置。</li>
+<li>Throwable类及其所有的子类都提供了带cause参数的构造器，其他的异常类就只有通过initCause()来设置cause了。设置完cause的新异常可以通过getCause()方法返回原始异常。</li>
+</ul>
+<pre><code class="java">public class ExceptionCause &#123;
+    private static void test1() throws Exception&#123;
+        try&#123;
+            test2();                                      // 创建原始异常
+        &#125;catch(NullPointerException e)&#123;                   // 捕获原始异常
+            Exception Ex = new Exception(&quot;New exception&quot;);// 1
+            Ex.initCause(e);                              // 把原始异常传递给新的异常
+            throw Ex;                                     // 抛出新的异常
+ //           Ex.getCause();                                // 原始异常
+//           throw new Exception(&quot;New exception&quot;, e);      // 2
+        &#125;
+    &#125;
+    private static void test2()&#123;
+        throw new  NullPointerException(&quot;Str is null&quot;);
+    &#125;
+
+    public static void main(String[] args) throws Exception &#123;
+        test1();
+    &#125;
+
+&#125;/*Output:
+Exception in thread &quot;main&quot; java.lang.Exception: New exception
+   at chapter12.ExceptionCause.test1(ExceptionCause.java:8)
+   at chapter12.ExceptionCause.main(ExceptionCause.java:19)
+Caused by: java.lang.NullPointerException: Str is null       //如果没有initCause(e),原始异常不会输出
+   at chapter12.ExceptionCause.test2(ExceptionCause.java:15)
+   at chapter12.ExceptionCause.test1(ExceptionCause.java:6)
+   ... 1 more
+*/
+</code></pre>
+<h1 id="自定义异常"><a href="#自定义异常" class="headerlink" title="自定义异常"></a><strong>自定义异常</strong></h1><h2 id="创建自定义异常"><a href="#创建自定义异常" class="headerlink" title="创建自定义异常"></a><strong>创建自定义异常</strong></h2><p>要自己定义异常类，必须从已有的异常类继承，最好是选择意思相近的异常类（但是并不好找）。建立新的异常类非常简单，可以是简单的继承，例如：</p>
+<pre><code class="java">class MyException extends Exception &#123;&#125;
+</code></pre>
+<h1 id="异常见解"><a href="#异常见解" class="headerlink" title="异常见解"></a><strong>异常见解</strong></h1><h2 id="构造器"><a href="#构造器" class="headerlink" title="构造器"></a><strong>构造器</strong></h2><p>有一点很重要，即你要时刻询问自己“如果异常发生了，所有东西能被正确的清理吗?”尽管大多数情况下是非常安全的，但涉及构造器时，问题就出现了，构造器会把对象设置成安全的初始状态，但还会有别的动作，比如打开一个文件，这样的动作只有在对象使用完毕并且用户调用了特殊的清理方法之后才能得以清理。如果在构造器内抛出了异常，这些清理行为也许就不能正常工作了。这意味着在编写构造器时要格外细心。</p>
+<p>finally能解决所有问题吗？因为finally会每次执行清理代码，但如果构造器在其执行过程中半途而废，也许该对象的某些部分还没有被成功创建，而这些部分却是在finally里要清理的，这就出现问题了。</p>
+<h2 id="异常匹配"><a href="#异常匹配" class="headerlink" title="异常匹配"></a><strong>异常匹配</strong></h2><p>抛出异常的时候，异常处理系统会按照代码的书写顺序找出“最近”的处理程序，找到匹配的处理程序之后，它就认为异常将得到处理，然后就不再继续查找。</p>
+<p>查找的时候并不要求抛出的异常同处理程序所声明的异常完全匹配。派生类的对象也可以匹配其基类的处理程序，就像这样：</p>
+<pre><code class="java">class Level1Exception extends Exception &#123;&#125;
+class Level2Exception extends Level1Exception &#123;&#125;
+class Level3Exception extends Level2Exception &#123;&#125;
+
+class A &#123;
+    void f() throws Level1Exception &#123;
+        throw new Level1Exception();
+    &#125;
+&#125;
+
+class B extends A &#123;
+    void f() throws Level2Exception &#123;
+        throw new Level2Exception();
+    &#125;
+&#125;
+
+class C extends B &#123;
+    void f() throws Level3Exception &#123;
+        throw new Level3Exception();
+    &#125;
+&#125;
+
+public class E25_ThreeLevelExceptions &#123;
+    public static void main(String[] args) &#123;
+        try &#123;
+            A c = new C();
+            c.f();
+        // catch按照异常的层级进行排列，基类异常在最后
+        &#125; catch (Level3Exception l3) &#123;
+            System.out.println(&quot;Catch &quot; + l3);
+        &#125; catch (Level2Exception l2) &#123;
+            System.out.println(&quot;Catch &quot; + l2);
+        &#125; catch (Level1Exception l1) &#123;
+            System.out.println(&quot;Catch &quot; + l1);
+        &#125;
+    &#125;
+&#125;/*Output:
+// 找到最近的匹配处理程序之后，它就认为异常将得到处理，然后就不再继续查找。
+Catch chapter12.exercise25.Level3Exception
+*/
+</code></pre>
+<h2 id="异常处理的思想及其他思考"><a href="#异常处理的思想及其他思考" class="headerlink" title="异常处理的思想及其他思考"></a><strong>异常处理的思想及其他思考</strong></h2><p>异常处理的一个重要原则是“只有在你知道如何处理的情况下才捕获异常”。实际上，异常处理的一个重要目标就是把错误处理的代码同错误发生的地点相分离。这使你能在一段代码中专注与要完成的事情，至于如何处理错误，则放在另一段代码中完成。这样一来，主干代码就不会与错误代码逻辑混在一起，也更容易理解和维护。通过允许一个处理程序去处理多个出错点，异常处理还使得错误处理代码的数量趋向于减少。</p>
+<p>受查异常（checked exception）使得这个问题变得复杂，因为它们强制你在可能还没准备好处理错误时被迫加上catch子句，这就导致<strong>吞食则有害（harmfal if swallowed）</strong>的问题：</p>
+<pre><code class="java">try &#123;
+    //...to do something useful
+&#125; catch(ObligatoryException e) &#123;&#125;  // Gulp! Do nothing after catch it
+</code></pre>
+<p>程序员们只做最简单的事情，常常是无意中“吞食”了异常，然而一且这么做，虽然能通过编译，但除非你记得复查并改正代码，否则异常将会丢失。异常确实发生了，但“吞食”后它却完全消失了。因为编译器强迫你立刻写代码来处理异常，所以这种看起来最简单的方法，却可能是最糟糕的做法。接下来将讨论一下<strong>受查异常及其并发症</strong>，以及采用什么方法解决这些问题。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+            </ul>
+            
+            
+            <div class="post-nav">
+                <hr>
+                
+                    <div class="post-nav-item">上一篇:<a href="/2021/03/28/%E5%AE%B9%E5%99%A8%E7%BB%BC%E8%BF%B0/" rel="prev" 
+                        title="容器分析">容器分析
+                      </a></div>
+                
+                
+                    <div class="post-nav-item">下一篇:<a href="/2021/03/27/%E6%B3%9B%E5%9E%8B%E5%9F%BA%E7%A1%80/" rel="next" 
+                        title="泛型基础">泛型基础</a></div>
+                                
+            </div>   
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d=''
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/lovelyChild.jpg" height=300 width=300></img>
+                    <p>HustZjx</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/TriDiamond" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="https://twitter.com/TriDiamond6" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="https://stackoverflow.com/users/7602324/tridiamond?tab=profile" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">21 <p>文章</p></a></li>
+                    <li><a href="/categories">4 <p>分类</p></a></li>
+                    <li><a href="/tags">55 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%88%86%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">异常分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Error-%E5%92%8C-Exception"><span class="toc-number">2.1.</span> <span class="toc-text">Error 和 Exception</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">异常处理机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8D%95%E8%8E%B7%E4%B8%8E%E5%A4%84%E7%90%86"><span class="toc-number">3.1.</span> <span class="toc-text">捕获与处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#try-catch-finally%E7%9A%84%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6"><span class="toc-number">3.1.1.</span> <span class="toc-text">try-catch-finally的处理机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%85%B3%E9%97%AD%E7%9A%84try-catch"><span class="toc-number">3.1.2.</span> <span class="toc-text">自动关闭的try-catch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#try-catch-finally%E7%9A%84%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6"><span class="toc-number">3.1.3.</span> <span class="toc-text">try-catch-finally的执行机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8D%95%E8%8E%B7%E6%89%80%E6%9C%89%E5%BC%82%E5%B8%B8"><span class="toc-number">3.2.</span> <span class="toc-text">捕获所有异常</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E7%9A%84%E4%BF%A1%E6%81%AF%EF%BC%9Ae-toString-%E5%92%8Ce-getMessage"><span class="toc-number">3.2.1.</span> <span class="toc-text">异常的信息：e.toString()和e.getMessage()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E9%93%BE"><span class="toc-number">3.2.2.</span> <span class="toc-text">异常链</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8"><span class="toc-number">4.</span> <span class="toc-text">自定义异常</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8"><span class="toc-number">4.1.</span> <span class="toc-text">创建自定义异常</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E8%A7%81%E8%A7%A3"><span class="toc-number">5.</span> <span class="toc-text">异常见解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%99%A8"><span class="toc-number">5.1.</span> <span class="toc-text">构造器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%8C%B9%E9%85%8D"><span class="toc-number">5.2.</span> <span class="toc-text">异常匹配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%9A%84%E6%80%9D%E6%83%B3%E5%8F%8A%E5%85%B6%E4%BB%96%E6%80%9D%E8%80%83"><span class="toc-number">5.3.</span> <span class="toc-text">异常处理的思想及其他思考</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2021
+        <span class="gradient-text">
+            HustZjx
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.5" target="_blank" rel="noopener">v1.4.5</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-149874671-1');
+</script>
+ 
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', 'Stay hungry, stay foolish'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+ <!-- 例：百度统计 --> <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?your_code"; var s = document.getElementsByTagName("script")[0];  s.parentNode.insertBefore(hm, s); })(); </script> 
+
+</html>
