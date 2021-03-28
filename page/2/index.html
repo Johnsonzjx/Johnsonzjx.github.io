@@ -135,43 +135,40 @@
     <div id="post0" class="else">
         <p class="animated fadeInDown">
             
-            <a href="/categories/并发编程"><b>「
-                </b>并发编程<b> 」</b></a>
+            <a href="/categories/JVM"><b>「
+                </b>JVM<b> 」</b></a>
             
-            八月 29, 2020
+            十月 29, 2020
         </p>
         <h3 class="post-title animated fadeInDown">
-            <a href="/2020/08/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%BA%8C%EF%BC%89/" title="线程池（二）" class="posttitle">线程池（二）</a></h3>
+            <a href="/2020/10/29/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="JVM类加载器" class="posttitle">JVM类加载器</a></h3>
         
         <p class="post-count animated fadeInDown">
             
             <span>
                 <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                18k
+                3.5k
             </span>
             
             
             <span>
                 <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                16 mins.
+                3 mins.
             </span>
             
             
         </p>
         
         
-        <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/CachedThreadExecutor/" rel="tag">CachedThreadExecutor</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/FixedThreadPool/" rel="tag">FixedThreadPool</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ScheduledThreadPoolExecutor/" rel="tag">ScheduledThreadPoolExecutor</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/SingleThreadExecutor/" rel="tag">SingleThreadExecutor</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ThreadPoolExecutor/" rel="tag">ThreadPoolExecutor</a></li></ul>
+        <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B/" rel="tag">双亲委派模型</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" rel="tag">类加载器</a></li></ul>
         
         <div class="md-content animated fadeIn">
             
-            <p>首先创建一个 <code>Runnable</code> 接口的实现类（当然也可以是 <code>Callable</code> 接口，我们上面也说了两者的区别。）</p>
-<pre><code class="java">MyRunnable.java
-import java.util.Date;
-
-/**
- ...</code></pre>
+            <p>JVM 中内置了三个重要的 ClassLoader，除了 BootstrapClassLoader 其他类加载器均由 Java 实现且全部继承自<code>java.lang.ClassLoader</code>：</p>
+<ol>
+<li><strong>BootstrapClass...</strong></li></ol>
             
-            <span class="read-more"><a href="/2020/08/29/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%BA%8C%EF%BC%89/" title="查看全文" class="posttitle">查看全文</a>
+            <span class="read-more"><a href="/2020/10/29/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="查看全文" class="posttitle">查看全文</a>
                 <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
@@ -192,6 +189,301 @@ import java.util.Date;
 
     <div id="primary">
         
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/JVM">
+                  <b>「 </b>JVM<b> 」</b>
+                </a>
+            
+            十月 29, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/10/29/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="JVM类加载器" class="posttitle">JVM类加载器</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        3.5k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        3 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B/" rel="tag">双亲委派模型</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" rel="tag">类加载器</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>JVM 中内置了三个重要的 ClassLoader，除了 BootstrapClassLoader 其他类加载器均由 Java 实现且全部继承自<code>java.lang.ClassLoader</code>：</p>
+<ol>
+<li><strong>BootstrapClassLoader(启动类加载器)</strong> ：最顶层的加载类，由C++实现，负责加载 <code>%JAVA_HOME%/lib</code>目录下的jar包和类或者或被 <code>-Xbootclasspath</code>参数指定的路径中的所有类。</li>
+<li><strong>ExtensionClassLoader(扩展类加载器)</strong> ：主要负责加载目录 <code>%JRE_HOME...</code></li></ol>
+            
+            <span class="read-more"><a href="/2020/10/29/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/JVM">
+                  <b>「 </b>JVM<b> 」</b>
+                </a>
+            
+            十月 25, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/10/25/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/" title="JVM类加载" class="posttitle">JVM类加载</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        4.4k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        4 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/" rel="tag">类加载过程</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>一个类的完整生命周期如下：加载-验证-准备-解析-初始化-使用-卸载</p>
+<p>Class 文件需要加载到虚拟机中之后才能运行和使用，那么虚拟机是如何加载这些 Class 文件呢？</p>
+<p>系统加载 Class 类型的文件主要三步:<strong>加载-&gt;连接-&gt;初始化</strong>。连接过程又可分为三步:<strong>验证-&gt;准备-&gt;解析</strong>。</p>
+<p></p>
+<h3 id="加载"><a href="#加载" class="headerlink" title="加载"></a><strong>加载</strong></h3><p>类加载过程的第一步，主要完成下面3件事情：</p>
+<ol>
+<li>通过全类名获取定义此类的二进制字节流</li>
+<li>将字节流所代表的静态存储结构转换为方法区的运行时数据结构</li>
+<li>在内存中生成一个代表该类的 Class 对象...</li></ol>
+            
+            <span class="read-more"><a href="/2020/10/25/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/JVM">
+                  <b>「 </b>JVM<b> 」</b>
+                </a>
+            
+            十月 15, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/10/15/JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" title="JVM垃圾回收" class="posttitle">JVM垃圾回收</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        14k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        13 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%88%86%E4%BB%A3%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95/" rel="tag">分代收集算法</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90/" rel="tag">可达性分析</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/" rel="tag">垃圾回收器</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95/" rel="tag">引用计数法</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>Java 的自动内存管理主要是针对对象内存的回收和对象内存的分配。同时，Java 自动内存管理最核心的功能是 <strong>堆</strong> 内存中对象的分配与回收。</p>
+<p>Java 堆是垃圾收集器管理的主要区域，因此也被称作<strong>GC 堆（Garbage Collected Heap）</strong>.从垃圾回收的角度，由于现在收集器基本都采用分代垃圾收集算法，所以 Java 堆还可以细分为：新生代和老年代：再细致一点有：Eden 空间、From Survivor、To Survivor 空间等。<strong>进一步划分的目的是更好地回收内存，或者更快地分配内存...</strong></p>
+            
+            <span class="read-more"><a href="/2020/10/15/JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/JVM">
+                  <b>「 </b>JVM<b> 」</b>
+                </a>
+            
+            九月 29, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/09/29/HotSpot%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%B9%E8%B1%A1/" title="HotSpot虚拟机对象" class="posttitle">HotSpot虚拟机对象</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        7.7k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        7 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/String%E7%B1%BB/" rel="tag">String类</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA/" rel="tag">对象创建</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%B8%B8%E9%87%8F%E6%B1%A0/" rel="tag">常量池</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>下图便是 Java 对象的创建过程，我建议最好是能默写出来，并且要掌握每一步在做什么。 </p>
+<ol>
+<li><p>判断类加载过程，如果执行对象创建之前没有进行过类加载，首先执行类加载过程(加载、连接(验证、准备、解析)、初始化、使用、卸载)。</p>
+</li>
+<li><p>为成员变量分配内存空间，采用何种方法来分配内存空间取决于Java堆中内存的完整性，如果采用的是带有空间压缩性质的垃圾回收器(如 Serial、SerialOld、G1)，则利用指针碰撞的方法来进行变量内存分配，如果使用的垃圾回收期没有该性质(如CMS)，则利用空闲列表的方法进...</p></li></ol>
+            
+            <span class="read-more"><a href="/2020/09/29/HotSpot%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%B9%E8%B1%A1/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/JVM">
+                  <b>「 </b>JVM<b> 」</b>
+                </a>
+            
+            九月 20, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/09/20/JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/" title="JVM内存区域" class="posttitle">JVM内存区域</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        8.8k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        8 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/" rel="tag">Java虚拟机栈</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%A0%86/" rel="tag">堆</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88/" rel="tag">本地方法栈</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8/" rel="tag">程序计数器</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>如果没有特殊说明，都是针对的是 HotSpot 虚拟机。</p>
+<p>对于 Java 程序员来说，在虚拟机自动内存管理机制下，不再需要像 C/C++程序开发程序员这样为每一个 new 操作去写对应的 delete/free 操作，不容易出现内存泄漏和内存溢出问题。正是因为 Java 程序员把内存控制权利交给 Java 虚拟机，一旦出现内存泄漏和溢出方面的问题，如果不了解虚拟机是怎样使用内存的，那么排查错误将会是一个非常艰巨的任务。</p>
+<p>Java 虚拟机在执行 Java 程序的过程中会把它管理的内存划分成若干个不...</p>
+            
+            <span class="read-more"><a href="/2020/09/20/JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/并发编程">
+                  <b>「 </b>并发编程<b> 」</b>
+                </a>
+            
+            九月 15, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/09/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%B8%89%EF%BC%89/" title="线程池（三）" class="posttitle">线程池（三）</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        6k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        5 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ScheduledThreadPoolExecutor/" rel="tag">ScheduledThreadPoolExecutor</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%A4%A7%E5%B0%8F/" rel="tag">线程池大小</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p><code>ScheduledThreadPoolExecutor</code> 主要用来在给定的延迟后运行任务，或者定期执行任务。 这个在实际项目中基本不会被用到，因为有其他方案选择比如<code>quartz</code>。大家只需要简单了解一下它的思想。关于如何在 Spring Boot 中 实现定时任务，可以查看这篇文章<a target="_blank" rel="noopener" href="https://github.com/Snailclimb/springboot-guide/blob/master/docs/advanced/SpringBoot-ScheduleTasks.md">《5 分钟搞懂如何在 Spring Boot 中 Schedule Tasks》</a>。</p>
+<p><code>ScheduledThreadPoolExecutor</code> 使用的任务队列 <code>DelayQueue</code> 封装了一个 <code>PriorityQueue</code>，<code>PriorityQueu...</code></p>
+            
+            <span class="read-more"><a href="/2020/09/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%B8%89%EF%BC%89/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
 <div class="post" id="post">
     <div class="post-cover animated fadeIn" style="
             background-image:
@@ -400,310 +692,6 @@ public class MyRunnable implements Runnable &#123;
 <p>因为监视器锁（monitor）是依赖于底层的操作系统的 <code>Mutex Lock</code> 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从用户态转换到内...</p>
             
             <span class="read-more"><a href="/2020/07/29/%E5%B9%B6%E5%8F%91%E8%BF%9B%E9%98%B6/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/并发编程">
-                  <b>「 </b>并发编程<b> 」</b>
-                </a>
-            
-            六月 30, 2020
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2020/06/30/%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/" title="并发基础" class="posttitle">并发基础</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        6.8k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        6 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/" rel="tag">上下文切换</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%AD%BB%E9%94%81/" rel="tag">死锁</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag">线程</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag">进程</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p>进程是程序的一次执行过程，是系统运行程序的基本单位，因此进程是动态的。系统运行一个程序即是一个进程从创建，运行到消亡的过程。</p>
-<p>在 Java 中，进程是线程的容器，当我们启动 main 函数时其实就是启动了一个 JVM 的进程，而 main 函数所在的线程就是这个进程中的一个线程，也称主线程。</p>
-<p>线程与进程相似，但线程是一个比进程更小的执行单位。一个进程在其执行的过程中可以产生多个线程。与进程不同的是同类的多个线程共享进程的<strong>堆</strong>和<strong>方法区</strong>资源，但每个线程有自己的<strong>程序计数器</strong>、<strong>虚拟机栈</strong>和<strong>本地方法栈</strong>，所以系统...</p>
-            
-            <span class="read-more"><a href="/2020/06/30/%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/容器与源码分析">
-                  <b>「 </b>容器与源码分析<b> 」</b>
-                </a>
-            
-            六月 15, 2020
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2020/06/15/%E5%AE%B9%E5%99%A8%E7%BB%BC%E8%BF%B0/" title="容器分析" class="posttitle">容器分析</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        23k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        21 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Collection/" rel="tag">Collection</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/List/" rel="tag">List</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Map/" rel="tag">Map</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Set/" rel="tag">Set</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/" rel="tag">线程安全</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p>从下图可以看出，在 Java 中除了以 <code>Map</code> 结尾的类之外， 其他类都实现了 <code>Collection</code> 接口。并且，以 <code>Map</code> 结尾的类都实现了 <code>Map</code> 接口：</p>
-<p></p>
-<ul>
-<li><code>List</code>(对付顺序的好帮手)： 存储的元素是有序的、可重复的。</li>
-<li><code>Set</code>(注重独一无二的性质): 存储的元素是无序的、不可重复的。</li>
-<li><code>Map</code>(用 Key 来搜索的专家): 使用键值对（key-value）存储，类似于数学上的函数 y=f(x)，“x”代表 key，”y”代表 value，Key 是无序的、不可重复的，value 是无序的、...</li></ul>
-            
-            <span class="read-more"><a href="/2020/06/15/%E5%AE%B9%E5%99%A8%E7%BB%BC%E8%BF%B0/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/Java基础">
-                  <b>「 </b>JAVA基础<b> 」</b>
-                </a>
-            
-            五月 10, 2020
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2020/05/10/Java%E9%9B%86%E5%90%88/" title="Java集合" class="posttitle">Java集合</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        5.6k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        5 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Collection/" rel="tag">Collection</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E8%AE%BF%E9%97%AE%E6%96%B9%E5%BC%8F/" rel="tag">访问方式</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p>如果访问List集合中的元素，可以通过元素的索引来访问；如果访问Map集合中的元素，可以根据每项元素的Key值来访问其value；如果访问Set集合中的元素，只能根据元素本身来访问。</p>
-<p>因为Collection的父接口时Iterable，可以调用foreach方法(引用Predicative类，该类是函数时接口)，利用Lambda表达式可以实现</p>
-<pre><code class="java">public class Test&#123;
-    public static void main(String[] args)&#123;
-        Collection...</code></pre>
-            
-            <span class="read-more"><a href="/2020/05/10/Java%E9%9B%86%E5%90%88/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/Java基础">
-                  <b>「 </b>JAVA基础<b> 」</b>
-                </a>
-            
-            四月 23, 2020
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2020/04/23/%E5%BC%82%E5%B8%B8/" title="异常" class="posttitle">异常</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        11k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        10 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%86%85%E9%83%A8%E7%B1%BB/" rel="tag">内部类</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag">垃圾回收</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%BC%95%E7%94%A8/" rel="tag">引用</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%8A%BD%E8%B1%A1%E7%B1%BB/" rel="tag">抽象类</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p>实际上，当java程序执行时出现错误时，jvm会把执行时出错的信息(例如出错原因、类型、 位置)收集，然后打包成为1个对象(object)，程序员可以对这种对象进行处理。这种对象就是所谓的异常。<strong>可能出现的异常的代码并不是肯定会出现异常, 还取决于执行环境和数据</strong>。</p>
-<p>在Java中，所有的异常都有一个共同的超类Throwable（可抛出类）。Throwable类有两个重要的子类：Exception（异常）和 Error（错误），二者都是Java异常处理的重要子类，各自都包含大量子类。异常和错误的区别是...</p>
-            
-            <span class="read-more"><a href="/2020/04/23/%E5%BC%82%E5%B8%B8/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/Java基础">
-                  <b>「 </b>JAVA基础<b> 」</b>
-                </a>
-            
-            三月 25, 2020
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2020/03/25/%E6%B3%9B%E5%9E%8B%E5%9F%BA%E7%A1%80/" title="泛型基础" class="posttitle">泛型基础</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        4.6k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        4 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/PECS%E5%8E%9F%E5%88%99/" rel="tag">PECS原则</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%B3%9B%E5%9E%8B/" rel="tag">泛型</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%B1%BB%E5%9E%8B%E9%80%9A%E9%85%8D%E7%AC%A6/" rel="tag">类型通配符</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p>所谓泛型，就是允许再定义类、接口、方法时使用类型形参；</p>
-<ul>
-<li>当创建带泛型声明的自定义类，为该类定义构造器时，构造器名还是原来的类名，不要增加泛型声明，例如Apple<t>的构造器名依然是Apple；</t></li>
-<li>并不存在实际的泛型类，不管泛型的实际类型参数是什么，它们在运行时总有同样的类；</li>
-<li>在静态方法、静态初始化块静态变量的声明和初始化中不允许使用类型形参；</li>
-<li>由于系统中并不会真正生成泛型类，所以instanceof运算符后不能使用泛型类；</li>
-<li>List<string>对象不能被当作List<object>对象使用，也就是说，List<string>类并不是List<object>类...</object></string></object></string></li></ul>
-            
-            <span class="read-more"><a href="/2020/03/25/%E6%B3%9B%E5%9E%8B%E5%9F%BA%E7%A1%80/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/Java基础">
-                  <b>「 </b>JAVA基础<b> 」</b>
-                </a>
-            
-            三月 10, 2020
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2020/03/10/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1(%E4%BA%8C)/" title="面向对象(二)" class="posttitle">面向对象(二)</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        5.6k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        5 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%86%85%E9%83%A8%E7%B1%BB/" rel="tag">内部类</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag">垃圾回收</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%BC%95%E7%94%A8/" rel="tag">引用</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%8A%BD%E8%B1%A1%E7%B1%BB/" rel="tag">抽象类</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%8E%A5%E5%8F%A3/" rel="tag">接口</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <ul>
-<li><input checked disabled type="checkbox"> static和abstract关键字使用问题</li>
-<li><input checked disabled type="checkbox"> 接口和抽象类的联系与区别</li>
-<li><input checked disabled type="checkbox"> 内部类与外部类的关系</li>
-<li><input checked disabled type="checkbox"> 对象与垃圾回收问题</li>
-<li><input checked disabled type="checkbox"> 引用的四种类型与作用</li>
-</ul>
-<p>static和abstract不能同时修饰某个方法，即没有所谓的类抽象方法，但可以同时修饰内部类；abstract和private不能同时修饰方法，因为抽象方法不被子类重写就永远没有方法体，所以不应该设置private的访问权限。</p>
-<ol>
-<li>接口和抽象类都不能被实例化，他们都位于继承树的顶端，用于被其他类实现和继承；</li>
-<li>接口和抽象类都可以包含抽象方法，实现接...</li></ol>
-            
-            <span class="read-more"><a href="/2020/03/10/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1(%E4%BA%8C)/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
 </div>
