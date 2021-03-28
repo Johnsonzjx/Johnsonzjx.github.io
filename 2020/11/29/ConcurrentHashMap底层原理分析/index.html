@@ -1,0 +1,952 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ConcurrentHashMap底层原理分析 - Java Learning Blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Java Study,"> 
+    <meta name="description" content="ConcurrentHashMap 1.7存储结构
+Java 7 中 ConcurrentHashMap 的存储结构如上图，ConcurrnetHashMap 由很多个 Segment 组合，而每一,"> 
+    <meta name="author" content="HustZjx"> 
+    <link rel="alternative" href="atom.xml" title="Java Learning Blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Java Learning Blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">ConcurrentHashMap底层原理分析</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/容器与源码分析"><b>「
+                    </b>容器与源码分析<b> 」</b></a>
+                
+                十一月 29, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/11/29/ConcurrentHashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="ConcurrentHashMap底层原理分析" class="">ConcurrentHashMap底层原理分析</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    23k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    21 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/CAS/" rel="tag">CAS</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ConcurrentHashMap/" rel="tag">ConcurrentHashMap</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Segment/" rel="tag">Segment</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="ConcurrentHashMap-1-7"><a href="#ConcurrentHashMap-1-7" class="headerlink" title="ConcurrentHashMap 1.7"></a><strong>ConcurrentHashMap 1.7</strong></h1><h2 id="存储结构"><a href="#存储结构" class="headerlink" title="存储结构"></a><strong>存储结构</strong></h2><p><img src="https://snailclimb.gitee.io/javaguide/docs/java/collection/images/image-20200405151029416.png" alt="Java 7 ConcurrentHashMap 存储结构"></p>
+<p>Java 7 中 ConcurrentHashMap 的存储结构如上图，ConcurrnetHashMap 由很多个 Segment 组合，而每一个 Segment 是一个类似于 HashMap 的结构，所以每一个 HashMap 的内部可以进行扩容。但是 Segment 的个数一旦<strong>初始化就不能改变</strong>，默认 Segment 的个数是 16 个，你也可以认为 ConcurrentHashMap 默认支持最多 16 个线程并发。</p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a><strong>初始化</strong></h2><p>通过 ConcurrentHashMap 的无参构造探寻 ConcurrentHashMap 的初始化流程。</p>
+<pre><code class="java">    /**
+     * Creates a new, empty map with a default initial capacity (16),
+     * load factor (0.75) and concurrencyLevel (16).
+     */
+    public ConcurrentHashMap() &#123;
+        this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, DEFAULT_CONCURRENCY_LEVEL);
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>无参构造中调用了有参构造，传入了三个参数的默认值，他们的值是。</p>
+<pre><code class="java">    /**
+     * 默认初始化容量
+     */
+    static final int DEFAULT_INITIAL_CAPACITY = 16;
+
+    /**
+     * 默认负载因子
+     */
+    static final float DEFAULT_LOAD_FACTOR = 0.75f;
+
+    /**
+     * 默认并发级别
+     */
+    static final int DEFAULT_CONCURRENCY_LEVEL = 16;Copy to clipboardErrorCopied
+</code></pre>
+<p>接着看下这个有参构造函数的内部实现逻辑。</p>
+<pre><code class="java">@SuppressWarnings(&quot;unchecked&quot;)
+public ConcurrentHashMap(int initialCapacity,float loadFactor, int concurrencyLevel) &#123;
+    // 参数校验
+    if (!(loadFactor &gt; 0) || initialCapacity &lt; 0 || concurrencyLevel &lt;= 0)
+        throw new IllegalArgumentException();
+    // 校验并发级别大小，大于 1&lt;&lt;16，重置为 65536
+    if (concurrencyLevel &gt; MAX_SEGMENTS)
+        concurrencyLevel = MAX_SEGMENTS;
+    // Find power-of-two sizes best matching arguments
+    // 2的多少次方
+    int sshift = 0;
+    int ssize = 1;
+    // 这个循环可以找到 concurrencyLevel 之上最近的 2的次方值
+    while (ssize &lt; concurrencyLevel) &#123;
+        ++sshift;
+        ssize &lt;&lt;= 1;
+    &#125;
+    // 记录段偏移量
+    this.segmentShift = 32 - sshift;
+    // 记录段掩码
+    this.segmentMask = ssize - 1;
+    // 设置容量
+    if (initialCapacity &gt; MAXIMUM_CAPACITY)
+        initialCapacity = MAXIMUM_CAPACITY;
+    // c = 容量 / ssize ，默认 16 / 16 = 1，这里是计算每个 Segment 中的类似于 HashMap 的容量
+    int c = initialCapacity / ssize;
+    if (c * ssize &lt; initialCapacity)
+        ++c;
+    int cap = MIN_SEGMENT_TABLE_CAPACITY;
+    //Segment 中的类似于 HashMap 的容量至少是2或者2的倍数
+    while (cap &lt; c)
+        cap &lt;&lt;= 1;
+    // create segments and segments[0]
+    // 创建 Segment 数组，设置 segments[0]
+    Segment&lt;K,V&gt; s0 = new Segment&lt;K,V&gt;(loadFactor, (int)(cap * loadFactor),
+                         (HashEntry&lt;K,V&gt;[])new HashEntry[cap]);
+    Segment&lt;K,V&gt;[] ss = (Segment&lt;K,V&gt;[])new Segment[ssize];
+    UNSAFE.putOrderedObject(ss, SBASE, s0); // ordered write of segments[0]
+    this.segments = ss;
+&#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>总结一下在 Java 7 中 ConcurrnetHashMap 的初始化逻辑。</p>
+<ol>
+<li>必要参数校验。</li>
+<li>校验并发级别 concurrencyLevel 大小，如果大于最大值，重置为最大值。无惨构造<strong>默认值是 16.</strong></li>
+<li>寻找并发级别 concurrencyLevel 之上最近的 <strong>2 的幂次方</strong>值，作为初始化容量大小，<strong>默认是 16</strong>。</li>
+<li>记录 segmentShift 偏移量，这个值为【容量 = 2 的N次方】中的 N，在后面 Put 时计算位置时会用到。<strong>默认是 32 - sshift = 28</strong>.</li>
+<li>记录 segmentMask，默认是 ssize - 1 = 16 -1 = 15.</li>
+<li><strong>初始化 segments[0]**，**默认大小为 2</strong>，<strong>负载因子 0.75</strong>，<strong>扩容阀值是 2*0.75=1.5</strong>，插入第二个值时才会进行扩容。</li>
+</ol>
+<h2 id="put-方法"><a href="#put-方法" class="headerlink" title="put()方法"></a>put()方法</h2><p>接着上面的初始化参数继续查看 put 方法源码。</p>
+<pre><code class="java">/**
+ * Maps the specified key to the specified value in this table.
+ * Neither the key nor the value can be null.
+ *
+ * &lt;p&gt; The value can be retrieved by calling the &lt;tt&gt;get&lt;/tt&gt; method
+ * with a key that is equal to the original key.
+ *
+ * @param key key with which the specified value is to be associated
+ * @param value value to be associated with the specified key
+ * @return the previous value associated with &lt;tt&gt;key&lt;/tt&gt;, or
+ *         &lt;tt&gt;null&lt;/tt&gt; if there was no mapping for &lt;tt&gt;key&lt;/tt&gt;
+ * @throws NullPointerException if the specified key or value is null
+ */
+public V put(K key, V value) &#123;
+    Segment&lt;K,V&gt; s;
+    if (value == null)
+        throw new NullPointerException();
+    int hash = hash(key);
+    // hash 值无符号右移 28位（初始化时获得），然后与 segmentMask=15 做与运算
+    // 其实也就是把高4位与segmentMask（1111）做与运算
+    int j = (hash &gt;&gt;&gt; segmentShift) &amp; segmentMask;
+    if ((s = (Segment&lt;K,V&gt;)UNSAFE.getObject          // nonvolatile; recheck
+         (segments, (j &lt;&lt; SSHIFT) + SBASE)) == null) //  in ensureSegment
+        // 如果查找到的 Segment 为空，初始化
+        s = ensureSegment(j);
+    return s.put(key, hash, value, false);
+&#125;
+
+/**
+ * Returns the segment for the given index, creating it and
+ * recording in segment table (via CAS) if not already present.
+ *
+ * @param k the index
+ * @return the segment
+ */
+@SuppressWarnings(&quot;unchecked&quot;)
+private Segment&lt;K,V&gt; ensureSegment(int k) &#123;
+    final Segment&lt;K,V&gt;[] ss = this.segments;
+    long u = (k &lt;&lt; SSHIFT) + SBASE; // raw offset
+    Segment&lt;K,V&gt; seg;
+    // 判断 u 位置的 Segment 是否为null
+    if ((seg = (Segment&lt;K,V&gt;)UNSAFE.getObjectVolatile(ss, u)) == null) &#123;
+        Segment&lt;K,V&gt; proto = ss[0]; // use segment 0 as prototype
+        // 获取0号 segment 里的 HashEntry&lt;K,V&gt; 初始化长度
+        int cap = proto.table.length;
+        // 获取0号 segment 里的 hash 表里的扩容负载因子，所有的 segment 的 loadFactor 是相同的
+        float lf = proto.loadFactor;
+        // 计算扩容阀值
+        int threshold = (int)(cap * lf);
+        // 创建一个 cap 容量的 HashEntry 数组
+        HashEntry&lt;K,V&gt;[] tab = (HashEntry&lt;K,V&gt;[])new HashEntry[cap];
+        if ((seg = (Segment&lt;K,V&gt;)UNSAFE.getObjectVolatile(ss, u)) == null) &#123; // recheck
+            // 再次检查 u 位置的 Segment 是否为null，因为这时可能有其他线程进行了操作
+            Segment&lt;K,V&gt; s = new Segment&lt;K,V&gt;(lf, threshold, tab);
+            // 自旋检查 u 位置的 Segment 是否为null
+            while ((seg = (Segment&lt;K,V&gt;)UNSAFE.getObjectVolatile(ss, u))
+                   == null) &#123;
+                // 使用CAS 赋值，只会成功一次
+                if (UNSAFE.compareAndSwapObject(ss, u, null, seg = s))
+                    break;
+            &#125;
+        &#125;
+    &#125;
+    return seg;
+&#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>上面的源码分析了 ConcurrentHashMap 在 put 一个数据时的处理流程，下面梳理下具体流程。</p>
+<ol>
+<li><p>计算要 put 的 key 的位置，获取指定位置的 Segment。</p>
+</li>
+<li><p>如果指定位置的 Segment 为空，则初始化这个 Segment.</p>
+<p><strong>初始化 Segment 流程：</strong></p>
+<ol>
+<li>检查计算得到的位置的 Segment 是否为null.</li>
+<li>为 null 继续初始化，使用 Segment[0] 的容量和负载因子创建一个 HashEntry 数组。</li>
+<li>再次检查计算得到的指定位置的 Segment 是否为null.</li>
+<li>使用创建的 HashEntry 数组初始化这个 Segment.</li>
+<li>自旋判断计算得到的指定位置的 Segment 是否为null，使用 CAS 在这个位置赋值为 Segment.</li>
+</ol>
+</li>
+<li><p>Segment.put 插入 key,value 值。</p>
+</li>
+</ol>
+<p>上面探究了获取 Segment 段和初始化 Segment 段的操作。最后一行的 Segment 的 put 方法还没有查看，继续分析。</p>
+<pre><code class="java">final V put(K key, int hash, V value, boolean onlyIfAbsent) &#123;
+    // 获取 ReentrantLock 独占锁，获取不到，scanAndLockForPut 获取。
+    HashEntry&lt;K,V&gt; node = tryLock() ? null : scanAndLockForPut(key, hash, value);
+    V oldValue;
+    try &#123;
+        HashEntry&lt;K,V&gt;[] tab = table;
+        // 计算要put的数据位置
+        int index = (tab.length - 1) &amp; hash;
+        // CAS 获取 index 坐标的值
+        HashEntry&lt;K,V&gt; first = entryAt(tab, index);
+        for (HashEntry&lt;K,V&gt; e = first;;) &#123;
+            if (e != null) &#123;
+                // 检查是否 key 已经存在，如果存在，则遍历链表寻找位置，找到后替换 value
+                K k;
+                if ((k = e.key) == key ||
+                    (e.hash == hash &amp;&amp; key.equals(k))) &#123;
+                    oldValue = e.value;
+                    if (!onlyIfAbsent) &#123;
+                        e.value = value;
+                        ++modCount;
+                    &#125;
+                    break;
+                &#125;
+                e = e.next;
+            &#125;
+            else &#123;
+                // first 有值没说明 index 位置已经有值了，有冲突，链表头插法。
+                if (node != null)
+                    node.setNext(first);
+                else
+                    node = new HashEntry&lt;K,V&gt;(hash, key, value, first);
+                int c = count + 1;
+                // 容量大于扩容阀值，小于最大容量，进行扩容
+                if (c &gt; threshold &amp;&amp; tab.length &lt; MAXIMUM_CAPACITY)
+                    rehash(node);
+                else
+                    // index 位置赋值 node，node 可能是一个元素，也可能是一个链表的表头
+                    setEntryAt(tab, index, node);
+                ++modCount;
+                count = c;
+                oldValue = null;
+                break;
+            &#125;
+        &#125;
+    &#125; finally &#123;
+        unlock();
+    &#125;
+    return oldValue;
+&#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>由于 Segment 继承了 ReentrantLock，所以 Segment 内部可以很方便的获取锁，put 流程就用到了这个功能。</p>
+<ol>
+<li><p>tryLock() 获取锁，获取不到使用 <strong><code>scanAndLockForPut</code></strong> 方法继续获取。</p>
+</li>
+<li><p>计算 put 的数据要放入的 index 位置，然后获取这个位置上的 HashEntry 。</p>
+</li>
+<li><p>遍历 put 新元素，为什么要遍历？因为这里获取的 HashEntry 可能是一个空元素，也可能是链表已存在，所以要区别对待。</p>
+<p>如果这个位置上的 <strong>HashEntry 不存在</strong>：</p>
+<ol>
+<li>如果当前容量大于扩容阀值，小于最大容量，<strong>进行扩容</strong>。</li>
+<li>直接头插法插入。</li>
+</ol>
+<p>如果这个位置上的 <strong>HashEntry 存在</strong>：</p>
+<ol>
+<li>判断链表当前元素 Key 和 hash 值是否和要 put 的 key 和 hash 值一致。一致则替换值</li>
+<li>不一致，获取链表下一个节点，直到发现相同进行值替换，或者链表表里完毕没有相同的。<ol>
+<li>如果当前容量大于扩容阀值，小于最大容量，<strong>进行扩容</strong>。</li>
+<li>直接链表头插法插入。</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>如果要插入的位置之前已经存在，替换后返回旧值，否则返回 null.</p>
+</li>
+</ol>
+<p>这里面的第一步中的 scanAndLockForPut 操作这里没有介绍，这个方法做的操作就是不断的自旋 <code>tryLock()</code> 获取锁。当自旋次数大于指定次数时，使用 <code>lock()</code> 阻塞获取锁。在自旋时顺表获取下 hash 位置的 HashEntry。</p>
+<pre><code class="java">private HashEntry&lt;K,V&gt; scanAndLockForPut(K key, int hash, V value) &#123;
+    HashEntry&lt;K,V&gt; first = entryForHash(this, hash);
+    HashEntry&lt;K,V&gt; e = first;
+    HashEntry&lt;K,V&gt; node = null;
+    int retries = -1; // negative while locating node
+    // 自旋获取锁
+    while (!tryLock()) &#123;
+        HashEntry&lt;K,V&gt; f; // to recheck first below
+        if (retries &lt; 0) &#123;
+            if (e == null) &#123;
+                if (node == null) // speculatively create node
+                    node = new HashEntry&lt;K,V&gt;(hash, key, value, null);
+                retries = 0;
+            &#125;
+            else if (key.equals(e.key))
+                retries = 0;
+            else
+                e = e.next;
+        &#125;
+        else if (++retries &gt; MAX_SCAN_RETRIES) &#123;
+            // 自旋达到指定次数后，阻塞等到只到获取到锁
+            lock();
+            break;
+        &#125;
+        else if ((retries &amp; 1) == 0 &amp;&amp;
+                 (f = entryForHash(this, hash)) != first) &#123;
+            e = first = f; // re-traverse if entry changed
+            retries = -1;
+        &#125;
+    &#125;
+    return node;
+&#125;
+</code></pre>
+<h2 id="扩容rehash"><a href="#扩容rehash" class="headerlink" title="扩容rehash"></a><strong>扩容rehash</strong></h2><p>ConcurrentHashMap 的扩容只会扩容到原来的两倍。老数组里的数据移动到新的数组时，位置要么不变，要么变为 index+ oldSize，参数里的 node 会在扩容之后使用链表<strong>头插法</strong>插入到指定位置。</p>
+<pre><code class="java">private void rehash(HashEntry&lt;K,V&gt; node) &#123;
+    HashEntry&lt;K,V&gt;[] oldTable = table;
+    // 老容量
+    int oldCapacity = oldTable.length;
+    // 新容量，扩大两倍
+    int newCapacity = oldCapacity &lt;&lt; 1;
+    // 新的扩容阀值 
+    threshold = (int)(newCapacity * loadFactor);
+    // 创建新的数组
+    HashEntry&lt;K,V&gt;[] newTable = (HashEntry&lt;K,V&gt;[]) new HashEntry[newCapacity];
+    // 新的掩码，默认2扩容后是4，-1是3，二进制就是11。
+    int sizeMask = newCapacity - 1;
+    for (int i = 0; i &lt; oldCapacity ; i++) &#123;
+        // 遍历老数组
+        HashEntry&lt;K,V&gt; e = oldTable[i];
+        if (e != null) &#123;
+            HashEntry&lt;K,V&gt; next = e.next;
+            // 计算新的位置，新的位置只可能是不便或者是老的位置+老的容量。
+            int idx = e.hash &amp; sizeMask;
+            if (next == null)   //  Single node on list
+                // 如果当前位置还不是链表，只是一个元素，直接赋值
+                newTable[idx] = e;
+            else &#123; // Reuse consecutive sequence at same slot
+                // 如果是链表了
+                HashEntry&lt;K,V&gt; lastRun = e;
+                int lastIdx = idx;
+                // 新的位置只可能是不便或者是老的位置+老的容量。
+                // 遍历结束后，lastRun 后面的元素位置都是相同的
+                for (HashEntry&lt;K,V&gt; last = next; last != null; last = last.next) &#123;
+                    int k = last.hash &amp; sizeMask;
+                    if (k != lastIdx) &#123;
+                        lastIdx = k;
+                        lastRun = last;
+                    &#125;
+                &#125;
+                // ，lastRun 后面的元素位置都是相同的，直接作为链表赋值到新位置。
+                newTable[lastIdx] = lastRun;
+                // Clone remaining nodes
+                for (HashEntry&lt;K,V&gt; p = e; p != lastRun; p = p.next) &#123;
+                    // 遍历剩余元素，头插法到指定 k 位置。
+                    V v = p.value;
+                    int h = p.hash;
+                    int k = h &amp; sizeMask;
+                    HashEntry&lt;K,V&gt; n = newTable[k];
+                    newTable[k] = new HashEntry&lt;K,V&gt;(h, p.key, v, n);
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+    // 头插法插入新的节点
+    int nodeIndex = node.hash &amp; sizeMask; // add the new node
+    node.setNext(newTable[nodeIndex]);
+    newTable[nodeIndex] = node;
+    table = newTable;
+&#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>最后的两个 for 循环的理解：这里第一个 for 是为了寻找这样一个节点，这个节点后面的所有 next 节点的新位置都是相同的。然后把这个作为一个链表赋值到新位置，第二个 for 循环是为了把剩余的元素通过头插法插入到指定位置链表，这样实现的原因可能是基于概率统计。</p>
+<h2 id="get-函数"><a href="#get-函数" class="headerlink" title="get()函数"></a><strong>get()函数</strong></h2><ol>
+<li>计算得到 key 的存放位置。</li>
+<li>遍历指定位置查找相同 key 的 value 值。</li>
+</ol>
+<pre><code class="java">public V get(Object key) &#123;
+    Segment&lt;K,V&gt; s; // manually integrate access methods to reduce overhead
+    HashEntry&lt;K,V&gt;[] tab;
+    int h = hash(key);
+    long u = (((h &gt;&gt;&gt; segmentShift) &amp; segmentMask) &lt;&lt; SSHIFT) + SBASE;
+    // 计算得到 key 的存放位置
+    if ((s = (Segment&lt;K,V&gt;)UNSAFE.getObjectVolatile(segments, u)) != null &amp;&amp;
+        (tab = s.table) != null) &#123;
+        for (HashEntry&lt;K,V&gt; e = (HashEntry&lt;K,V&gt;) UNSAFE.getObjectVolatile
+                 (tab, ((long)(((tab.length - 1) &amp; h)) &lt;&lt; TSHIFT) + TBASE);
+             e != null; e = e.next) &#123;
+            // 如果是链表，遍历查找到相同 key 的 value。
+            K k;
+            if ((k = e.key) == key || (e.hash == h &amp;&amp; key.equals(k)))
+                return e.value;
+        &#125;
+    &#125;
+    return null;
+&#125;
+</code></pre>
+<h1 id="ConcurrentHashMap-1-8"><a href="#ConcurrentHashMap-1-8" class="headerlink" title="ConcurrentHashMap 1.8"></a><strong>ConcurrentHashMap 1.8</strong></h1><h2 id="存储结构-1"><a href="#存储结构-1" class="headerlink" title="存储结构"></a><strong>存储结构</strong></h2><p><img src="https://snailclimb.gitee.io/javaguide/docs/java/collection/images/java8_concurrenthashmap.png" alt="Java8 ConcurrentHashMap 存储结构（图片来自 javadoop）"></p>
+<p>可以发现 Java8 的 ConcurrentHashMap 相对于 Java7 来说变化比较大，不再是之前的 <strong>Segment 数组 + HashEntry 数组 + 链表</strong>，而是 <strong>Node 数组 + 链表 / 红黑树</strong>。当冲突链表达到一定长度时，链表会转换成红黑树。</p>
+<h3 id="2-初始化-initTable"><a href="#2-初始化-initTable" class="headerlink" title="2. 初始化 initTable"></a><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/java/collection/ConcurrentHashMap%E6%BA%90%E7%A0%81+%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%90?id=_2-%E5%88%9D%E5%A7%8B%E5%8C%96-inittable">2. 初始化 initTable</a></h3><pre><code class="java">/**
+ * Initializes table, using the size recorded in sizeCtl.
+ */
+private final Node&lt;K,V&gt;[] initTable() &#123;
+    Node&lt;K,V&gt;[] tab; int sc;
+    while ((tab = table) == null || tab.length == 0) &#123;
+        ／／　如果 sizeCtl &lt; 0 ,说明另外的线程执行CAS 成功，正在进行初始化。
+        if ((sc = sizeCtl) &lt; 0)
+            // 让出 CPU 使用权
+            Thread.yield(); // lost initialization race; just spin
+        else if (U.compareAndSwapInt(this, SIZECTL, sc, -1)) &#123;
+            try &#123;
+                if ((tab = table) == null || tab.length == 0) &#123;
+                    int n = (sc &gt; 0) ? sc : DEFAULT_CAPACITY;
+                    @SuppressWarnings(&quot;unchecked&quot;)
+                    Node&lt;K,V&gt;[] nt = (Node&lt;K,V&gt;[])new Node&lt;?,?&gt;[n];
+                    table = tab = nt;
+                    sc = n - (n &gt;&gt;&gt; 2);
+                &#125;
+            &#125; finally &#123;
+                sizeCtl = sc;
+            &#125;
+            break;
+        &#125;
+    &#125;
+    return tab;
+&#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>从源码中可以发现 ConcurrentHashMap 的初始化是通过<strong>自旋和 CAS</strong> 操作完成的。里面需要注意的是变量 <code>sizeCtl</code> ，它的值决定着当前的初始化状态。</p>
+<ol>
+<li>-1 说明正在初始化</li>
+<li>-N 说明有N-1个线程正在进行扩容</li>
+<li>表示 table 初始化大小，如果 table 没有初始化</li>
+<li>表示 table 容量，如果 table　已经初始化。</li>
+</ol>
+<h2 id="put-方法-1"><a href="#put-方法-1" class="headerlink" title="put()方法"></a><strong>put()方法</strong></h2><pre><code class="java">public V put(K key, V value) &#123;
+    return putVal(key, value, false);
+&#125;
+
+/** Implementation for put and putIfAbsent */
+final V putVal(K key, V value, boolean onlyIfAbsent) &#123;
+    // key 和 value 不能为空
+    if (key == null || value == null) throw new NullPointerException();
+    int hash = spread(key.hashCode());
+    int binCount = 0;
+    for (Node&lt;K,V&gt;[] tab = table;;) &#123;
+        // f = 目标位置元素
+        Node&lt;K,V&gt; f; int n, i, fh;// fh 后面存放目标位置的元素 hash 值
+        if (tab == null || (n = tab.length) == 0)
+            // 数组桶为空，初始化数组桶（自旋+CAS)
+            tab = initTable();
+        else if ((f = tabAt(tab, i = (n - 1) &amp; hash)) == null) &#123;
+            // 桶内为空，CAS 放入，不加锁，成功了就直接 break 跳出
+            if (casTabAt(tab, i, null,new Node&lt;K,V&gt;(hash, key, value, null)))
+                break;  // no lock when adding to empty bin
+        &#125;
+        else if ((fh = f.hash) == MOVED)
+            tab = helpTransfer(tab, f);
+        else &#123;
+            V oldVal = null;
+            // 使用 synchronized 加锁加入节点
+            synchronized (f) &#123;
+                if (tabAt(tab, i) == f) &#123;
+                    // 说明是链表
+                    if (fh &gt;= 0) &#123;
+                        binCount = 1;
+                        // 循环加入新的或者覆盖节点
+                        for (Node&lt;K,V&gt; e = f;; ++binCount) &#123;
+                            K ek;
+                            if (e.hash == hash &amp;&amp;
+                                ((ek = e.key) == key ||
+                                 (ek != null &amp;&amp; key.equals(ek)))) &#123;
+                                oldVal = e.val;
+                                if (!onlyIfAbsent)
+                                    e.val = value;
+                                break;
+                            &#125;
+                            Node&lt;K,V&gt; pred = e;
+                            if ((e = e.next) == null) &#123;
+                                pred.next = new Node&lt;K,V&gt;(hash, key,
+                                                          value, null);
+                                break;
+                            &#125;
+                        &#125;
+                    &#125;
+                    else if (f instanceof TreeBin) &#123;
+                        // 红黑树
+                        Node&lt;K,V&gt; p;
+                        binCount = 2;
+                        if ((p = ((TreeBin&lt;K,V&gt;)f).putTreeVal(hash, key,
+                                                       value)) != null) &#123;
+                            oldVal = p.val;
+                            if (!onlyIfAbsent)
+                                p.val = value;
+                        &#125;
+                    &#125;
+                &#125;
+            &#125;
+            if (binCount != 0) &#123;
+                if (binCount &gt;= TREEIFY_THRESHOLD)
+                    treeifyBin(tab, i);
+                if (oldVal != null)
+                    return oldVal;
+                break;
+            &#125;
+        &#125;
+    &#125;
+    addCount(1L, binCount);
+    return null;
+&#125;Copy to clipboardErrorCopied
+</code></pre>
+<ol>
+<li>根据 key 计算出 hashcode 。</li>
+<li>判断是否需要进行初始化。</li>
+<li>即为当前 key 定位出的 Node，如果为空表示当前位置可以写入数据，利用 CAS 尝试写入，失败则自旋保证成功。</li>
+<li>如果当前位置的 <code>hashcode == MOVED == -1</code>,则需要进行扩容。</li>
+<li>如果都不满足，则利用 synchronized 锁写入数据。</li>
+<li>如果数量大于 <code>TREEIFY_THRESHOLD</code> 则要转换为红黑树。</li>
+</ol>
+<h2 id="get-方法"><a href="#get-方法" class="headerlink" title="get()方法"></a><strong>get()方法</strong></h2><p>get 流程比较简单</p>
+<pre><code class="java">public V get(Object key) &#123;
+    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; e, p; int n, eh; K ek;
+    // key 所在的 hash 位置
+    int h = spread(key.hashCode());
+    if ((tab = table) != null &amp;&amp; (n = tab.length) &gt; 0 &amp;&amp;
+        (e = tabAt(tab, (n - 1) &amp; h)) != null) &#123;
+        // 如果指定位置元素存在，头结点hash值相同
+        if ((eh = e.hash) == h) &#123;
+            if ((ek = e.key) == key || (ek != null &amp;&amp; key.equals(ek)))
+                // key hash 值相等，key值相同，直接返回元素 value
+                return e.val;
+        &#125;
+        else if (eh &lt; 0)
+            // 头结点hash值小于0，说明正在扩容或者是红黑树，find查找
+            return (p = e.find(h, key)) != null ? p.val : null;
+        while ((e = e.next) != null) &#123;
+            // 是链表，遍历查找
+            if (e.hash == h &amp;&amp;
+                ((ek = e.key) == key || (ek != null &amp;&amp; key.equals(ek))))
+                return e.val;
+        &#125;
+    &#125;
+    return null;
+&#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>总结一下 get 过程：</p>
+<ol>
+<li>根据 hash 值计算位置。</li>
+<li>查找到指定位置，如果头节点就是要找的，直接返回它的 value.</li>
+<li>如果头节点 hash 值小于 0 ，说明正在扩容或者是红黑树，查找之。</li>
+<li>如果是链表，遍历查找之。</li>
+</ol>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Java7 中 ConcruuentHashMap 使用的分段锁，也就是每一个 Segment 上同时只有一个线程可以操作，每一个 Segment 都是一个类似 HashMap 数组的结构，它可以扩容，它的冲突会转化为链表。但是 Segment 的个数一但初始化就不能改变。</p>
+<p>Java8 中的 ConcruuentHashMap 使用的 Synchronized 锁加 CAS 的机制。结构也由 Java7 中的 <strong>Segment 数组 + HashEntry 数组 + 链表</strong> 进化成了 <strong>Node 数组 + 链表 / 红黑树</strong>，Node 是类似于一个 HashEntry 的结构。它的冲突再达到一定大小时会转化成红黑树，在冲突小于一定数量时又退回链表。</p>
+<p>Synchronized 锁自从引入锁升级策略后，性能不再是问题，详细解释留在并发编程里介绍。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+            </ul>
+            
+            
+            <div class="post-nav">
+                <hr>
+                
+                    <div class="post-nav-item">上一篇:<a href="/2020/12/10/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" rel="prev" 
+                        title="HashMap底层原理分析">HashMap底层原理分析
+                      </a></div>
+                
+                
+                    <div class="post-nav-item">下一篇:<a href="/2020/11/22/LinkedList%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" rel="next" 
+                        title="LinkedList底层原理分析">LinkedList底层原理分析</a></div>
+                                
+            </div>   
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d=''
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/lovelyChild.jpg" height=300 width=300></img>
+                    <p>HustZjx</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/TriDiamond" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="https://twitter.com/TriDiamond6" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="https://stackoverflow.com/users/7602324/tridiamond?tab=profile" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">21 <p>文章</p></a></li>
+                    <li><a href="/categories">4 <p>分类</p></a></li>
+                    <li><a href="/tags">55 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ConcurrentHashMap-1-7"><span class="toc-number">1.</span> <span class="toc-text">ConcurrentHashMap 1.7</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">存储结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.2.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#put-%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text">put()方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%A9%E5%AE%B9rehash"><span class="toc-number">1.4.</span> <span class="toc-text">扩容rehash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#get-%E5%87%BD%E6%95%B0"><span class="toc-number">1.5.</span> <span class="toc-text">get()函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ConcurrentHashMap-1-8"><span class="toc-number">2.</span> <span class="toc-text">ConcurrentHashMap 1.8</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.1.</span> <span class="toc-text">存储结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9D%E5%A7%8B%E5%8C%96-initTable"><span class="toc-number">2.1.1.</span> <span class="toc-text">2. 初始化 initTable</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#put-%E6%96%B9%E6%B3%95-1"><span class="toc-number">2.2.</span> <span class="toc-text">put()方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#get-%E6%96%B9%E6%B3%95"><span class="toc-number">2.3.</span> <span class="toc-text">get()方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2021
+        <span class="gradient-text">
+            HustZjx
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.5" target="_blank" rel="noopener">v1.4.5</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-149874671-1');
+</script>
+ 
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', 'Stay hungry, stay foolish'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+ <!-- 例：百度统计 --> <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?your_code"; var s = document.getElementsByTagName("script")[0];  s.parentNode.insertBefore(hm, s); })(); </script> 
+
+</html>

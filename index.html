@@ -135,40 +135,39 @@
     <div id="post0" class="else">
         <p class="animated fadeInDown">
             
-            <a href="/categories/JVM"><b>「
-                </b>JVM<b> 」</b></a>
+            <a href="/categories/容器与源码分析"><b>「
+                </b>容器与源码分析<b> 」</b></a>
             
-            三月 28, 2021
+            十二月 10, 2020
         </p>
         <h3 class="post-title animated fadeInDown">
-            <a href="/2021/03/28/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="JVM类加载器" class="posttitle">JVM类加载器</a></h3>
+            <a href="/2020/12/10/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="HashMap底层原理分析" class="posttitle">HashMap底层原理分析</a></h3>
         
         <p class="post-count animated fadeInDown">
             
             <span>
                 <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                3.5k
+                14k
             </span>
             
             
             <span>
                 <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                3 mins.
+                13 mins.
             </span>
             
             
         </p>
         
         
-        <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B/" rel="tag">双亲委派模型</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" rel="tag">类加载器</a></li></ul>
+        <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/HashMap/" rel="tag">HashMap</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" rel="tag">红黑树</a></li></ul>
         
         <div class="md-content animated fadeIn">
             
-            <p>JVM 中内置了三个重要的 ClassLoader，除了 BootstrapClassLoader 其他类加载器均由 Java 实现且全部继承自<code>java.lang.ClassLoader</code>：</p>
-<ol>
-<li><strong>BootstrapClass...</strong></li></ol>
+            <p>HashMap 主要用来存放键值对，它基于哈希表的 Map 接口实现，是常用的 Java 集合之一。</p>
+<p>JDK1.8 之前 HashMap 由 数组+链表 组成的，数组是 HashMap 的主体，链表则...</p>
             
-            <span class="read-more"><a href="/2021/03/28/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="查看全文" class="posttitle">查看全文</a>
+            <span class="read-more"><a href="/2020/12/10/HashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="查看全文" class="posttitle">查看全文</a>
                 <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
@@ -198,13 +197,207 @@
     <div class="else">
         <p class="animated fadeInDown">
             
+                <a href="/categories/容器与源码分析">
+                  <b>「 </b>容器与源码分析<b> 」</b>
+                </a>
+            
+            十一月 29, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/11/29/ConcurrentHashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="ConcurrentHashMap底层原理分析" class="posttitle">ConcurrentHashMap底层原理分析</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        23k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        21 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/CAS/" rel="tag">CAS</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ConcurrentHashMap/" rel="tag">ConcurrentHashMap</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Segment/" rel="tag">Segment</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p></p>
+<p>Java 7 中 ConcurrentHashMap 的存储结构如上图，ConcurrnetHashMap 由很多个 Segment 组合，而每一个 Segment 是一个类似于 HashMap 的结构，所以每一个 HashMap 的内部可以进行扩容。但是 Segment 的个数一旦<strong>初始化就不能改变</strong>，默认 Segment 的个数是 16 个，你也可以认为 ConcurrentHashMap 默认支持最多 16 个线程并发。</p>
+<p>通过 ConcurrentHashMap 的无参构造探寻 ConcurrentHashMa...</p>
+            
+            <span class="read-more"><a href="/2020/11/29/ConcurrentHashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/容器与源码分析">
+                  <b>「 </b>容器与源码分析<b> 」</b>
+                </a>
+            
+            十一月 22, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/11/22/LinkedList%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="LinkedList底层原理分析" class="posttitle">LinkedList底层原理分析</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        11k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        10 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/LinkedList/" rel="tag">LinkedList</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>LinkedList是一个实现了List接口和Deque接口的双端链表。 LinkedList底层的链表结构使它支持高效的插入和删除操作，另外它实现了Deque接口，使得LinkedList类也具有队列的特性; LinkedList不是线程安全的，如果想使LinkedList变成线程安全的，可以调用静态类Collections类中的synchronizedList方法：</p>
+<pre><code class="java">List list=Collections.synchronizedList(new LinkedList(...));
+</code></pre>
+<p> ...</p>
+            
+            <span class="read-more"><a href="/2020/11/22/LinkedList%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/容器与源码分析">
+                  <b>「 </b>容器与源码分析<b> 」</b>
+                </a>
+            
+            十一月 15, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/11/15/ArrayList%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="ArrayList底层原理分析" class="posttitle">ArrayList底层原理分析</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        16k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        15 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ArrayList/" rel="tag">ArrayList</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/LinkedList/" rel="tag">LinkedList</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p><code>ArrayList</code> 的底层是数组队列，相当于动态数组。与 Java 中的数组相比，它的容量能动态增长。在添加大量元素前，应用程序可以使用<code>ensureCapacity</code>操作来增加 <code>ArrayList</code> 实例的容量。这可以减少递增式再分配的数量。</p>
+<p><code>ArrayList</code>继承于 <strong><code>AbstractList</code></strong> ，实现了 <strong><code>List</code></strong>, <strong><code>RandomAccess</code></strong>, <strong><code>Cloneable</code></strong>, <strong><code>java.io.Serializable</code></strong> 这些接口。</p>
+<pre><code class="java">public class ArrayList&lt;E&gt; extends AbstractLis...</code></pre>
+            
+            <span class="read-more"><a href="/2020/11/15/ArrayList%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
                 <a href="/categories/JVM">
                   <b>「 </b>JVM<b> 」</b>
                 </a>
             
-            三月 28, 2021
+            十月 29, 2020
         </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2021/03/28/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/" title="JVM类加载" class="posttitle">JVM类加载</a></h3>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/10/29/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="JVM类加载器" class="posttitle">JVM类加载器</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        3.5k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        3 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B/" rel="tag">双亲委派模型</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" rel="tag">类加载器</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>JVM 中内置了三个重要的 ClassLoader，除了 BootstrapClassLoader 其他类加载器均由 Java 实现且全部继承自<code>java.lang.ClassLoader</code>：</p>
+<ol>
+<li><strong>BootstrapClassLoader(启动类加载器)</strong> ：最顶层的加载类，由C++实现，负责加载 <code>%JAVA_HOME%/lib</code>目录下的jar包和类或者或被 <code>-Xbootclasspath</code>参数指定的路径中的所有类。</li>
+<li><strong>ExtensionClassLoader(扩展类加载器)</strong> ：主要负责加载目录 <code>%JRE_HOME...</code></li></ol>
+            
+            <span class="read-more"><a href="/2020/10/29/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/JVM">
+                  <b>「 </b>JVM<b> 」</b>
+                </a>
+            
+            十月 25, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/10/25/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/" title="JVM类加载" class="posttitle">JVM类加载</a></h3>
         
             <p class="post-count animated fadeInDown">
                 
@@ -237,7 +430,7 @@
 <li>将字节流所代表的静态存储结构转换为方法区的运行时数据结构</li>
 <li>在内存中生成一个代表该类的 Class 对象...</li></ol>
             
-            <span class="read-more"><a href="/2021/03/28/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+            <span class="read-more"><a href="/2020/10/25/JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
 </div>
@@ -256,9 +449,9 @@
                   <b>「 </b>JVM<b> 」</b>
                 </a>
             
-            三月 28, 2021
+            十月 15, 2020
         </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2021/03/28/JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" title="JVM垃圾回收" class="posttitle">JVM垃圾回收</a></h3>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/10/15/JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" title="JVM垃圾回收" class="posttitle">JVM垃圾回收</a></h3>
         
             <p class="post-count animated fadeInDown">
                 
@@ -284,7 +477,7 @@
                 <p>Java 的自动内存管理主要是针对对象内存的回收和对象内存的分配。同时，Java 自动内存管理最核心的功能是 <strong>堆</strong> 内存中对象的分配与回收。</p>
 <p>Java 堆是垃圾收集器管理的主要区域，因此也被称作<strong>GC 堆（Garbage Collected Heap）</strong>.从垃圾回收的角度，由于现在收集器基本都采用分代垃圾收集算法，所以 Java 堆还可以细分为：新生代和老年代：再细致一点有：Eden 空间、From Survivor、To Survivor 空间等。<strong>进一步划分的目的是更好地回收内存，或者更快地分配内存...</strong></p>
             
-            <span class="read-more"><a href="/2021/03/28/JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+            <span class="read-more"><a href="/2020/10/15/JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
 </div>
@@ -303,9 +496,9 @@
                   <b>「 </b>JVM<b> 」</b>
                 </a>
             
-            三月 28, 2021
+            九月 29, 2020
         </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2021/03/28/HotSpot%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%B9%E8%B1%A1/" title="HotSpot虚拟机对象" class="posttitle">HotSpot虚拟机对象</a></h3>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/09/29/HotSpot%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%B9%E8%B1%A1/" title="HotSpot虚拟机对象" class="posttitle">HotSpot虚拟机对象</a></h3>
         
             <p class="post-count animated fadeInDown">
                 
@@ -334,7 +527,7 @@
 </li>
 <li><p>为成员变量分配内存空间，采用何种方法来分配内存空间取决于Java堆中内存的完整性，如果采用的是带有空间压缩性质的垃圾回收器(如 Serial、SerialOld、G1)，则利用指针碰撞的方法来进行变量内存分配，如果使用的垃圾回收期没有该性质(如CMS)，则利用空闲列表的方法进...</p></li></ol>
             
-            <span class="read-more"><a href="/2021/03/28/HotSpot%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%B9%E8%B1%A1/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+            <span class="read-more"><a href="/2020/09/29/HotSpot%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%B9%E8%B1%A1/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
 </div>
@@ -353,9 +546,9 @@
                   <b>「 </b>JVM<b> 」</b>
                 </a>
             
-            三月 28, 2021
+            九月 20, 2020
         </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2021/03/28/JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/" title="JVM内存区域" class="posttitle">JVM内存区域</a></h3>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/09/20/JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/" title="JVM内存区域" class="posttitle">JVM内存区域</a></h3>
         
             <p class="post-count animated fadeInDown">
                 
@@ -382,7 +575,7 @@
 <p>对于 Java 程序员来说，在虚拟机自动内存管理机制下，不再需要像 C/C++程序开发程序员这样为每一个 new 操作去写对应的 delete/free 操作，不容易出现内存泄漏和内存溢出问题。正是因为 Java 程序员把内存控制权利交给 Java 虚拟机，一旦出现内存泄漏和溢出方面的问题，如果不了解虚拟机是怎样使用内存的，那么排查错误将会是一个非常艰巨的任务。</p>
 <p>Java 虚拟机在执行 Java 程序的过程中会把它管理的内存划分成若干个不...</p>
             
-            <span class="read-more"><a href="/2021/03/28/JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+            <span class="read-more"><a href="/2020/09/20/JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
 </div>
@@ -401,9 +594,9 @@
                   <b>「 </b>并发编程<b> 」</b>
                 </a>
             
-            三月 28, 2021
+            九月 15, 2020
         </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2021/03/28/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%B8%89%EF%BC%89/" title="线程池（三）" class="posttitle">线程池（三）</a></h3>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/09/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%B8%89%EF%BC%89/" title="线程池（三）" class="posttitle">线程池（三）</a></h3>
         
             <p class="post-count animated fadeInDown">
                 
@@ -429,220 +622,7 @@
                 <p><code>ScheduledThreadPoolExecutor</code> 主要用来在给定的延迟后运行任务，或者定期执行任务。 这个在实际项目中基本不会被用到，因为有其他方案选择比如<code>quartz</code>。大家只需要简单了解一下它的思想。关于如何在 Spring Boot 中 实现定时任务，可以查看这篇文章<a target="_blank" rel="noopener" href="https://github.com/Snailclimb/springboot-guide/blob/master/docs/advanced/SpringBoot-ScheduleTasks.md">《5 分钟搞懂如何在 Spring Boot 中 Schedule Tasks》</a>。</p>
 <p><code>ScheduledThreadPoolExecutor</code> 使用的任务队列 <code>DelayQueue</code> 封装了一个 <code>PriorityQueue</code>，<code>PriorityQueu...</code></p>
             
-            <span class="read-more"><a href="/2021/03/28/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%B8%89%EF%BC%89/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/并发编程">
-                  <b>「 </b>并发编程<b> 」</b>
-                </a>
-            
-            三月 28, 2021
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2021/03/28/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%BA%8C%EF%BC%89/" title="线程池（二）" class="posttitle">线程池（二）</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        18k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        16 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/CachedThreadExecutor/" rel="tag">CachedThreadExecutor</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/FixedThreadPool/" rel="tag">FixedThreadPool</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ScheduledThreadPoolExecutor/" rel="tag">ScheduledThreadPoolExecutor</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/SingleThreadExecutor/" rel="tag">SingleThreadExecutor</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ThreadPoolExecutor/" rel="tag">ThreadPoolExecutor</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p>首先创建一个 <code>Runnable</code> 接口的实现类（当然也可以是 <code>Callable</code> 接口，我们上面也说了两者的区别。）</p>
-<pre><code class="java">MyRunnable.java
-import java.util.Date;
-
-/**
- * 这是一个简单的Runnable类，需要大约5秒钟来执行其任务。
- * @author shuang.kou
- */
-public class MyRunnable implements Runnable &#123;
-
-    private String command;
-
-    public MyRunnable...</code></pre>
-            
-            <span class="read-more"><a href="/2021/03/28/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%BA%8C%EF%BC%89/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/并发编程">
-                  <b>「 </b>并发编程<b> 」</b>
-                </a>
-            
-            三月 28, 2021
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2021/03/28/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%B8%80%EF%BC%89/" title="线程池（一）" class="posttitle">线程池（一）</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        8.9k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        8 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Executor/" rel="tag">Executor</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ThreadPoolExecutor/" rel="tag">ThreadPoolExecutor</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p><strong>线程池</strong>提供了一种限制和管理资源（包括执行一个任务）。 每个<strong>线程池</strong>还维护一些基本统计信息，例如已完成任务的数量。</p>
-<p>这里借用《Java 并发编程的艺术》提到的来说一下<strong>使用线程池的好处</strong>：</p>
-<ul>
-<li><strong>降低资源消耗</strong>。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。</li>
-<li><strong>提高响应速度</strong>。当任务到达时，任务可以不需要的等到线程创建就能立即执行。</li>
-<li><strong>提高线程的可管理性</strong>。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。</li>
-</ul>
-<p>Executor 框架是 Java5...</p>
-            
-            <span class="read-more"><a href="/2021/03/28/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%B8%80%EF%BC%89/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/并发编程">
-                  <b>「 </b>并发编程<b> 」</b>
-                </a>
-            
-            三月 28, 2021
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2021/03/28/Atomic%E5%8E%9F%E5%AD%90%E7%B1%BB/" title="Atomic原子类" class="posttitle">Atomic原子类</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        3.9k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        4 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ABA%E9%97%AE%E9%A2%98/" rel="tag">ABA问题</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%8E%9F%E5%AD%90%E7%B1%BB/" rel="tag">原子类</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p><code>Atomic</code> 翻译成中文是原子的意思。在化学上，我们知道原子是构成一般物质的最小单位，在化学反应中是不可分割的。在我们这里 Atomic 是指一个操作是不可中断的。即使是在多个线程一起执行的时候，一个操作一旦开始，就不会被其他线程干扰。</p>
-<p>所以，所谓原子类说简单点就是具有原子/原子操作特征的类。</p>
-<p>并发包 <code>java.util.concurrent</code> 的原子类都存放在<code>java.util.concurrent.atomic</code>下</p>
-<p><strong>基本类型</strong></p>
-<p>使用原子的方式更新基本类型</p>
-<ul>
-<li><code>AtomicInteger</code>：整形原子类</li>
-...</ul>
-            
-            <span class="read-more"><a href="/2021/03/28/Atomic%E5%8E%9F%E5%AD%90%E7%B1%BB/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/并发编程">
-                  <b>「 </b>并发编程<b> 」</b>
-                </a>
-            
-            三月 28, 2021
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2021/03/28/%E5%B9%B6%E5%8F%91%E8%BF%9B%E9%98%B6/" title="并发进阶" class="posttitle">并发进阶</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        17k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        15 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Atomic/" rel="tag">Atomic</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ThreadLocal/" rel="tag">ThreadLocal</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/synchronized/" rel="tag">synchronized</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/volatile/" rel="tag">volatile</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p><code>synchronized</code><strong>关键字解决的是多个线程之间访问资源的同步性</strong>，<code>synchronized</code><strong>关键字可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。</strong></p>
-<p>另外，在 Java 早期版本中，<code>synchronized</code> 属于 <strong>重量级锁</strong>，效率低下。</p>
-<p><strong>为什么呢？</strong></p>
-<p>因为监视器锁（monitor）是依赖于底层的操作系统的 <code>Mutex Lock</code> 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从用户态转换到内...</p>
-            
-            <span class="read-more"><a href="/2021/03/28/%E5%B9%B6%E5%8F%91%E8%BF%9B%E9%98%B6/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+            <span class="read-more"><a href="/2020/09/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E4%B8%89%EF%BC%89/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
 </div>

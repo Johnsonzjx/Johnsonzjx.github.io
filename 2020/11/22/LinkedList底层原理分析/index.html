@@ -1,0 +1,730 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LinkedList底层原理分析 - Java Learning Blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Java Study,"> 
+    <meta name="description" content="LinkedList简介LinkedList是一个实现了List接口和Deque接口的双端链表。 LinkedList底层的链表结构使它支持高效的插入和删除操作，另外它实现了Deque接口，使得Li,"> 
+    <meta name="author" content="HustZjx"> 
+    <link rel="alternative" href="atom.xml" title="Java Learning Blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Java Learning Blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">LinkedList底层原理分析</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/容器与源码分析"><b>「
+                    </b>容器与源码分析<b> 」</b></a>
+                
+                十一月 22, 2020
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/11/22/LinkedList%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="LinkedList底层原理分析" class="">LinkedList底层原理分析</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    11k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    10 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/LinkedList/" rel="tag">LinkedList</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="LinkedList简介"><a href="#LinkedList简介" class="headerlink" title="LinkedList简介"></a><strong>LinkedList简介</strong></h1><p>LinkedList是一个实现了List接口和Deque接口的双端链表。 LinkedList底层的链表结构使它支持高效的插入和删除操作，另外它实现了Deque接口，使得LinkedList类也具有队列的特性; LinkedList不是线程安全的，如果想使LinkedList变成线程安全的，可以调用静态类Collections类中的synchronizedList方法：</p>
+<pre><code class="java">List list=Collections.synchronizedList(new LinkedList(...));
+</code></pre>
+<h2 id="内部数据结构"><a href="#内部数据结构" class="headerlink" title="内部数据结构"></a><strong>内部数据结构</strong></h2><p><img src="https://snailclimb.gitee.io/javaguide/docs/java/collection/images/linkedlist/LinkedList%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84.png" alt="LinkedList内部结构"> </p>
+<p>看完了图之后，我们再看LinkedList类中的一个<strong>内部私有类Node</strong>就很好理解了：</p>
+<pre><code class="java">private static class Node&lt;E&gt; &#123;
+        E item;//节点值
+        Node&lt;E&gt; next;//后继节点
+        Node&lt;E&gt; prev;//前驱节点
+
+        Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;
+            this.item = element;
+            this.next = next;
+            this.prev = prev;
+        &#125;
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>这个类就代表双端链表的节点Node。这个类有三个属性，分别是前驱节点，本节点的值，后继结点。</p>
+<h1 id="LinkedList源码分析"><a href="#LinkedList源码分析" class="headerlink" title="LinkedList源码分析"></a><strong>LinkedList源码分析</strong></h1><h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a><strong>构造方法</strong></h2><p><strong>空构造方法：</strong></p>
+<pre><code class="java">    public LinkedList() &#123;
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p><strong>用已有的集合创建链表的构造方法：</strong></p>
+<pre><code class="java">    public LinkedList(Collection&lt;? extends E&gt; c) &#123;
+        this();
+        addAll(c);
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<h2 id="add方法"><a href="#add方法" class="headerlink" title="add方法"></a><strong>add方法</strong></h2><p><strong>add(E e)</strong> 方法：将元素添加到链表尾部</p>
+<pre><code class="java">public boolean add(E e) &#123;
+        linkLast(e);//这里就只调用了这一个方法
+        return true;
+    &#125;Copy to clipboardErrorCopied
+   /**
+     * 链接使e作为最后一个元素。
+     */
+    void linkLast(E e) &#123;
+        final Node&lt;E&gt; l = last;
+        final Node&lt;E&gt; newNode = new Node&lt;&gt;(l, e, null);
+        last = newNode;//新建节点
+        if (l == null)
+            first = newNode;
+        else
+            l.next = newNode;//指向后继元素也就是指向下一个元素
+        size++;
+        modCount++;
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>**add(int index,E e)**：在指定位置添加元素</p>
+<pre><code class="java">public void add(int index, E element) &#123;
+        checkPositionIndex(index); //检查索引是否处于[0-size]之间
+
+        if (index == size)//添加在链表尾部
+            linkLast(element);
+        else//添加在链表中间
+            linkBefore(element, node(index));
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>linkBefore方法需要给定两个参数，一个插入节点的值，一个指定的node，所以我们又调用了Node(index)去找到index对应的node</p>
+<p><strong>addAll(Collection c )：将集合插入到链表尾部</strong></p>
+<pre><code class="java">public boolean addAll(Collection&lt;? extends E&gt; c) &#123;
+        return addAll(size, c);
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p><strong>addAll(int index, Collection c)：</strong> 将集合从指定位置开始插入</p>
+<pre><code class="java">public boolean addAll(int index, Collection&lt;? extends E&gt; c) &#123;
+        //1:检查index范围是否在size之内
+        checkPositionIndex(index);
+
+        //2:toArray()方法把集合的数据存到对象数组中
+        Object[] a = c.toArray();
+        int numNew = a.length;
+        if (numNew == 0)
+            return false;
+
+        //3：得到插入位置的前驱节点和后继节点
+        Node&lt;E&gt; pred, succ;
+        //如果插入位置为尾部，前驱节点为last，后继节点为null
+        if (index == size) &#123;
+            succ = null;
+            pred = last;
+        &#125;
+        //否则，调用node()方法得到后继节点，再得到前驱节点
+        else &#123;
+            succ = node(index);
+            pred = succ.prev;
+        &#125;
+
+        // 4：遍历数据将数据插入
+        for (Object o : a) &#123;
+            @SuppressWarnings(&quot;unchecked&quot;) E e = (E) o;
+            //创建新节点
+            Node&lt;E&gt; newNode = new Node&lt;&gt;(pred, e, null);
+            //如果插入位置在链表头部
+            if (pred == null)
+                first = newNode;
+            else
+                pred.next = newNode;
+            pred = newNode;
+        &#125;
+
+        //如果插入位置在尾部，重置last节点
+        if (succ == null) &#123;
+            last = pred;
+        &#125;
+        //否则，将插入的链表与先前链表连接起来
+        else &#123;
+            pred.next = succ;
+            succ.prev = pred;
+        &#125;
+
+        size += numNew;
+        modCount++;
+        return true;
+    &#125;    Copy to clipboardErrorCopied
+</code></pre>
+<p>上面可以看出addAll方法通常包括下面四个步骤：</p>
+<ol>
+<li>检查index范围是否在size之内</li>
+<li>toArray()方法把集合的数据存到对象数组中</li>
+<li>得到插入位置的前驱和后继节点</li>
+<li>遍历数据，将数据插入到指定位置</li>
+</ol>
+<p><strong>addFirst(E e)：</strong> 将元素添加到链表头部</p>
+<pre><code class="java"> public void addFirst(E e) &#123;
+        linkFirst(e);
+    &#125;Copy to clipboardErrorCopied
+private void linkFirst(E e) &#123;
+        final Node&lt;E&gt; f = first;
+        final Node&lt;E&gt; newNode = new Node&lt;&gt;(null, e, f);//新建节点，以头节点为后继节点
+        first = newNode;
+        //如果链表为空，last节点也指向该节点
+        if (f == null)
+            last = newNode;
+        //否则，将头节点的前驱指针指向新节点，也就是指向前一个元素
+        else
+            f.prev = newNode;
+        size++;
+        modCount++;
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p><strong>addLast(E e)：</strong> 将元素添加到链表尾部，与 <strong>add(E e)</strong> 方法一样</p>
+<pre><code class="java">public void addLast(E e) &#123;
+        linkLast(e);
+    &#125;
+</code></pre>
+<h2 id="根据位置取数据的方法"><a href="#根据位置取数据的方法" class="headerlink" title="根据位置取数据的方法"></a><strong>根据位置取数据的方法</strong></h2><p><strong>get(int index)：</strong> 根据指定索引返回数据</p>
+<pre><code class="java">public E get(int index) &#123;
+        //检查index范围是否在size之内
+        checkElementIndex(index);
+        //调用Node(index)去找到index对应的node然后返回它的值
+        return node(index).item;
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p><strong>获取头节点（index=0）数据方法:</strong></p>
+<pre><code class="java">public E getFirst() &#123;
+        final Node&lt;E&gt; f = first;
+        if (f == null)
+            throw new NoSuchElementException();
+        return f.item;
+    &#125;
+public E element() &#123;
+        return getFirst();
+    &#125;
+public E peek() &#123;
+        final Node&lt;E&gt; f = first;
+        return (f == null) ? null : f.item;
+    &#125;
+
+public E peekFirst() &#123;
+        final Node&lt;E&gt; f = first;
+        return (f == null) ? null : f.item;
+     &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p><strong>区别：</strong> getFirst(),element(),peek(),peekFirst() 这四个获取头结点方法的区别在于对链表为空时的处理，是抛出异常还是返回null，其中<strong>getFirst()</strong> 和<strong>element()</strong> 方法将会在链表为空时，抛出异常</p>
+<p>element()方法的内部就是使用getFirst()实现的。它们会在链表为空时，抛出NoSuchElementException<br><strong>获取尾节点（index=-1）数据方法:</strong></p>
+<pre><code class="java"> public E getLast() &#123;
+        final Node&lt;E&gt; l = last;
+        if (l == null)
+            throw new NoSuchElementException();
+        return l.item;
+    &#125;
+ public E peekLast() &#123;
+        final Node&lt;E&gt; l = last;
+        return (l == null) ? null : l.item;
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p><strong>两者区别：</strong> <strong>getLast()</strong> 方法在链表为空时，会抛出<strong>NoSuchElementException</strong>，而<strong>peekLast()</strong> 则不会，只是会返回 <strong>null</strong>。</p>
+<h2 id="根据对象得到索引的方法"><a href="#根据对象得到索引的方法" class="headerlink" title="根据对象得到索引的方法"></a><strong>根据对象得到索引的方法</strong></h2><p><strong>int indexOf(Object o)：</strong> 从头遍历找</p>
+<pre><code class="java">public int indexOf(Object o) &#123;
+        int index = 0;
+        if (o == null) &#123;
+            //从头遍历
+            for (Node&lt;E&gt; x = first; x != null; x = x.next) &#123;
+                if (x.item == null)
+                    return index;
+                index++;
+            &#125;
+        &#125; else &#123;
+            //从头遍历
+            for (Node&lt;E&gt; x = first; x != null; x = x.next) &#123;
+                if (o.equals(x.item))
+                    return index;
+                index++;
+            &#125;
+        &#125;
+        return -1;
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p><strong>int lastIndexOf(Object o)：</strong> 从尾遍历找</p>
+<pre><code class="java">public int lastIndexOf(Object o) &#123;
+        int index = size;
+        if (o == null) &#123;
+            //从尾遍历
+            for (Node&lt;E&gt; x = last; x != null; x = x.prev) &#123;
+                index--;
+                if (x.item == null)
+                    return index;
+            &#125;
+        &#125; else &#123;
+            //从尾遍历
+            for (Node&lt;E&gt; x = last; x != null; x = x.prev) &#123;
+                index--;
+                if (o.equals(x.item))
+                    return index;
+            &#125;
+        &#125;
+        return -1;
+    &#125;
+</code></pre>
+<h2 id="检查LinkedList是否包含对象（contains）"><a href="#检查LinkedList是否包含对象（contains）" class="headerlink" title="检查LinkedList是否包含对象（contains）"></a><strong>检查LinkedList是否包含对象（contains）</strong></h2><p><strong>contains(Object o)：</strong> 检查对象o是否存在于链表中</p>
+<pre><code class="java"> public boolean contains(Object o) &#123;
+        return indexOf(o) != -1;
+    &#125;
+</code></pre>
+<h2 id="remove-方法"><a href="#remove-方法" class="headerlink" title="remove()方法"></a><strong>remove()方法</strong></h2><p><strong>remove()</strong> ,<strong>removeFirst(),pop():</strong> 删除头节点</p>
+<pre><code>public E pop() &#123;
+        return removeFirst();
+    &#125;
+public E remove() &#123;
+        return removeFirst();
+    &#125;
+public E removeFirst() &#123;
+        final Node&lt;E&gt; f = first;
+        if (f == null)
+            throw new NoSuchElementException();
+        return unlinkFirst(f);
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p><strong>removeLast(),pollLast():</strong> 删除尾节点</p>
+<pre><code class="java">public E removeLast() &#123;
+        final Node&lt;E&gt; l = last;
+        if (l == null)
+            throw new NoSuchElementException();
+        return unlinkLast(l);
+    &#125;
+public E pollLast() &#123;
+        final Node&lt;E&gt; l = last;
+        return (l == null) ? null : unlinkLast(l);
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p><strong>区别：</strong> removeLast()在链表为空时将抛出NoSuchElementException，而pollLast()方法返回null。</p>
+<p><strong>remove(Object o):</strong> 删除指定元素</p>
+<pre><code class="java">public boolean remove(Object o) &#123;
+        //如果删除对象为null
+        if (o == null) &#123;
+            //从头开始遍历
+            for (Node&lt;E&gt; x = first; x != null; x = x.next) &#123;
+                //找到元素
+                if (x.item == null) &#123;
+                   //从链表中移除找到的元素
+                    unlink(x);
+                    return true;
+                &#125;
+            &#125;
+        &#125; else &#123;
+            //从头开始遍历
+            for (Node&lt;E&gt; x = first; x != null; x = x.next) &#123;
+                //找到元素
+                if (o.equals(x.item)) &#123;
+                    //从链表中移除找到的元素
+                    unlink(x);
+                    return true;
+                &#125;
+            &#125;
+        &#125;
+        return false;
+    &#125;Copy to clipboardErrorCopied
+</code></pre>
+<p>当删除指定对象时，只需调用remove(Object o)即可，不过该方法一次只会删除一个匹配的对象，如果删除了匹配对象，返回true，否则false。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+            </ul>
+            
+            
+            <div class="post-nav">
+                <hr>
+                
+                    <div class="post-nav-item">上一篇:<a href="/2020/11/29/ConcurrentHashMap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" rel="prev" 
+                        title="ConcurrentHashMap底层原理分析">ConcurrentHashMap底层原理分析
+                      </a></div>
+                
+                
+                    <div class="post-nav-item">下一篇:<a href="/2020/11/15/ArrayList%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" rel="next" 
+                        title="ArrayList底层原理分析">ArrayList底层原理分析</a></div>
+                                
+            </div>   
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d=''
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/lovelyChild.jpg" height=300 width=300></img>
+                    <p>HustZjx</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/TriDiamond" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="https://twitter.com/TriDiamond6" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="https://stackoverflow.com/users/7602324/tridiamond?tab=profile" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">21 <p>文章</p></a></li>
+                    <li><a href="/categories">4 <p>分类</p></a></li>
+                    <li><a href="/tags">55 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#LinkedList%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">LinkedList简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">内部数据结构</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LinkedList%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">LinkedList源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text">构造方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#add%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">add方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E4%BD%8D%E7%BD%AE%E5%8F%96%E6%95%B0%E6%8D%AE%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.3.</span> <span class="toc-text">根据位置取数据的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E5%AF%B9%E8%B1%A1%E5%BE%97%E5%88%B0%E7%B4%A2%E5%BC%95%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.4.</span> <span class="toc-text">根据对象得到索引的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5LinkedList%E6%98%AF%E5%90%A6%E5%8C%85%E5%90%AB%E5%AF%B9%E8%B1%A1%EF%BC%88contains%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">检查LinkedList是否包含对象（contains）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#remove-%E6%96%B9%E6%B3%95"><span class="toc-number">2.6.</span> <span class="toc-text">remove()方法</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2021
+        <span class="gradient-text">
+            HustZjx
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.5" target="_blank" rel="noopener">v1.4.5</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-149874671-1');
+</script>
+ 
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', 'Stay hungry, stay foolish'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+ <!-- 例：百度统计 --> <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?your_code"; var s = document.getElementsByTagName("script")[0];  s.parentNode.insertBefore(hm, s); })(); </script> 
+
+</html>
