@@ -135,39 +135,46 @@
     <div id="post0" class="else">
         <p class="animated fadeInDown">
             
-            <a href="/categories/设计模式"><b>「
-                </b>设计模式<b> 」</b></a>
+            <a href="/categories/数据库"><b>「
+                </b>数据库<b> 」</b></a>
             
-            一月 14, 2021
+            四月 13, 2021
         </p>
         <h3 class="post-title animated fadeInDown">
-            <a href="/2021/01/14/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" title="策略模式" class="posttitle">策略模式</a></h3>
+            <a href="/2021/04/13/MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/" title="MySQL语句的基本用法" class="posttitle">MySQL语句的基本用法</a></h3>
         
         <p class="post-count animated fadeInDown">
             
             <span>
                 <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                3.7k
+                10k
             </span>
             
             
             <span>
                 <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                3 mins.
+                9 mins.
             </span>
             
             
         </p>
         
         
-        <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" rel="tag">策略模式</a></li></ul>
+        <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">正则表达式</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E9%80%9A%E9%85%8D%E7%AC%A6/" rel="tag">通配符</a></li></ul>
         
         <div class="md-content animated fadeIn">
             
-            <p>在策略模式（Strategy Pattern）中，一个类的行为或其算法可以在运行时更改。这种类型的设计模式属于行为型模式。</p>
-<p>在策略模式中，我们创建表示各种策略的对象和一个行为随着策略对象改变而改变的 ...</p>
+            <header>
+<meta name="referrer" content="never">
+</header>
+
+<ul>
+<li>在使用长的合法选项清单时，<code>IN</code>操作符的语法更清楚且更直观；</li>
+<li>在使用IN时，计算的次序更容易管理（因为使用的操作符更少）；</li>
+<li><code>IN</code>操作符一般比<code>OR</code>操作符清单执行更快；</li>
+<li><code>IN</code>的最大优点是可以包含其他...</li></ul>
             
-            <span class="read-more"><a href="/2021/01/14/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" title="查看全文" class="posttitle">查看全文</a>
+            <span class="read-more"><a href="/2021/04/13/MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/" title="查看全文" class="posttitle">查看全文</a>
                 <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
@@ -188,6 +195,57 @@
 
     <div id="primary">
         
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/设计模式">
+                  <b>「 </b>设计模式<b> 」</b>
+                </a>
+            
+            一月 14, 2021
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2021/01/14/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" title="策略模式" class="posttitle">策略模式</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        3.7k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        3 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" rel="tag">策略模式</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>在策略模式（Strategy Pattern）中，一个类的行为或其算法可以在运行时更改。这种类型的设计模式属于行为型模式。</p>
+<p>在策略模式中，我们创建表示各种策略的对象和一个行为随着策略对象改变而改变的 context 对象。策略对象改变 context 对象的执行算法。</p>
+<p><strong>意图：</strong>定义一系列的算法,把它们一个个封装起来, 并且使它们可相互替换。</p>
+<p><strong>主要解决：</strong>在有多种算法相似的情况下，使用 if…else 所带来的复杂和难以维护。</p>
+<p><strong>何时使用：</strong>一个系统有许多许多类，而区分它们的只是他们直接的行为。</p>
+<p><strong>如何解决...</strong></p>
+            
+            <span class="read-more"><a href="/2021/01/14/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
 <div class="post" id="post">
     <div class="post-cover animated fadeIn" style="
             background-image:
@@ -587,54 +645,6 @@
 <p> ...</p>
             
             <span class="read-more"><a href="/2020/11/22/LinkedList%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
-        </div>
-    </div>
-</div>
-
-
-<div class="post" id="post">
-    <div class="post-cover animated fadeIn" style="
-            background-image:
-            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
-            url(/img/welcome-cover.jpg);">
-    </div>
-    <div class="else">
-        <p class="animated fadeInDown">
-            
-                <a href="/categories/容器与源码分析">
-                  <b>「 </b>容器与源码分析<b> 」</b>
-                </a>
-            
-            十一月 15, 2020
-        </p>
-        <h3 class="post-title animated fadeInDown"><a href="/2020/11/15/ArrayList%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="ArrayList底层原理分析" class="posttitle">ArrayList底层原理分析</a></h3>
-        
-            <p class="post-count animated fadeInDown">
-                
-                    <span>
-                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        16k
-                    </span>
-                
-                
-                    <span>
-                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        15 mins.
-                    </span>
-                
-                
-            </p>
-            
-                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/ArrayList/" rel="tag">ArrayList</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/LinkedList/" rel="tag">LinkedList</a></li></ul>
-            
-        
-        <div class="md-content animated fadeIn">
-            
-                <p><code>ArrayList</code> 的底层是数组队列，相当于动态数组。与 Java 中的数组相比，它的容量能动态增长。在添加大量元素前，应用程序可以使用<code>ensureCapacity</code>操作来增加 <code>ArrayList</code> 实例的容量。这可以减少递增式再分配的数量。</p>
-<p><code>ArrayList</code>继承于 <strong><code>AbstractList</code></strong> ，实现了 <strong><code>List</code></strong>, <strong><code>RandomAccess</code></strong>, <strong><code>Cloneable</code></strong>, <strong><code>java.io.Serializable</code></strong> 这些接口。</p>
-<pre><code class="java">public class ArrayList&lt;E&gt; extends AbstractLis...</code></pre>
-            
-            <span class="read-more"><a href="/2020/11/15/ArrayList%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
 </div>

@@ -1,0 +1,592 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MySQL语句的基本用法 - Java Learning Blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Java Study,"> 
+    <meta name="description" content="
+
+
+
+MySQL语句的基本用法使用IN操作符的好处
+在使用长的合法选项清单时，IN操作符的语法更清楚且更直观；
+在使用IN时，计算的次序更容易管理（因为使用的操作符更少）；
+IN操作符一般比OR操,"> 
+    <meta name="author" content="HustZjx"> 
+    <link rel="alternative" href="atom.xml" title="Java Learning Blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Java Learning Blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">MySQL语句的基本用法</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/数据库"><b>「
+                    </b>数据库<b> 」</b></a>
+                
+                四月 13, 2021
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2021/04/13/MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/" title="MySQL语句的基本用法" class="">MySQL语句的基本用法</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    10k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    9 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">正则表达式</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E9%80%9A%E9%85%8D%E7%AC%A6/" rel="tag">通配符</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <header>
+<meta name="referrer" content="never">
+</header>
+
+<h1 id="MySQL语句的基本用法"><a href="#MySQL语句的基本用法" class="headerlink" title="MySQL语句的基本用法"></a><strong><code>MySQL</code>语句的基本用法</strong></h1><h2 id="使用IN操作符的好处"><a href="#使用IN操作符的好处" class="headerlink" title="使用IN操作符的好处"></a><strong>使用<code>IN</code>操作符的好处</strong></h2><ul>
+<li>在使用长的合法选项清单时，<code>IN</code>操作符的语法更清楚且更直观；</li>
+<li>在使用IN时，计算的次序更容易管理（因为使用的操作符更少）；</li>
+<li><code>IN</code>操作符一般比<code>OR</code>操作符清单执行更快；</li>
+<li><code>IN</code>的最大优点是可以包含其他<code>SELECT</code>语句，使得能够更动态地建立<code>WHERE</code>子句</li>
+</ul>
+<h2 id="书写格式"><a href="#书写格式" class="headerlink" title="书写格式"></a><strong>书写格式</strong></h2><p><code>MySQL</code>命令行与<code>Java</code>语句书写类似，每一条执行语句以<code>；</code>结束，为了更好地调试与维护，采用关键字大写、数据集小写的书写方式，如：</p>
+<pre><code class="mysql">SELECT prod_id, prod_name, prod_price
+FROM products
+WHERE vend_id IN (1002, 1003) AND prod_price &lt;= 10
+ORDER BY prod_price DESC, prod_name
+LIMIT 2, 3;
+</code></pre>
+<p>这是一条执行语句</p>
+<h3 id="书写注意点"><a href="#书写注意点" class="headerlink" title="书写注意点"></a><strong>书写注意点</strong></h3><ul>
+<li><p><code>DESC</code>表示将输出数据进行降序排列， 需要对每一个列属性后都加一个<code>DESC</code>才能保证都按降序排列，例如上述语句首先按<code>prod_price</code>降序排列，当<code>prod_price</code>一样时按照<code>prod_name</code>升序输出，如果需要按照<code>prod_name</code>降序输出，则应该修改子句为：</p>
+<pre><code class="mysql">ORDER BY prod_price DESC, prod_name DESC
+</code></pre>
+</li>
+<li><p>检索出来的第一行为行0而不是行1。因此，<code>LIMIT 1, 1</code>将检索出第二行而不是第一行;</p>
+</li>
+<li><p><code>SQL</code>（像多数语言一样）在处理<code>OR</code>操作符前，优先处理<code>AND</code>操作符；</p>
+</li>
+<li><p><code>WHERE</code>子句中的<code>NOT</code>操作符有且只有一个功能，那就是否定它之后所跟的任何条件：</p>
+<pre><code class="mysql">SELECT prod_name, prod_price
+FROM products
+WHERE vend
+</code></pre>
+</li>
+<li><p>为在搜索子句中使用通配符，必须使用<code>LIKE</code>操作符，<code>LIKE</code>指示<code>MySQL</code>，后跟的搜索模式利用通配符而不是直接相等匹配进行比较</p>
+</li>
+</ul>
+<h1 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a><strong>通配符</strong></h1><h2 id="百分号通配符"><a href="#百分号通配符" class="headerlink" title="百分号通配符"></a><strong>百分号通配符</strong></h2><p><strong><code>%</code>表示任何字符出现任意次数</strong>，例如以下语句表示找出所有以词<code>jet</code>起头的产品：</p>
+<pre><code class="mysql">SELECT prod_id,prod_name
+FROM products
+WHERE prod_name LIKE &#39;jet%&#39;;
+</code></pre>
+<p>此例子使用了搜索模式<code>&#39;jet%&#39;</code>。在执行这条子句时，将检索任意以<code>jet</code>起头的词。<code>%</code>告诉<code>MySQL</code>接受<code>jet</code>之后的任意字符，不管它有多少字符。</p>
+<p><strong>注意：</strong></p>
+<ul>
+<li><p>根据<code>MySQL</code>的配置方式，搜索可以是区分大小写的。如果区分大小写，<code>&#39;jet%&#39;</code>与<code>JetPack 1000</code>将不匹配。</p>
+</li>
+<li><p><code>%</code>通配符可以匹配除了<code>NULL</code>以外的任何字符；</p>
+</li>
+<li><p>尾空格可能会干扰通配符匹配，如在保存词<code>anvil</code>时，如果后面有一个或多个空格，则子句</p>
+<pre><code class="mysql">WHERE prod_name LIKE &#39;%anvil&#39;
+</code></pre>
+<p>不会匹配到它们，解决方法是改为<code>%anvil%</code>，或者使用函数去掉首位空格。</p>
+</li>
+</ul>
+<h2 id="下划线通配符"><a href="#下划线通配符" class="headerlink" title="下划线通配符"></a><strong>下划线通配符</strong></h2><p>下划线通配符<code>_</code>也可以匹配任何字符，但只能匹配单个而不能匹配多个，如：</p>
+<pre><code class="mysql">SELECT prod_id, prod_name
+FROM products
+WHERE prod_name LIKE &#39;_ ton anvil&#39;;
+</code></pre>
+<p>此<code>WHERE</code>子句中的搜索模式给出了后面跟有文本的两个通配符。结果只显示匹配搜索模式的行：第一行中下划线匹配<code>1</code>，第二行中匹配<code>2</code>。<code>.5 ton anvil</code>产品没有匹配，因为搜索模式要求匹配两个通配符而不是一个。对照一下，下面的<code>SELECT</code>语句使用<code>%</code>通配符，返回三行产品：</p>
+<pre><code class="mysql">SELECT prod_id, prod_name
+FROM products
+WHERE prod_name LIKE &#39;%ton anvil&#39;;
+</code></pre>
+<p>与<code>%</code>能匹配<code>0</code>个字符不一样，<code>_</code>总是匹配一个字符，不能多也不能少。</p>
+<h2 id="使用通配符的注意事项"><a href="#使用通配符的注意事项" class="headerlink" title="使用通配符的注意事项"></a><strong>使用通配符的注意事项</strong></h2><ul>
+<li>不要过度使用通配符，如果其他操作符能达到相同的目的，应该使用其他的操作符；</li>
+<li>在确实需要使用通配符时，除非绝对有必要，否则不要把他们用在搜索模式的开始处。把通配符置于搜索模式的开始处，搜索起来是最慢的；</li>
+<li>注意通配符的位置</li>
+</ul>
+<h1 id="正则表达式搜索"><a href="#正则表达式搜索" class="headerlink" title="正则表达式搜索"></a><strong>正则表达式搜索</strong></h1><p><strong>正则表达式是用来匹配文本的特殊的串（字符集合）</strong></p>
+<h2 id="LIKE与REGEXP差别"><a href="#LIKE与REGEXP差别" class="headerlink" title="LIKE与REGEXP差别"></a><strong><code>LIKE</code>与<code>REGEXP</code>差别</strong></h2><pre><code class="mysql">SELECT prod_name
+FROM products
+WHERE prod_name LIKE &#39;1000&#39;
+ORDER BY prod_name;
+</code></pre>
+<pre><code class="mysql">SELECT prod_name
+FROM products
+WHERE prod_name REGEXP &#39;1000&#39;
+ORDER BY prod_name;
+</code></pre>
+<p>如果执行上述两条语句，会发现第一条语句不返回数据，而第二条语句返回一行。</p>
+<p><code>LIKE</code>匹配整个列。如果被匹配的文本在列值中出现，<code>LIKE</code>将不会找到它，相应的行也不被返回（除非使用通配符）。而<code>REGEXP</code>在列值内进行匹配，如果被匹配的文本在列值中出现，<code>REGEXP</code>将会找到它，相应的行将被返回。这是一个非常重要的差别。</p>
+<h2 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a><strong>一些注意事项</strong></h2><p>为了匹配特殊字符，必须用<code>\\</code>为前导。<code>\\-</code>表示查找<code>-</code>，<code>\\.</code>表示查找<code>.</code>，前面的两个斜杠是转义字符</p>
+<p>为了匹配反斜杠（<code>\</code>）本身，需要使用<code>\\\</code></p>
+<p><img src="http://636283.haituie.cn/636283/image-20210420145617713.png"></p>
+<p><img src="http://636283.haituie.cn/636283/image-20210420150858088.png"></p>
+<p><code>&#39;[[:digit:]]&#123;4&#125;&#39;</code>匹配连在一起的任意4位数字</p>
+<p><img src="http://636283.haituie.cn/636283/image-20210420153907953.png"></p>
+<p>注意到<code>^</code>有两个作用：</p>
+<ol>
+<li>在集合中（用[和]定义），用它来否定该集合；</li>
+<li>用来指串的开始处。</li>
+</ol>
+<h3 id="使REGEXP起类似LIKE的作用"><a href="#使REGEXP起类似LIKE的作用" class="headerlink" title="使REGEXP起类似LIKE的作用"></a><strong>使<code>REGEXP</code>起类似<code>LIKE</code>的作用</strong></h3><p><code>LIKE</code>和<code>REGEXP</code>的不同在于，<code>LIKE</code>匹配整个串而<code>REGEXP</code>匹配子串。利用定位符，通过用<code>^</code>开始每个表达式，用<code>$</code>结束每个表达式，可以使<code>REGEXP</code>的作用与<code>LIKE</code>一样。</p>
+<h3 id="简单的正则表达式测试"><a href="#简单的正则表达式测试" class="headerlink" title="简单的正则表达式测试"></a><strong>简单的正则表达式测试</strong></h3><p>可以在不使用数据库表的情况下用<code>SELECT</code>来测试正则表达式。<code>REGEXP</code>检查总是返回0（没有匹配）或1（匹配）。可以用带文字串的<code>REGEXP</code>来测试表达式，并试验它们。相应的语法如下：</p>
+<pre><code class="mysql">SELECT &#39;hello&#39; REGEXP &#39;[0-9]&#39;;
+Output: 0
+</code></pre>
+<h1 id="计算字段"><a href="#计算字段" class="headerlink" title="计算字段"></a><strong>计算字段</strong></h1><p><strong>字段：基本上与列的意思相同，经常互换使用，不过数据库列一般称为列，而术语字段通常用在计算字段的连接上</strong></p>
+<h2 id="Concat-拼接串"><a href="#Concat-拼接串" class="headerlink" title="Concat()拼接串"></a><strong><code>Concat()</code>拼接串</strong></h2><p>即把多个串连接起来形成一个较长的串</p>
+<p><img src="http://636283.haituie.cn/636283/image-20210420161939800.png"></p>
+<h2 id="Trim函数"><a href="#Trim函数" class="headerlink" title="Trim函数"></a><strong><code>Trim</code>函数</strong></h2><p><code>MySQL</code>除了支持<code>RTrim()</code>（正如刚才所见，它去掉串右边的空格），还支持<code>LTrim()</code>（去掉串左边的空格）以及<code>Trim()</code>（去掉串左右两边的空格）</p>
+<h2 id="起别名"><a href="#起别名" class="headerlink" title="起别名"></a><strong>起别名</strong></h2><p>利用<code>AS</code>关键字，可以将拼接后的字段进行重命名， 亦可称之为导出列。</p>
+<h2 id="测试计算"><a href="#测试计算" class="headerlink" title="测试计算"></a><strong>测试计算</strong></h2><p><code>SELECT</code>提供了测试和试验函数与计算的一个很好的办法。虽然<code>SELECT</code>通常用来从表中检索数据，但可以省略<code>FROM</code>子句以便简单地访问和处理表达式。例如，<code>SELECT 3*2;</code>将返回6，<code>SELECT Trim(&#39;abc&#39;);</code>将返回<code>abc</code>，而<code>SELECT Now()</code>利用<code>Now()</code>函数返回当前日期和时间。通过这些例子，可以明白如何根据需要使用<code>SELECT</code>进行试验。</p>
+<h1 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a><strong>使用函数</strong></h1><p>大多数<code>SQL</code>实现支持一下类型的函数：</p>
+<ul>
+<li>用于处理文本串（如删除或填充值，转换值为大写或小写）的文本函数；</li>
+<li>用于在数值数据上进行算术操作（如返回绝对值，进行代数运算）的数值函数；</li>
+<li>用于处理日期和时间值并从这些值中提取特定成分（例如，返回两个日期之差，检查日期有效性等）的日期和时间函数；</li>
+<li>返回DBMS正使用的特殊信息（如返回用户登录信息，检查版本细节）的系统函数。</li>
+</ul>
+<h2 id="Upper函数"><a href="#Upper函数" class="headerlink" title="Upper函数"></a><strong>Upper函数</strong></h2><p>Upper()函数将文本转换为大写</p>
+<pre><code class="mysql">SELECT Upper(&#39;hello WOrld&#39;) AS test;
+
+Output: &#39;HELLO WORLD&#39;
+</code></pre>
+<h2 id="常见函数"><a href="#常见函数" class="headerlink" title="常见函数"></a><strong>常见函数</strong></h2><p><img src="http://636283.haituie.cn/636283/image-20210422112437719.png"></p>
+<p>其中<code>Soundex()</code>函数的主要作用是匹配所有发音类似的字符串，例如<code>Y.Lee</code>与<code>Y.Lie</code>的发音类似，使用<code>Soundex()</code>函数可以进行匹配。</p>
+<p><strong>如果要的是日期，则使用<code>Date()</code>函数是一个良好的习惯，因为要检索的列的日期存储格式可能不一致</strong></p>
+<h1 id="汇总数据"><a href="#汇总数据" class="headerlink" title="汇总数据"></a><strong>汇总数据</strong></h1><h2 id="聚集函数表"><a href="#聚集函数表" class="headerlink" title="聚集函数表"></a><strong>聚集函数表</strong></h2><p><img src="http://636283.haituie.cn/636283/image-20210423103551623.png"></p>
+<ul>
+<li><p>其中<code>AVG()</code>函数只能用于单个列，为了获得多个列的平均值，必须使用多个<code>AVG()</code>函数，<code>AVG()</code>函数忽略列值为<code>NULL</code>的行；</p>
+</li>
+<li><p>如果指定列名，则指定列的值为空的行被<code>COUNT()</code>函数忽略，但如果<code>COUNT()</code>函数中用的是星号<code>*</code>，则不忽略，例如：</p>
+<pre><code class="mysql">SELECT COUNT(*) AS num_cust
+FROM customers;
+
+Output: 5
+
+SELECT COUNT(cust_email) AS num_cust
+FROM customers;
+
+Output: 3
+</code></pre>
+</li>
+<li><p><code>MAX()</code>函数一般用来找出最大的数值或日期值，但<code>MySQL</code>允许将它用来返回任意列中的最大值，包括返回文本中的最大值，用于文本数据时，如果数据按相应的列排序，则<code>MAX()</code>返回最后一行，<code>MAX()</code>函数忽略列值为<code>NULL</code>的行；</p>
+</li>
+<li><p>当聚集不同值的时候，可以使用<code>DISTINCT</code>参数，例如使用<code>AVG(DISTINCE prod_price)</code>函数时，计算的平均值为<code>prod_price</code>不同列值的平均值；</p>
+</li>
+</ul>
+<h1 id="分组数据"><a href="#分组数据" class="headerlink" title="分组数据"></a><strong>分组数据</strong></h1><h2 id="GROUP-BY子句的规定"><a href="#GROUP-BY子句的规定" class="headerlink" title="GROUP BY子句的规定"></a><strong><code>GROUP BY</code>子句的规定</strong></h2><ul>
+<li><code>GROUP BY</code>子句可以包含任意数目的列，这使得能对分组进行嵌套，为数据分组提供更细致的控制；</li>
+<li>如果在<code>GROUP BY</code>子句中嵌套了分组，数据将在最后规定的分组上进行汇总。换句话说，在建立分组时，指定的所有列都一起计算（所以不能从个别的列取回数据）；</li>
+<li><code>GROUP BY</code>子句中列出的每个列都必须是检索列或有效的表达式（但不能是聚集函数）。如果在SELECT中使用表达式，则必须在<code>GROUP BY</code>子句中制定相同的表达式，不能使用别名；</li>
+<li>除聚集计算语句外，<code>SELECT</code>语句中的每个列都必须在<code>GROUP BY</code>子句中给出；</li>
+<li>如果分组列中具有<code>NULL</code>值，则<code>NULL</code>将作为一个分组返回。如果列中有多行<code>NULL</code>值，它们将分为一组；</li>
+<li><code>GROUP BY</code>子句必须出现在<code>WHERE</code>子句之后，<code>ORDER BY</code>子句之前。</li>
+</ul>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+            </ul>
+            
+            
+            <div class="post-nav">
+                <hr>
+                
+                
+                    <div class="post-nav-item">下一篇:<a href="/2021/01/14/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" rel="next" 
+                        title="策略模式">策略模式</a></div>
+                                
+            </div>   
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d=''
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/lovelyChild.jpg" height=300 width=300></img>
+                    <p>HustZjx</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/TriDiamond" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="https://twitter.com/TriDiamond6" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="https://stackoverflow.com/users/7602324/tridiamond?tab=profile" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">31 <p>文章</p></a></li>
+                    <li><a href="/categories">8 <p>分类</p></a></li>
+                    <li><a href="/tags">70 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">MySQL语句的基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8IN%E6%93%8D%E4%BD%9C%E7%AC%A6%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="toc-number">1.1.</span> <span class="toc-text">使用IN操作符的好处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A6%E5%86%99%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">书写格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%A6%E5%86%99%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-number">1.2.1.</span> <span class="toc-text">书写注意点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">2.</span> <span class="toc-text">通配符</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BE%E5%88%86%E5%8F%B7%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">2.1.</span> <span class="toc-text">百分号通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E5%88%92%E7%BA%BF%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">2.2.</span> <span class="toc-text">下划线通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">2.3.</span> <span class="toc-text">使用通配符的注意事项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%90%9C%E7%B4%A2"><span class="toc-number">3.</span> <span class="toc-text">正则表达式搜索</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LIKE%E4%B8%8EREGEXP%E5%B7%AE%E5%88%AB"><span class="toc-number">3.1.</span> <span class="toc-text">LIKE与REGEXP差别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">3.2.</span> <span class="toc-text">一些注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BFREGEXP%E8%B5%B7%E7%B1%BB%E4%BC%BCLIKE%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">3.2.1.</span> <span class="toc-text">使REGEXP起类似LIKE的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B5%8B%E8%AF%95"><span class="toc-number">3.2.2.</span> <span class="toc-text">简单的正则表达式测试</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E5%AD%97%E6%AE%B5"><span class="toc-number">4.</span> <span class="toc-text">计算字段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Concat-%E6%8B%BC%E6%8E%A5%E4%B8%B2"><span class="toc-number">4.1.</span> <span class="toc-text">Concat()拼接串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Trim%E5%87%BD%E6%95%B0"><span class="toc-number">4.2.</span> <span class="toc-text">Trim函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%B7%E5%88%AB%E5%90%8D"><span class="toc-number">4.3.</span> <span class="toc-text">起别名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E8%AE%A1%E7%AE%97"><span class="toc-number">4.4.</span> <span class="toc-text">测试计算</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">5.</span> <span class="toc-text">使用函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Upper%E5%87%BD%E6%95%B0"><span class="toc-number">5.1.</span> <span class="toc-text">Upper函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0"><span class="toc-number">5.2.</span> <span class="toc-text">常见函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B1%87%E6%80%BB%E6%95%B0%E6%8D%AE"><span class="toc-number">6.</span> <span class="toc-text">汇总数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%9A%E9%9B%86%E5%87%BD%E6%95%B0%E8%A1%A8"><span class="toc-number">6.1.</span> <span class="toc-text">聚集函数表</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE"><span class="toc-number">7.</span> <span class="toc-text">分组数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#GROUP-BY%E5%AD%90%E5%8F%A5%E7%9A%84%E8%A7%84%E5%AE%9A"><span class="toc-number">7.1.</span> <span class="toc-text">GROUP BY子句的规定</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2021
+        <span class="gradient-text">
+            HustZjx
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.5" target="_blank" rel="noopener">v1.4.5</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-149874671-1');
+</script>
+ 
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', 'Stay hungry, stay foolish'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+ <!-- 例：百度统计 --> <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?your_code"; var s = document.getElementsByTagName("script")[0];  s.parentNode.insertBefore(hm, s); })(); </script> 
+
+</html>
