@@ -1,0 +1,626 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MySQL语句的基本用法(二) - Java Learning Blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Java Study,"> 
+    <meta name="description" content="子查询引出子查询的简单例子
+列出订购物品TNT2的所有客户
+SELECT cust_id
+FROM orders
+WHERE order_num IN (SELECT order_num
+     ,"> 
+    <meta name="author" content="HustZjx"> 
+    <link rel="alternative" href="atom.xml" title="Java Learning Blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Java Learning Blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">MySQL语句的基本用法(二)</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/数据库"><b>「
+                    </b>数据库<b> 」</b></a>
+                
+                四月 20, 2021
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2021/04/20/MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95(%E4%BA%8C)/" title="MySQL语句的基本用法(二)" class="">MySQL语句的基本用法(二)</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    7.2k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    7 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%AD%90%E6%9F%A5%E8%AF%A2/" rel="tag">子查询</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E8%81%94%E7%BB%93-%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2/" rel="tag">联结 - 组合查询</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a><strong>子查询</strong></h1><h2 id="引出子查询的简单例子"><a href="#引出子查询的简单例子" class="headerlink" title="引出子查询的简单例子"></a><strong>引出子查询的简单例子</strong></h2><ol>
+<li><p><strong>列出订购物品<code>TNT2</code>的所有客户</strong></p>
+<pre><code class="mysql">SELECT cust_id
+FROM orders
+WHERE order_num IN (SELECT order_num
+                    FROM orderitems
+                    WHERE prod_id = &#39;TNT2&#39;);
+
+Output:
+cust_id
+  10001
+  10004
+</code></pre>
+<pre><code class="mysql">SELECT cust_name, cust_contact
+FROM customers
+WHERE cust_id IN (SELECT cust_id
+                  FROM orders
+                  WHERE order_num IN (SELECT order_num
+                                      FROM orderitems
+                                      WHERE prod_id = &#39;TNT2&#39;));
+Output:
+cust_name          cust_contact
+Coyote Inc.           Y Lee
+Yosemite Place        Y Sam
+</code></pre>
+</li>
+<li><p><strong>显示customers表中每个客户的订单总数</strong></p>
+<pre><code class="mysql">SELECT cust_name,
+       cust_state,
+       (SELECT COUNT(*)
+        FROM orders
+        WHERE orders.cust_id = customers.cust_id) AS orders
+FROM customers
+ORDER BY cust_name;
+
+Output:
+
+cust_name          cust_state        orders
+Coyote Inc.            MI               2
+E Fudd                 IL               1
+Mouse House            OH               0
+Wascals                IN               1
+Yosemite Place         AZ               1
+</code></pre>
+<p>注意：涉及外部查询的子查询为相关子查询，当列名可能有多义性时，则必须使用完全限定列名。</p>
+</li>
+</ol>
+<h1 id="联结"><a href="#联结" class="headerlink" title="联结"></a><strong>联结</strong></h1><h2 id="外键"><a href="#外键" class="headerlink" title="外键"></a><strong>外键</strong></h2><p>外键为某个表中的一列，它包含另一个表的主键值，定义了两个表之间的关系</p>
+<h3 id="好处"><a href="#好处" class="headerlink" title="好处"></a><strong>好处</strong></h3><ul>
+<li>信息不重复，不浪费时间和空间；</li>
+<li>供应商信息变动，可以只更新vendors表中的单个记录，相关表中的数据不用改动；</li>
+<li>保证数据的一致性，使得处理数据更简单。</li>
+</ul>
+<h2 id="两种内部联结的代码"><a href="#两种内部联结的代码" class="headerlink" title="两种内部联结的代码"></a><strong>两种内部联结的代码</strong></h2><p><strong>输出供应商与产品名字和价格</strong></p>
+<pre><code class="mysql">第一种
+SELECT vend_name, prod_name, prod_price
+FROM vendors, products
+WHERE vendors.vend_id = products.vend_id
+ORDER BY vend_name, prod_name;
+第二种
+SELECT vend_name, prod_name, prod_price
+FROM vendors INNER JOIN products
+ON vendors.vend_id = products.vend_id;
+</code></pre>
+<p>输出结果相同，更推荐第二种方法</p>
+<p>注意：不要联结不必要的表，联结的表越多，性能下降的越厉害</p>
+<p>可以利用联结来代替子查询，如：</p>
+<pre><code class="mysql">SELECT cust_name, cust_contact
+FROM customers, orders, orderitems
+WHERE customers.cust_id = orders.cust_id
+AND orderitems.order_num = orders.order_num
+AND prod_id = &#39;TNT2&#39;;
+
+等价于
+
+SELECT cust_name, cust_contact
+FROM customers
+WHERE cust_id IN (SELECT cust_id
+                  FROM orders
+                  WHERE order_num IN (SELECT order_num
+                                      FROM orderitems
+                                      WHERE prod_id = &#39;TNT2&#39;));
+</code></pre>
+<h2 id="自联结"><a href="#自联结" class="headerlink" title="自联结"></a><strong>自联结</strong></h2><p>查询生产ID为<code>DTNTR</code>的物品的供应商生产的所有物品</p>
+<pre><code class="mysql">利用子查询
+SELECT prod_id, prod_name
+FROM products
+WHERE vend_id = (SELECT vend_id
+                 FROM products
+                 WHERE prod_id = &#39;DTNTR&#39;);
+                 
+利用自联结
+SELECT p1.prod_id, p1.prod_name
+FROM products as p1, products as p2
+WHERE p1.vend_id = p2.vend_id
+AND p2.prod_id = &#39;DTNTR&#39;;
+</code></pre>
+<h2 id="自然联结"><a href="#自然联结" class="headerlink" title="自然联结"></a><strong>自然联结</strong></h2><p>只选择唯一的列而不包含重复列的联结，例如</p>
+<pre><code class="mysql">SELECT c.*, o.order_num, o.order_date, oi.prod_id,
+       oi.quantity, oi.item_price
+FROM customers AS c, order AS o, orderitems AS oi
+WHERE c.cust_id = o.cust_id
+AND oi.order_num = o.order_num
+AND prod_id = &#39;FB&#39;;
+</code></pre>
+<p>我们一般用到的都是自然联结</p>
+<h2 id="外部联结"><a href="#外部联结" class="headerlink" title="外部联结"></a><strong>外部联结</strong></h2><p>联结包含了那些在相关表中没有关联行的行。这种类型的联结称为外部联结</p>
+<pre><code class="mysql">SELECT customers.cust_id, orders.order_num
+FROM customers LEFT OUTER JOIN orders
+ON customers.cust_id = orders.cust_id;
+
+Output:
+cust_id           order_num
+  10001               20005
+  10001               20009
+  10002                NULL
+  10003               20006
+  10004               20007
+  10005               20008
+</code></pre>
+<h2 id="UNION"><a href="#UNION" class="headerlink" title="UNION"></a><strong><code>UNION</code></strong></h2><ul>
+<li><code>UNION</code>必须由两条或两条以上的<code>SELECT</code>语句组成，语句之间用关键字<code>UNION</code>分隔（因此，如果组合4条<code>SELECT</code>语句，将要使用3个<code>UNION</code>关键字）；</li>
+<li><code>UNION</code>中的每个查询必须包含相同的列、表达式或聚集函数（不过各个列不需要以相同的次序列出）；</li>
+<li>列数据类型必须兼容：类型不必完全相同，但必须是<code>DBMS</code>可以隐含地转换的类型（例如，不同的数值类型或不同的日期类型）；</li>
+<li><code>ORDER BY</code>子句只能在<code>UNION</code>的最后一个<code>SELECT</code>语句中使用，但是作用于所有输出的行。</li>
+</ul>
+<h1 id="插入完整的行"><a href="#插入完整的行" class="headerlink" title="插入完整的行"></a><strong>插入完整的行</strong></h1><p>一个<code>INSERT</code>语句插入多个行比多个<code>INSERT</code>语句插入单行效率更高</p>
+<pre><code class="mysql">INSERT INTO customers(cust_name,
+                     cust_address,
+                     cust_city,
+                     cust_state,
+                     cust_zip,
+                     cust_country)
+VALUES(&#39;Pep E. LaPew&#39;,
+      &#39;100 Main Street&#39;,
+      &#39;Los Angeles&#39;,
+      &#39;CA&#39;,
+      &#39;90046&#39;,
+      &#39;USA&#39;),
+      (&#39;M. Martian&#39;,
+      &#39;42 Galaxy Way&#39;,
+      &#39;New York&#39;,
+      &#39;NY&#39;,
+      &#39;11213&#39;,
+      &#39;USA&#39;);
+</code></pre>
+<h2 id="可以插入检索出的数据"><a href="#可以插入检索出的数据" class="headerlink" title="可以插入检索出的数据"></a><strong>可以插入检索出的数据</strong></h2><pre><code class="mysql">INSERT INTO customers(cust_id,
+                     cust_contact,
+                     cust_email,
+                     cust_name,
+                     cust_address,
+                     cust_city,
+                     cust_state,
+                     cust_zip,
+                     cust_country)
+             SELECT cust_id,
+                     cust_contact,
+                     cust_email,
+                     cust_name,
+                     cust_address,
+                     cust_city,
+                     cust_state,
+                     cust_zip,
+                     cust_country
+             FROM custnew;
+</code></pre>
+<p><code>MySQL</code>只关注对应列的位置，不需要列名完全一致。</p>
+<h1 id="UPDATE和DELETE"><a href="#UPDATE和DELETE" class="headerlink" title="UPDATE和DELETE"></a><strong><code>UPDATE</code>和<code>DELETE</code></strong></h1><ul>
+<li>可以更新表中特定行或者所有行；</li>
+<li>可以删除表中某一行或者所有行；</li>
+<li>都需要<code>WHERE</code>子句加以限定</li>
+</ul>
+<h2 id="UPDATE例子"><a href="#UPDATE例子" class="headerlink" title="UPDATE例子"></a><strong><code>UPDATE</code>例子</strong></h2><pre><code class="mysql">UPDATE customers
+SET cust_name = &#39;The Fudds&#39;,
+    cust_email = &#39;elmer@fudd.com&#39;
+WHERE cust_id = 10005;
+</code></pre>
+<h2 id="DELETE例子"><a href="#DELETE例子" class="headerlink" title="DELETE例子"></a><strong><code>DELETE</code>例子</strong></h2><pre><code class="mysql">DELETE FROM customers
+WHERE cust_id = 10005;
+</code></pre>
+<p>如果想要快速删除整个表，可以使用<code>TRUNCATE TABLE</code>语句。</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+            </ul>
+            
+            
+            <div class="post-nav">
+                <hr>
+                
+                    <div class="post-nav-item">上一篇:<a href="/2021/04/25/MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95(%E4%B8%89)/" rel="prev" 
+                        title="MySQL语句的基本用法(三)">MySQL语句的基本用法(三)
+                      </a></div>
+                
+                
+                    <div class="post-nav-item">下一篇:<a href="/2021/04/13/MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/" rel="next" 
+                        title="MySQL语句的基本用法">MySQL语句的基本用法</a></div>
+                                
+            </div>   
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d=''
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/lovelyChild.jpg" height=300 width=300></img>
+                    <p>HustZjx</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/TriDiamond" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="https://twitter.com/TriDiamond6" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="https://stackoverflow.com/users/7602324/tridiamond?tab=profile" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">33 <p>文章</p></a></li>
+                    <li><a href="/categories">8 <p>分类</p></a></li>
+                    <li><a href="/tags">74 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.</span> <span class="toc-text">子查询</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E5%87%BA%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%9A%84%E7%AE%80%E5%8D%95%E4%BE%8B%E5%AD%90"><span class="toc-number">1.1.</span> <span class="toc-text">引出子查询的简单例子</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%81%94%E7%BB%93"><span class="toc-number">2.</span> <span class="toc-text">联结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E9%94%AE"><span class="toc-number">2.1.</span> <span class="toc-text">外键</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%BD%E5%A4%84"><span class="toc-number">2.1.1.</span> <span class="toc-text">好处</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%A4%E7%A7%8D%E5%86%85%E9%83%A8%E8%81%94%E7%BB%93%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="toc-number">2.2.</span> <span class="toc-text">两种内部联结的代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E8%81%94%E7%BB%93"><span class="toc-number">2.3.</span> <span class="toc-text">自联结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E7%84%B6%E8%81%94%E7%BB%93"><span class="toc-number">2.4.</span> <span class="toc-text">自然联结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E9%83%A8%E8%81%94%E7%BB%93"><span class="toc-number">2.5.</span> <span class="toc-text">外部联结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UNION"><span class="toc-number">2.6.</span> <span class="toc-text">UNION</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E5%AE%8C%E6%95%B4%E7%9A%84%E8%A1%8C"><span class="toc-number">3.</span> <span class="toc-text">插入完整的行</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E4%BB%A5%E6%8F%92%E5%85%A5%E6%A3%80%E7%B4%A2%E5%87%BA%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-number">3.1.</span> <span class="toc-text">可以插入检索出的数据</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#UPDATE%E5%92%8CDELETE"><span class="toc-number">4.</span> <span class="toc-text">UPDATE和DELETE</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#UPDATE%E4%BE%8B%E5%AD%90"><span class="toc-number">4.1.</span> <span class="toc-text">UPDATE例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DELETE%E4%BE%8B%E5%AD%90"><span class="toc-number">4.2.</span> <span class="toc-text">DELETE例子</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2021
+        <span class="gradient-text">
+            HustZjx
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.5" target="_blank" rel="noopener">v1.4.5</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-149874671-1');
+</script>
+ 
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', 'Stay hungry, stay foolish'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+ <!-- 例：百度统计 --> <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?your_code"; var s = document.getElementsByTagName("script")[0];  s.parentNode.insertBefore(hm, s); })(); </script> 
+
+</html>

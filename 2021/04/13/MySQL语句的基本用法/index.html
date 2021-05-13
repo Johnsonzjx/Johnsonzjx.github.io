@@ -10,10 +10,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="Java Study,"> 
-    <meta name="description" content="MySQL语句的基本用法使用IN操作符的好处
-在使用长的合法选项清单时，IN操作符的语法更清楚且更直观；
-在使用IN时，计算的次序更容易管理（因为使用的操作符更少）；
-IN操作符一般比OR操作符清单,"> 
+    <meta name="description" content="MySQL语句的基本用法DISTINCT用法用来指示MySQL只返回不同的值
+SELECT DISTINCT vend_id
+FROM products;
+
+Output: 1001
+       ,"> 
     <meta name="author" content="HustZjx"> 
     <link rel="alternative" href="atom.xml" title="Java Learning Blog" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -102,13 +104,13 @@ IN操作符一般比OR操作符清单,">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                    9.9k
+                    13k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                    9 mins.
+                    12 mins.
                 </span>
                 
                 
@@ -142,7 +144,20 @@ IN操作符一般比OR操作符清单,">
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h1 id="MySQL语句的基本用法"><a href="#MySQL语句的基本用法" class="headerlink" title="MySQL语句的基本用法"></a><strong><code>MySQL</code>语句的基本用法</strong></h1><h2 id="使用IN操作符的好处"><a href="#使用IN操作符的好处" class="headerlink" title="使用IN操作符的好处"></a><strong>使用<code>IN</code>操作符的好处</strong></h2><ul>
+            <h1 id="MySQL语句的基本用法"><a href="#MySQL语句的基本用法" class="headerlink" title="MySQL语句的基本用法"></a><strong><code>MySQL</code>语句的基本用法</strong></h1><h2 id="DISTINCT用法"><a href="#DISTINCT用法" class="headerlink" title="DISTINCT用法"></a><strong><code>DISTINCT</code>用法</strong></h2><p>用来指示<code>MySQL</code>只返回不同的值</p>
+<pre><code class="mysql">SELECT DISTINCT vend_id
+FROM products;
+
+Output: 1001
+        1002
+        1003
+        1005
+</code></pre>
+<h2 id="LIMIT用法"><a href="#LIMIT用法" class="headerlink" title="LIMIT用法"></a><strong><code>LIMIT</code>用法</strong></h2><p>指示<code>MySQL</code>输出不多于指定行数，例如：</p>
+<pre><code class="mysql">LIMIT 5; 表示输出5行，若数据不足5行，则输出所有
+LIMIT 4,5; 表示从第5行开始输出5行（因为第一行为0），不足则全部输出
+</code></pre>
+<h2 id="使用IN操作符的好处"><a href="#使用IN操作符的好处" class="headerlink" title="使用IN操作符的好处"></a><strong>使用<code>IN</code>操作符的好处</strong></h2><ul>
 <li>在使用长的合法选项清单时，<code>IN</code>操作符的语法更清楚且更直观；</li>
 <li>在使用IN时，计算的次序更容易管理（因为使用的操作符更少）；</li>
 <li><code>IN</code>操作符一般比<code>OR</code>操作符清单执行更快；</li>
@@ -178,6 +193,9 @@ WHERE vend
 <pre><code class="mysql">SELECT prod_id,prod_name
 FROM products
 WHERE prod_name LIKE &#39;jet%&#39;;
+
+Output： JP1000   JetPack 1000
+         JP2000   JetPack 2000  注：此处未区分大小写，可以在MySQL配置中设置区分大小写
 </code></pre>
 <p>此例子使用了搜索模式<code>&#39;jet%&#39;</code>。在执行这条子句时，将检索任意以<code>jet</code>起头的词。<code>%</code>告诉<code>MySQL</code>接受<code>jet</code>之后的任意字符，不管它有多少字符。</p>
 <p><strong>注意：</strong></p>
@@ -200,7 +218,7 @@ WHERE prod_name LIKE &#39;_ ton anvil&#39;;
 <p>此<code>WHERE</code>子句中的搜索模式给出了后面跟有文本的两个通配符。结果只显示匹配搜索模式的行：第一行中下划线匹配<code>1</code>，第二行中匹配<code>2</code>。<code>.5 ton anvil</code>产品没有匹配，因为搜索模式要求匹配两个通配符而不是一个。对照一下，下面的<code>SELECT</code>语句使用<code>%</code>通配符，返回三行产品：</p>
 <pre><code class="mysql">SELECT prod_id, prod_name
 FROM products
-WHERE prod_name LIKE &#39;%ton anvil&#39;;
+WHERE prod_name LIKE &#39;% ton anvil&#39;;
 </code></pre>
 <p>与<code>%</code>能匹配<code>0</code>个字符不一样，<code>_</code>总是匹配一个字符，不能多也不能少。</p>
 <h2 id="使用通配符的注意事项"><a href="#使用通配符的注意事项" class="headerlink" title="使用通配符的注意事项"></a><strong>使用通配符的注意事项</strong></h2><ul>
@@ -220,13 +238,20 @@ WHERE prod_name REGEXP &#39;1000&#39;
 ORDER BY prod_name;
 </code></pre>
 <p>如果执行上述两条语句，会发现第一条语句不返回数据，而第二条语句返回一行。</p>
-<p><code>LIKE</code>匹配整个列。如果被匹配的文本在列值中出现，<code>LIKE</code>将不会找到它，相应的行也不被返回（除非使用通配符）。而<code>REGEXP</code>在列值内进行匹配，如果被匹配的文本在列值中出现，<code>REGEXP</code>将会找到它，相应的行将被返回。这是一个非常重要的差别。</p>
-<h2 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a><strong>一些注意事项</strong></h2><p>为了匹配特殊字符，必须用<code>\\</code>为前导。<code>\\-</code>表示查找<code>-</code>，<code>\\.</code>表示查找<code>.</code>，前面的两个斜杠是转义字符</p>
-<p>为了匹配反斜杠（<code>\</code>）本身，需要使用<code>\\\</code></p>
-<p><img src="http://636283.haituie.cn/636283/image-20210420145617713.png"></p>
-<p><img src="http://636283.haituie.cn/636283/image-20210420150858088.png"></p>
+<p><code>LIKE</code>匹配整个列，如果被匹配的文本在列值中出现，<code>LIKE</code>将不会找到它，相应的行也不被返回（除非使用通配符）；而<code>REGEXP</code>在列值内进行匹配，如果被匹配的文本在列值中出现，<code>REGEXP</code>将会找到它，相应的行将被返回。这是一个非常重要的差别。</p>
+<h2 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a><strong>一些注意事项</strong></h2><ul>
+<li><p>为了匹配特殊字符，必须用<code>\\</code>为前导。<code>\\-</code>表示查找<code>-</code>，<code>\\.</code>表示查找<code>.</code>，前面的两个斜杠是转义字符</p>
+<p>为了匹配反斜杠（<code>\</code>）本身，需要使用<code>\\\</code>；</p>
+</li>
+<li><p>可以使用<code>BINARY</code>关键字来区分大小写，例如：</p>
+<pre><code class="mysql">WHERE prod_name REGEXP BINARY &#39;JetPack .000&#39;;  不加BINARY则不区分大小写
+</code></pre>
+</li>
+</ul>
+<p><img src="http://tiebapic.baidu.com/forum/w%3D580/sign=61c2189b19f41bd5da53e8fc61db81a0/1e0fa8d3fd1f41348bd6face321f95cad0c85eaa.jpg"></p>
+<p><img src="http://tiebapic.baidu.com/forum/w%3D580/sign=9d486e426a1ed21b79c92eed9d6fddae/8beb828ba61ea8d3e7c38bb4800a304e241f58aa.jpg"></p>
 <p><code>&#39;[[:digit:]]&#123;4&#125;&#39;</code>匹配连在一起的任意4位数字</p>
-<p><img src="http://636283.haituie.cn/636283/image-20210420153907953.png"></p>
+<p><img src="http://tiebapic.baidu.com/forum/w%3D580/sign=040967eecac451daf6f60ce386fc52a5/f925970a304e251f8a161b48b086c9177e3e53aa.jpg"></p>
 <p>注意到<code>^</code>有两个作用：</p>
 <ol>
 <li>在集合中（用[和]定义），用它来否定该集合；</li>
@@ -239,7 +264,7 @@ Output: 0
 </code></pre>
 <h1 id="计算字段"><a href="#计算字段" class="headerlink" title="计算字段"></a><strong>计算字段</strong></h1><p><strong>字段：基本上与列的意思相同，经常互换使用，不过数据库列一般称为列，而术语字段通常用在计算字段的连接上</strong></p>
 <h2 id="Concat-拼接串"><a href="#Concat-拼接串" class="headerlink" title="Concat()拼接串"></a><strong><code>Concat()</code>拼接串</strong></h2><p>即把多个串连接起来形成一个较长的串</p>
-<p><img src="http://636283.haituie.cn/636283/image-20210420161939800.png"></p>
+<p><img src="http://tiebapic.baidu.com/forum/w%3D580/sign=cfc7c4740cd5ad6eaaf964e2b1ca39a3/10c2fd1f4134970a2d92ef9f82cad1c8a6865daa.jpg"></p>
 <h2 id="Trim函数"><a href="#Trim函数" class="headerlink" title="Trim函数"></a><strong><code>Trim</code>函数</strong></h2><p><code>MySQL</code>除了支持<code>RTrim()</code>（正如刚才所见，它去掉串右边的空格），还支持<code>LTrim()</code>（去掉串左边的空格）以及<code>Trim()</code>（去掉串左右两边的空格）</p>
 <h2 id="起别名"><a href="#起别名" class="headerlink" title="起别名"></a><strong>起别名</strong></h2><p>利用<code>AS</code>关键字，可以将拼接后的字段进行重命名， 亦可称之为导出列。</p>
 <h2 id="测试计算"><a href="#测试计算" class="headerlink" title="测试计算"></a><strong>测试计算</strong></h2><p><code>SELECT</code>提供了测试和试验函数与计算的一个很好的办法。虽然<code>SELECT</code>通常用来从表中检索数据，但可以省略<code>FROM</code>子句以便简单地访问和处理表达式。例如，<code>SELECT 3*2;</code>将返回6，<code>SELECT Trim(&#39;abc&#39;);</code>将返回<code>abc</code>，而<code>SELECT Now()</code>利用<code>Now()</code>函数返回当前日期和时间。通过这些例子，可以明白如何根据需要使用<code>SELECT</code>进行试验。</p>
@@ -255,10 +280,10 @@ Output: 0
 
 Output: &#39;HELLO WORLD&#39;
 </code></pre>
-<h2 id="常见函数"><a href="#常见函数" class="headerlink" title="常见函数"></a><strong>常见函数</strong></h2><p><img src="http://636283.haituie.cn/636283/image-20210422112437719.png"></p>
+<h2 id="常见函数"><a href="#常见函数" class="headerlink" title="常见函数"></a><strong>常见函数</strong></h2><p><img src="http://tiebapic.baidu.com/forum/w%3D580/sign=1028d155ba6eddc426e7b4f309dab6a2/450e4134970a304e3bc35f4ac6c8a786c8175caa.jpg"></p>
 <p>其中<code>Soundex()</code>函数的主要作用是匹配所有发音类似的字符串，例如<code>Y.Lee</code>与<code>Y.Lie</code>的发音类似，使用<code>Soundex()</code>函数可以进行匹配。</p>
 <p><strong>如果要的是日期，则使用<code>Date()</code>函数是一个良好的习惯，因为要检索的列的日期存储格式可能不一致</strong></p>
-<h1 id="汇总数据"><a href="#汇总数据" class="headerlink" title="汇总数据"></a><strong>汇总数据</strong></h1><h2 id="聚集函数表"><a href="#聚集函数表" class="headerlink" title="聚集函数表"></a><strong>聚集函数表</strong></h2><p><img src="http://636283.haituie.cn/636283/image-20210423103551623.png"></p>
+<h1 id="汇总数据"><a href="#汇总数据" class="headerlink" title="汇总数据"></a><strong>汇总数据</strong></h1><h2 id="聚集函数表"><a href="#聚集函数表" class="headerlink" title="聚集函数表"></a><strong>聚集函数表</strong></h2><p><img src="http://tiebapic.baidu.com/forum/w%3D580/sign=4b2c48824dafa40f3cc6ced59b65038c/2a54d688d43f87949c1eb79ec51b0ef41ad53aaa.jpg"></p>
 <ul>
 <li><p>其中<code>AVG()</code>函数只能用于单个列，为了获得多个列的平均值，必须使用多个<code>AVG()</code>函数，<code>AVG()</code>函数忽略列值为<code>NULL</code>的行；</p>
 </li>
@@ -280,13 +305,59 @@ Output: 3
 </li>
 </ul>
 <h1 id="分组数据"><a href="#分组数据" class="headerlink" title="分组数据"></a><strong>分组数据</strong></h1><h2 id="GROUP-BY子句的规定"><a href="#GROUP-BY子句的规定" class="headerlink" title="GROUP BY子句的规定"></a><strong><code>GROUP BY</code>子句的规定</strong></h2><ul>
-<li><code>GROUP BY</code>子句可以包含任意数目的列，这使得能对分组进行嵌套，为数据分组提供更细致的控制；</li>
-<li>如果在<code>GROUP BY</code>子句中嵌套了分组，数据将在最后规定的分组上进行汇总。换句话说，在建立分组时，指定的所有列都一起计算（所以不能从个别的列取回数据）；</li>
-<li><code>GROUP BY</code>子句中列出的每个列都必须是检索列或有效的表达式（但不能是聚集函数）。如果在SELECT中使用表达式，则必须在<code>GROUP BY</code>子句中制定相同的表达式，不能使用别名；</li>
-<li>除聚集计算语句外，<code>SELECT</code>语句中的每个列都必须在<code>GROUP BY</code>子句中给出；</li>
-<li>如果分组列中具有<code>NULL</code>值，则<code>NULL</code>将作为一个分组返回。如果列中有多行<code>NULL</code>值，它们将分为一组；</li>
-<li><code>GROUP BY</code>子句必须出现在<code>WHERE</code>子句之后，<code>ORDER BY</code>子句之前。</li>
+<li><p><code>GROUP BY</code>子句可以包含任意数目的列，这使得能对分组进行嵌套，为数据分组提供更细致的控制；</p>
+</li>
+<li><p>如果在<code>GROUP BY</code>子句中嵌套了分组，数据将在最后规定的分组上进行汇总。换句话说，在建立分组时，指定的所有列都一起计算（所以不能从个别的列取回数据）；</p>
+</li>
+<li><p><code>GROUP BY</code>子句中列出的每个列都必须是检索列或有效的表达式（但不能是聚集函数）。如果在SELECT中使用表达式，则必须在<code>GROUP BY</code>子句中制定相同的表达式，不能使用别名；</p>
+</li>
+<li><p>除聚集计算语句外，<code>SELECT</code>语句中的每个列都必须在<code>GROUP BY</code>子句中给出；</p>
+</li>
+<li><p>如果分组列中具有<code>NULL</code>值，则<code>NULL</code>将作为一个分组返回。如果列中有多行<code>NULL</code>值，它们将分为一组；</p>
+</li>
+<li><p><code>GROUP BY</code>子句必须出现在<code>WHERE</code>子句之后，<code>ORDER BY</code>子句之前。</p>
+</li>
+<li><p>使用<code>WITH ROLLUP</code>关键字，可以得到每个分组以及每个分组汇总级别（针对每个分组）的值，如下所示：</p>
+<pre><code class="mysql">SELECT vend_id, COUNT(*) AS num_prods
+FROM products
+GROUP BY vend_id WITH ROLLUP;
+
+Output:
+vend_id    num_prods
+   1001            3
+   1002            2
+   1003            7
+   1005            2
+   NULL           14
+</code></pre>
+</li>
 </ul>
+<h2 id="HAVING和WHERE的区别"><a href="#HAVING和WHERE的区别" class="headerlink" title="HAVING和WHERE的区别"></a><strong><code>HAVING</code>和<code>WHERE</code>的区别</strong></h2><ul>
+<li><code>HAVING</code>支持所有<code>WHERE</code>操作符，所学过的有关<code>WHERE</code>的所有技术和选项都适用于<code>HAVING</code>，它们的句法是相同的，只是关键字有差别，<code>WHERE</code>过滤行而<code>HAVING</code>过滤分组；</li>
+<li><code>WHERE</code>在数据分组前进行过滤，<code>HAVING</code>在数据分组后进行过滤，也就是说<code>WHERE</code>排除的行不包括在分组中，这会改变计算值，从而影响<code>HAVING</code>子句中基于这些值过滤掉的分组。</li>
+</ul>
+<h2 id="一个需要同时使用WHERE和HAVING的例子"><a href="#一个需要同时使用WHERE和HAVING的例子" class="headerlink" title="一个需要同时使用WHERE和HAVING的例子"></a><strong>一个需要同时使用<code>WHERE</code>和<code>HAVING</code>的例子</strong></h2><p>列出具有2个（含）以上、价格为10（含）以上的产品的供应商</p>
+<pre><code class="mysql">SELECT vend_id, COUNT(*) AS num_prods
+FROM products
+WHERE prod_price &gt;= 10
+GROUP BY vend_id
+HAVING COUNT(*) &gt;= 2;
+
+Output:
+vend_id     num_prods
+   1003             4
+   1005             2
+</code></pre>
+<h2 id="ORDER-BY-和GROUP-BY"><a href="#ORDER-BY-和GROUP-BY" class="headerlink" title="ORDER BY 和GROUP BY"></a><strong><code>ORDER BY </code>和<code>GROUP BY</code></strong></h2><p>一般在使用<code>GROUP BY</code>子句时，应该也给出<code>ORDER BY</code>子句，这是保证数据正确排序的唯一方法，不要仅依赖<code>GROUP BY</code>排序数据</p>
+<h1 id="子句顺序"><a href="#子句顺序" class="headerlink" title="子句顺序"></a><strong>子句顺序</strong></h1><pre><code class="mysql">子句                        说明                              是否必须使用
+SELECT                  要返回的列或表达式                          是
+ FROM                   从中检索数据的表                        仅在从表选择数据时使用
+ WHERE                     行级过滤                               否
+GROUP BY                   分组说明                            仅在按组计算聚集时使用
+ HAVING                    组级过滤                               否
+ORDER BY                  输出次序排序                             否
+ LIMIT                    要检索的行数                             否
+</code></pre>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
@@ -301,6 +372,10 @@ Output: 3
             
             <div class="post-nav">
                 <hr>
+                
+                    <div class="post-nav-item">上一篇:<a href="/2021/04/20/MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95(%E4%BA%8C)/" rel="prev" 
+                        title="MySQL语句的基本用法(二)">MySQL语句的基本用法(二)
+                      </a></div>
                 
                 
                     <div class="post-nav-item">下一篇:<a href="/2021/01/14/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/" rel="next" 
@@ -340,9 +415,9 @@ Output: 3
                     </dl>
                 </div>
                 <ul>
-                    <li><a href="/">31 <p>文章</p></a></li>
+                    <li><a href="/">33 <p>文章</p></a></li>
                     <li><a href="/categories">8 <p>分类</p></a></li>
-                    <li><a href="/tags">70 <p>标签</p></a></li>
+                    <li><a href="/tags">74 <p>标签</p></a></li>
                 </ul>
             </div>
             
@@ -351,7 +426,7 @@ Output: 3
             <div class="box sticky animated fadeInRight faster">
                 <div id="toc" class="subbox">
                     <h4>目录</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">MySQL语句的基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8IN%E6%93%8D%E4%BD%9C%E7%AC%A6%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="toc-number">1.1.</span> <span class="toc-text">使用IN操作符的好处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A6%E5%86%99%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">书写格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%A6%E5%86%99%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-number">1.2.1.</span> <span class="toc-text">书写注意点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">2.</span> <span class="toc-text">通配符</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BE%E5%88%86%E5%8F%B7%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">2.1.</span> <span class="toc-text">百分号通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E5%88%92%E7%BA%BF%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">2.2.</span> <span class="toc-text">下划线通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">2.3.</span> <span class="toc-text">使用通配符的注意事项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%90%9C%E7%B4%A2"><span class="toc-number">3.</span> <span class="toc-text">正则表达式搜索</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LIKE%E4%B8%8EREGEXP%E5%B7%AE%E5%88%AB"><span class="toc-number">3.1.</span> <span class="toc-text">LIKE与REGEXP差别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">3.2.</span> <span class="toc-text">一些注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BFREGEXP%E8%B5%B7%E7%B1%BB%E4%BC%BCLIKE%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">3.2.1.</span> <span class="toc-text">使REGEXP起类似LIKE的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B5%8B%E8%AF%95"><span class="toc-number">3.2.2.</span> <span class="toc-text">简单的正则表达式测试</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E5%AD%97%E6%AE%B5"><span class="toc-number">4.</span> <span class="toc-text">计算字段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Concat-%E6%8B%BC%E6%8E%A5%E4%B8%B2"><span class="toc-number">4.1.</span> <span class="toc-text">Concat()拼接串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Trim%E5%87%BD%E6%95%B0"><span class="toc-number">4.2.</span> <span class="toc-text">Trim函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%B7%E5%88%AB%E5%90%8D"><span class="toc-number">4.3.</span> <span class="toc-text">起别名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E8%AE%A1%E7%AE%97"><span class="toc-number">4.4.</span> <span class="toc-text">测试计算</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">5.</span> <span class="toc-text">使用函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Upper%E5%87%BD%E6%95%B0"><span class="toc-number">5.1.</span> <span class="toc-text">Upper函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0"><span class="toc-number">5.2.</span> <span class="toc-text">常见函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B1%87%E6%80%BB%E6%95%B0%E6%8D%AE"><span class="toc-number">6.</span> <span class="toc-text">汇总数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%9A%E9%9B%86%E5%87%BD%E6%95%B0%E8%A1%A8"><span class="toc-number">6.1.</span> <span class="toc-text">聚集函数表</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE"><span class="toc-number">7.</span> <span class="toc-text">分组数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#GROUP-BY%E5%AD%90%E5%8F%A5%E7%9A%84%E8%A7%84%E5%AE%9A"><span class="toc-number">7.1.</span> <span class="toc-text">GROUP BY子句的规定</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">MySQL语句的基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DISTINCT%E7%94%A8%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">DISTINCT用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LIMIT%E7%94%A8%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">LIMIT用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8IN%E6%93%8D%E4%BD%9C%E7%AC%A6%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="toc-number">1.3.</span> <span class="toc-text">使用IN操作符的好处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A6%E5%86%99%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.4.</span> <span class="toc-text">书写格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%A6%E5%86%99%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-number">1.4.1.</span> <span class="toc-text">书写注意点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">2.</span> <span class="toc-text">通配符</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BE%E5%88%86%E5%8F%B7%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">2.1.</span> <span class="toc-text">百分号通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E5%88%92%E7%BA%BF%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">2.2.</span> <span class="toc-text">下划线通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">2.3.</span> <span class="toc-text">使用通配符的注意事项</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%90%9C%E7%B4%A2"><span class="toc-number">3.</span> <span class="toc-text">正则表达式搜索</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LIKE%E4%B8%8EREGEXP%E5%B7%AE%E5%88%AB"><span class="toc-number">3.1.</span> <span class="toc-text">LIKE与REGEXP差别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">3.2.</span> <span class="toc-text">一些注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BFREGEXP%E8%B5%B7%E7%B1%BB%E4%BC%BCLIKE%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">3.2.1.</span> <span class="toc-text">使REGEXP起类似LIKE的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B5%8B%E8%AF%95"><span class="toc-number">3.2.2.</span> <span class="toc-text">简单的正则表达式测试</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E5%AD%97%E6%AE%B5"><span class="toc-number">4.</span> <span class="toc-text">计算字段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Concat-%E6%8B%BC%E6%8E%A5%E4%B8%B2"><span class="toc-number">4.1.</span> <span class="toc-text">Concat()拼接串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Trim%E5%87%BD%E6%95%B0"><span class="toc-number">4.2.</span> <span class="toc-text">Trim函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%B7%E5%88%AB%E5%90%8D"><span class="toc-number">4.3.</span> <span class="toc-text">起别名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E8%AE%A1%E7%AE%97"><span class="toc-number">4.4.</span> <span class="toc-text">测试计算</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">5.</span> <span class="toc-text">使用函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Upper%E5%87%BD%E6%95%B0"><span class="toc-number">5.1.</span> <span class="toc-text">Upper函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0"><span class="toc-number">5.2.</span> <span class="toc-text">常见函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B1%87%E6%80%BB%E6%95%B0%E6%8D%AE"><span class="toc-number">6.</span> <span class="toc-text">汇总数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%9A%E9%9B%86%E5%87%BD%E6%95%B0%E8%A1%A8"><span class="toc-number">6.1.</span> <span class="toc-text">聚集函数表</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E6%95%B0%E6%8D%AE"><span class="toc-number">7.</span> <span class="toc-text">分组数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#GROUP-BY%E5%AD%90%E5%8F%A5%E7%9A%84%E8%A7%84%E5%AE%9A"><span class="toc-number">7.1.</span> <span class="toc-text">GROUP BY子句的规定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HAVING%E5%92%8CWHERE%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">7.2.</span> <span class="toc-text">HAVING和WHERE的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E9%9C%80%E8%A6%81%E5%90%8C%E6%97%B6%E4%BD%BF%E7%94%A8WHERE%E5%92%8CHAVING%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="toc-number">7.3.</span> <span class="toc-text">一个需要同时使用WHERE和HAVING的例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ORDER-BY-%E5%92%8CGROUP-BY"><span class="toc-number">7.4.</span> <span class="toc-text">ORDER BY 和GROUP BY</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%90%E5%8F%A5%E9%A1%BA%E5%BA%8F"><span class="toc-number">8.</span> <span class="toc-text">子句顺序</span></a></li></ol>
                 </div>
             </div>
             

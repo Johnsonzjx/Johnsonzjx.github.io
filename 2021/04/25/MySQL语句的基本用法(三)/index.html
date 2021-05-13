@@ -1,0 +1,685 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MySQL语句的基本用法(三) - Java Learning Blog</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Java Study,"> 
+    <meta name="description" content="存储过程使用存储过程的好处
+把处理封装在容易使用的单元中，简化复杂的操作；
+不要求反复建立一系列处理步骤，保证了数据的完整性，减少出错的可能性；
+简化对变动的管理，如果表名、列名或业务逻辑有变化，只,"> 
+    <meta name="author" content="HustZjx"> 
+    <link rel="alternative" href="atom.xml" title="Java Learning Blog" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+
+    
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+
+    
+<link rel="stylesheet" href="/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="/css/ball-atom.min.css">
+
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">Java Learning Blog</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="http://example.com">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">MySQL语句的基本用法(三)</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg) ">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/数据库"><b>「
+                    </b>数据库<b> 」</b></a>
+                
+                四月 25, 2021
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2021/04/25/MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95(%E4%B8%89)/" title="MySQL语句的基本用法(三)" class="">MySQL语句的基本用法(三)</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                    7.8k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                    7 mins.
+                </span>
+                
+                
+                
+                <span id="busuanzi_container_page_pv">
+                    <b class="iconfont icon-read"></b> <i>阅读次数</i>
+                    <span id="busuanzi_value_page_pv">0</span>
+                </span>
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E6%93%8D%E7%BA%B5%E8%A1%A8/" rel="tag">操纵表</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E8%A7%86%E5%9B%BE-%E8%A7%A6%E5%8F%91%E5%99%A8/" rel="tag">视图 - 触发器</a></li></ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <h1 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a><strong>存储过程</strong></h1><h2 id="使用存储过程的好处"><a href="#使用存储过程的好处" class="headerlink" title="使用存储过程的好处"></a><strong>使用存储过程的好处</strong></h2><ul>
+<li>把处理封装在容易使用的单元中，简化复杂的操作；</li>
+<li>不要求反复建立一系列处理步骤，保证了数据的完整性，减少出错的可能性；</li>
+<li>简化对变动的管理，如果表名、列名或业务逻辑有变化，只需要更改存储过程的代码，增加安全性；</li>
+<li>提高性能，使用存储过程比使用单独的<code>SQL</code>语句要快</li>
+</ul>
+<h2 id="创建存储过程"><a href="#创建存储过程" class="headerlink" title="创建存储过程"></a>创建存储过程</h2><pre><code class="mysql">DELIMITER //
+
+CREATE PROCEDURE productpricing()
+BEGIN
+    SELECT AVG(prod_price) AS priceaverage
+    FROM products
+END //
+
+DELIMITER ;
+</code></pre>
+<p>上述代码创建了一个无参数的存储过程，因为<code>MySQL</code>语句的分隔符和命令行的分隔符都是<code>;</code>，因此在用命令行创建存储过程的时候需要先把命令行的分隔符切换为其他的字符，例如例子的<code>//</code></p>
+<pre><code class="mysql">DELIMITER //
+
+CREATE PROCEDURE productpricing(
+    OUT pl DECIMAL(8, 2),
+    OUT ph DECIMAL(8, 2),
+    OUT pa DECIMAL(8, 2)
+)
+BEGIN
+    SELECT Min(prod_price)
+    INTO pl
+    FROM products;
+    SELECT Max(prod_price)
+    INTO ph
+    FROM products;
+    SELECT AVG(prod_price)
+    INTO pa
+    FROM products;
+END //
+
+DELIMITER ;
+</code></pre>
+<p>上述代码创建了一个可以接受三个参数的存储过程，用来输出价格的最大、最小和平均值</p>
+<p>不允许返回一个记录集，因此不能通过一个参数返回多个行和列，这就是为什么要用3个参数（和3个<code>SELECT</code>）的原因</p>
+<pre><code class="mysql">DELIMITER //
+
+CREATE PROCEDURE ordertotal(
+    IN onumber INT.
+    OUT ototal DECIMAL(8, 2)
+)
+BEGIN
+    SELECT Sum(item_price*quantity)
+        FROM orderitems
+        WHERE order_num = onumber
+        INTO ototal;
+END //
+
+DELIMITER ;
+</code></pre>
+<p>该例子使用了<code>IN</code>和<code>OUT</code>参数，其中<code>IN</code>参数<code>onumber</code>是传入存储过程的参数，<code>OUT</code>参数<code>ototal</code>是从存储过程传出的参数，调用该存储过程的语句如下：</p>
+<pre><code class="mysql">CALL ordertotal(20005, @total);
+</code></pre>
+<p>通过如下方式显示：</p>
+<pre><code class="mysql">SELECT @total;
+
+Output:
+@total
+149.71
+</code></pre>
+<p>如果要得到另一个订单的合计显示，需要再次调用存储过程，然后重新显示变量</p>
+<pre><code class="mysql">CALL ordertotal(20009, @total);
+SELECT @total;
+</code></pre>
+<h2 id="删除存储过程"><a href="#删除存储过程" class="headerlink" title="删除存储过程"></a><strong>删除存储过程</strong></h2><pre><code class="mysql">DROP PROCEDURE productpricing IF EXISTS;
+</code></pre>
+<h2 id="调用存储过程"><a href="#调用存储过程" class="headerlink" title="调用存储过程"></a><strong>调用存储过程</strong></h2><pre><code class="mysql">CALL productpricing(@pricelow,
+                    @pricehigh,
+                    @priceaverage);
+</code></pre>
+<p>所有<code>MySQL</code>变量都必须以<code>@</code>开始，在调用时不显示任何数据，可以通过如下方式显示：</p>
+<pre><code class="mysql">SELECT @pricehigh, @pricelow, @priceaverage;
+
+Output:
+@pricehigh      @pricelow       @priceaverage
+55.00           2.50            16.133571428
+</code></pre>
+<h2 id="建立智能存储过程"><a href="#建立智能存储过程" class="headerlink" title="建立智能存储过程"></a><strong>建立智能存储过程</strong></h2><pre><code class="mysql">-- Name: ordertotal
+-- Parameter: onumber = order number
+--            taxable = 0 if not taxable, 1 if taxable
+--            ototal = oreder total variable
+
+DELIMITER //
+
+CREATE PROCEDURE ordertotal(
+    IN onumber INT,
+    IN taxable BOOLEAN,
+    OUT ototal DECIMAL(8, 2)
+)COMMENT &#39;Obtain order total, optionally adding tax&#39;
+
+BEGIN
+    -- Declare variable for total
+    DECLARE total DECIMAL(8, 2);
+    -- Declare tax percentage
+    DECLARE taxrate INT DEFAULT 6;
+    
+    -- Get the order total
+    SELECT Sum(item_price*quantity)
+    FROM orderitems
+    WHERE order_num = onumber
+    INTO total;
+    
+    -- Is this taxable?
+    IF taxable THEN
+        -- Yes, so add taxrate to the total
+        SELECT total+(total/100*taxrate) INTO total;
+    END IF;
+    
+    -- And finally, save to our variable
+    SELECT total INTO ototal;
+END //
+
+DELIMITER ;
+</code></pre>
+<p>一个相对智能化的简单存储过程程序，通过输入<code>taxable</code>的0和1来控制是否需要增加营业税</p>
+<pre><code class="mysql">CALL ordertotal(20005, 0, @total);
+SELECT @total;
+
+CALL ordertotal(20005, 1, @total);
+SELECT @total;
+
+Output:
+@total
+149.87
+158.862200000
+</code></pre>
+<p>获得包括合适、由谁创建等详细信息的存储过程列表，使用如下语句：</p>
+<pre><code class="mysql">SHOW PROCEDURE STATUS LIKE &#39;ordertotal&#39;;
+</code></pre>
+<p>获得创建存储过程的<code>CREATE</code>语句：</p>
+<pre><code class="mysql">SHOW CREATE PROCEDURE ordertotal;
+</code></pre>
+<h1 id="游标"><a href="#游标" class="headerlink" title="游标"></a><strong>游标</strong></h1><p>可以帮助应用程序根据需要滚动或浏览其中的数据，只能用于存储过程（和函数）。</p>
+<h2 id="利用游标的一个工作样例"><a href="#利用游标的一个工作样例" class="headerlink" title="利用游标的一个工作样例"></a><strong>利用游标的一个工作样例</strong></h2><pre><code class="mysql">DELIMITER //
+
+CREATE PROCEDURE processorders()
+BEGIN
+    -- Declare local variables
+    DECLARE done BOOLEAN DEFAULT 0;
+    DECLARE o INT;
+    DECLARE t DECIMAL(8, 2);
+    
+    -- Declare the cursor
+    DECLARE ordernumbers CURSOR
+    FOR
+    SELECT order_num FROM orders;
+    
+    -- Declare continue handler
+    DECLARE CONTINUE HANDLER FOR SQLSTATE &#39;02000&#39; SET done = 1;
+    
+    -- Create a table to store the results
+    CREATE TABLE IF NOT EXISTS ordertotals
+        (order_num INT,
+         total DECIMAL(8, 2));
+    
+    OPEN ordernumbers;
+    
+    REPEAT
+        FETCH ordernumbers INTO o;
+        CALL ordertotal(o, 1, t);
+        INSERT INTO ordertotals(order_num, total)
+        VALUES(o, t);
+    UNTIL done END REPEAT;
+    CLOSE ordernumbers;
+END //
+
+DELIMITER ;
+</code></pre>
+<h1 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a><strong>触发器</strong></h1><h2 id="创建触发器的必要信息"><a href="#创建触发器的必要信息" class="headerlink" title="创建触发器的必要信息"></a><strong>创建触发器的必要信息</strong></h2><ul>
+<li>唯一的触发器名；</li>
+<li>触发器关联的表；</li>
+<li>触发器应该响应的活动（<code>DELETE</code>、<code>INSERT</code>或<code>UPDATE</code>）；</li>
+<li>触发器何时执行（处理之前或之后）。</li>
+</ul>
+<p>触发器仅支持表，不支持视图。</p>
+<h2 id="创建一个INSERT之后的触发器"><a href="#创建一个INSERT之后的触发器" class="headerlink" title="创建一个INSERT之后的触发器"></a><strong>创建一个<code>INSERT</code>之后的触发器</strong></h2><p>在<code>INSERT</code>触发器代码内，可以引用一个名为<code>NEW</code>的虚拟表，访问被插入的行，对于<code>AUTO_INCREMENT</code>的列<code>NEW</code>在<code>INSERT</code>之前包含0，在<code>INSERT</code>之后包含新的自动生成值，如下：</p>
+<pre><code class="mysql">CREATE TRIGGER neworder AFTER INSERT ON orders
+FOR EACH ROW SELECT NEW.order_num INTO @asd;  -- 因为MySQL5之后就不允许在触发器里输出值，因此把它存放到一个变量中
+
+-- 测试
+INSERT INTO orders(order_date, cust_id)
+VALUES(Now(), 10001);
+
+SELECT @asd;
+
+Output:
+@asd
+20010
+</code></pre>
+<p>通常将<code>BEFORE</code>用于数据验证和净化（目的是保证插入表中的数据确实是需要的数据）</p>
+<h2 id="DELETE触发器"><a href="#DELETE触发器" class="headerlink" title="DELETE触发器"></a><strong><code>DELETE</code>触发器</strong></h2><ul>
+<li>在<code>DELETE</code>触发器代码内，可以引用一个名为<code>OLD</code>的虚拟表，访问被删除的行；</li>
+<li><code>OLD</code>中的值全都是只读的，不能更新。</li>
+</ul>
+<pre><code class="mysql">DELIMITER //
+
+CREATE TRIGGER deleteorder BEFORE DELETE ON orders
+FOR EACH ROW
+BEGIN 
+    INSERT INTO archive_orders(order_num, order_date, cust_id)
+    VALUES(OLD.order_num, OLD.order_date, OLD.cust_id);
+
+END // 
+
+-- 测试
+CREATE TABLE archive_orders(
+    order_num   INT      NOT NULL,
+    order_date  DATETIME NOT NULL,
+    cust_id     INT      NOT NULL
+)
+
+DELETE FROM orders
+WHERE cust_id = 20010;
+
+SELECT *
+FROM archive_orders;
+
+Output:
+order_name       order_date            cust_id
+20010            2021-05-13 21:14:52     10001 
+</code></pre>
+<h2 id="UPDATE触发器"><a href="#UPDATE触发器" class="headerlink" title="UPDATE触发器"></a><strong><code>UPDATE</code>触发器</strong></h2><ul>
+<li>在<code>UPDATE</code>触发器代码中，可以引用一个名为<code>OLD</code>的虚拟表访问以前（<code>UPDATE</code>语句前）的值，引用一个名为<code>NEW</code>的虚拟表访问新更新的值；</li>
+<li>在<code>BEFORE UPDATE</code>触发器中，<code>NEW</code>中的值可能也被更新（允许更改将要用于<code>UPDATE</code>语句中的值）；</li>
+<li><code>OLD</code>中的值全都是只读的，不能更新</li>
+</ul>
+<pre><code class="mysql">CREATE TRIGGER updatevendor BEFORE UPDATE ON vendors
+FOR EACH ROW SET NEW.vend_state = Lower(New.vend_state);
+
+-- 测试
+
+UPDATE vendors
+SET vend_zip = 48075
+WHERE vend_id = 1001;
+
+SELECT *
+FROM vendors;
+
+Output：
+-- 在新的vend_state一栏里被更改的一行会变成小写‘mi‘
+</code></pre>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+            </ul>
+            
+            
+            <div class="post-nav">
+                <hr>
+                
+                
+                    <div class="post-nav-item">下一篇:<a href="/2021/04/20/MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95(%E4%BA%8C)/" rel="next" 
+                        title="MySQL语句的基本用法(二)">MySQL语句的基本用法(二)</a></div>
+                                
+            </div>   
+                        
+            
+            
+    <div id='gitalk-container' class="comment link"
+        data-ae='true'
+        data-ci='ec894e2b66f752e8b7fb'
+        data-cs='3ccc2e92bb350688fe2c2dc2930189b62622bfb1'
+        data-r='blog-comments'
+        data-o='TriDiamond'
+        data-a='TriDiamond'
+        data-d=''
+    >留言</div>
+
+
+            
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="/img/lovelyChild.jpg" height=300 width=300></img>
+                    <p>HustZjx</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/TriDiamond" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="https://twitter.com/TriDiamond6" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="https://stackoverflow.com/users/7602324/tridiamond?tab=profile" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">33 <p>文章</p></a></li>
+                    <li><a href="/categories">8 <p>分类</p></a></li>
+                    <li><a href="/tags">74 <p>标签</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>目录</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">存储过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="toc-number">1.1.</span> <span class="toc-text">使用存储过程的好处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">创建存储过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">删除存储过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">调用存储过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E6%99%BA%E8%83%BD%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.5.</span> <span class="toc-text">建立智能存储过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%B8%E6%A0%87"><span class="toc-number">2.</span> <span class="toc-text">游标</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%B8%B8%E6%A0%87%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B7%A5%E4%BD%9C%E6%A0%B7%E4%BE%8B"><span class="toc-number">2.1.</span> <span class="toc-text">利用游标的一个工作样例</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">触发器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%A7%A6%E5%8F%91%E5%99%A8%E7%9A%84%E5%BF%85%E8%A6%81%E4%BF%A1%E6%81%AF"><span class="toc-number">3.1.</span> <span class="toc-text">创建触发器的必要信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAINSERT%E4%B9%8B%E5%90%8E%E7%9A%84%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-number">3.2.</span> <span class="toc-text">创建一个INSERT之后的触发器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DELETE%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-number">3.3.</span> <span class="toc-text">DELETE触发器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UPDATE%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-number">3.4.</span> <span class="toc-text">UPDATE触发器</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
+
+    </div>
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2021
+        <span class="gradient-text">
+            HustZjx
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.5" target="_blank" rel="noopener">v1.4.5</a></small>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.css">
+ 
+<script src="//cdn.bootcss.com/gitalk/1.5.0/gitalk.min.js"></script>
+  
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+ 
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+ 
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+ 
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+  
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+   
+<script src="/js/busuanzi.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    if ($('span[id^="busuanzi_"]').length) {
+      initialBusuanzi();
+    }
+  });
+</script>
+ 
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-149874671-1');
+</script>
+ 
+
+<script>
+  function initialTyped() {
+    var typedTextEl = $('.typed-text');
+    if (typedTextEl && typedTextEl.length > 0) {
+      var typed = new Typed('.typed-text', {
+        strings: ['Think like an artist, develop like an artisan', 'Stay hungry, stay foolish'],
+        typeSpeed: 90,
+        loop: true,
+        loopCount: Infinity,
+        backSpeed: 20,
+      });
+    }
+  }
+
+  if ($('.article-header') && $('.article-header').length) {
+    $(document).ready(function () {
+      initialTyped();
+    });
+  }
+</script>
+
+
+
+
+ <!-- 例：百度统计 --> <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?your_code"; var s = document.getElementsByTagName("script")[0];  s.parentNode.insertBefore(hm, s); })(); </script> 
+
+</html>

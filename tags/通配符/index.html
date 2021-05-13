@@ -147,13 +147,13 @@
             
             <span>
                 <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                9.9k
+                13k
             </span>
             
             
             <span>
                 <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                9 mins.
+                12 mins.
             </span>
             
             
@@ -164,11 +164,16 @@
         
         <div class="md-content animated fadeIn">
             
-            <ul>
-<li>在使用长的合法选项清单时，<code>IN</code>操作符的语法更清楚且更直观；</li>
-<li>在使用IN时，计算的次序更容易管理（因为使用的操作符更少）；</li>
-<li><code>IN</code>操作符一般比<code>OR</code>操作符清单执行更快；</li>
-<li><code>IN</code>的最大优点是可以包含其他<code>SELECT...</code></li></ul>
+            <p>用来指示<code>MySQL</code>只返回不同的值</p>
+<pre><code class="mysql">SELECT DISTINCT vend_id
+FROM products;
+
+Output: 1001
+        1002
+        1003
+        1005
+</code></pre>
+<p>指示<code>MySQL</code>输出不多于指定行...</p>
             
             <span class="read-more"><a href="/2021/04/13/MySQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/" title="查看全文" class="posttitle">查看全文</a>
                 <b class="iconfont icon-arrow-right- gradient-text"></b></span>
